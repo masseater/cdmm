@@ -91,9 +91,24 @@ const dispatch = (
       deliver: (decision) =>
         findAccount(decision.accountId).pipe(
           Effect.flatMap((account) => startDesktop({ account, link: Option.some(input.link) })),
+          Effect.tap(() =>
+            Effect.logInfo("delivered claude:// link").pipe(
+              Effect.annotateLogs({ accountId: decision.accountId }),
+            ),
+          ),
         ),
-      "deliver-default": () => launchDefault(input.link),
-      ask: (decision) => ask({ link: input.link, candidates: decision.candidates }),
+      "deliver-default": () =>
+        launchDefault(input.link).pipe(
+          Effect.tap(() => Effect.logInfo("delivered claude:// link to the default Desktop")),
+        ),
+      ask: (decision) =>
+        ask({ link: input.link, candidates: decision.candidates }).pipe(
+          Effect.tap(() =>
+            Effect.logInfo("asked where to deliver a claude:// link").pipe(
+              Effect.annotateLogs({ candidates: decision.candidates.length }),
+            ),
+          ),
+        ),
       reject: () => Effect.logWarning("rejected claude:// link"),
     }),
   );

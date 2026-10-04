@@ -55,11 +55,13 @@ const codeEnv = (target: DesktopTarget): Readonly<Record<string, string>> =>
     onSome: (dir) => ({ CLAUDE_CONFIG_DIR: dir }),
   });
 
+const routeCommand = (executable: string): string => `"${executable}" --route -- "%1"`;
+
 const registryEntries = (executable: string): readonly (readonly string[])[] => [
   [CLASSES_KEY, "/ve", "/d", "URL:Claude (Claude Max Manager)"],
   [CLASSES_KEY, "/v", "URL Protocol", "/d", ""],
   [String.raw`${CLASSES_KEY}\DefaultIcon`, "/ve", "/d", executable],
-  [String.raw`${CLASSES_KEY}\shell\open\command`, "/ve", "/d", `"${executable}" --route "%1"`],
+  [String.raw`${CLASSES_KEY}\shell\open\command`, "/ve", "/d", routeCommand(executable)],
   [String.raw`${APP_KEY}\Capabilities`, "/v", "ApplicationName", "/d", "Claude Max Manager"],
   [
     String.raw`${APP_KEY}\Capabilities`,
@@ -171,17 +173,21 @@ const queryValue = (
 ): Effect.Effect<string, never, ChildProcessSpawner.ChildProcessSpawner> =>
   output({ command: "reg.exe", args: ["query", key, "/v", name] });
 
-const routerStatus = Effect.gen(function* routerStatus() {
+const routerStatus = Effect.fn("Desktop.routerStatus")(function* routerStatus(executable: string) {
+  const command = yield* output({
+    command: "reg.exe",
+    args: ["query", String.raw`${CLASSES_KEY}\shell\open\command`, "/ve"],
+  });
+  const registered = yield* queryValue(REGISTERED_APPS, APP_NAME);
+  if (!command.includes(routeCommand(executable)) || !registered.includes(APP_NAME)) {
+    return { status: "unregistered" } satisfies RouterStatus;
+  }
   const latest = yield* queryValue(String.raw`${ASSOCIATION}\UserChoiceLatest\ProgId`, "ProgId");
   const legacy = yield* queryValue(String.raw`${ASSOCIATION}\UserChoice`, "ProgId");
   if (`${latest}${legacy}`.includes(PROG_ID)) {
     return { status: "active" } satisfies RouterStatus;
   }
-  const registered = yield* queryValue(REGISTERED_APPS, APP_NAME);
-  if (registered.includes(APP_NAME)) {
-    return { status: "registered" } satisfies RouterStatus;
-  }
-  return { status: "unregistered" } satisfies RouterStatus;
+  return { status: "registered" } satisfies RouterStatus;
 });
 
 const isRunning = Effect.fn("Desktop.isRunning")(function* isRunning(userDataDir: string) {
@@ -224,7 +230,7 @@ const windowsLayer = (
       const alias = path.join(localAppData, "Microsoft", "WindowsApps", ALIAS);
       return Desktop.of({
         install: run(installAt(alias)),
-        router: run(routerStatus),
+        router: run(routerStatus(executable)),
         isRunning: (userDataDir) => run(isRunning(userDataDir)),
         launch: (target) =>
           run(detached({ command: alias, args: desktopArgs(target), env: codeEnv(target) })),

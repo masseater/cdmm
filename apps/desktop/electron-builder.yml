@@ -1,0 +1,19 @@
+appId: io.github.masseater.claude-max-manager
+productName: Claude Max Manager
+extraMetadata:
+  name: claude-max-manager
+directories:
+  output: release
+files:
+  - dist/**
+  - assets/**
+  - package.json
+  - "!**/node_modules/**"
+win:
+  target:
+    - target: nsis
+      arch: x64
+  icon: assets/icon.png
+nsis:
+  oneClick: true
+  perMachine: false
