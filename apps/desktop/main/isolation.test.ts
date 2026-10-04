@@ -1,6 +1,6 @@
 import { emptyOverride } from "@claude-max-manager/core";
 import type { Account, McpEntry, Preset } from "@claude-max-manager/core";
-import { Effect } from "effect";
+import { Effect, FileSystem } from "effect";
 import { describe, expect, it } from "vite-plus/test";
 
 import { runTest } from "./harness.test.helpers.ts";
@@ -15,6 +15,7 @@ import {
   WORK,
 } from "./scenario.test.helpers.ts";
 import { Store } from "./store.ts";
+import { syncStatus } from "./sync.ts";
 
 const TOKEN_A = "token-for-account-a-0123456789";
 const TOKEN_B = "token-for-account-b-9876543210";
@@ -168,6 +169,22 @@ describe("deleting and switching Global presets", () => {
         const config = yield* desktopConfigOf(first);
         expect(config).not.toHaveProperty(["mcpServers", "github"]);
         expect(config).toHaveProperty(["mcpServers", "local"]);
+      }),
+    ));
+});
+
+describe("deleting an account", () => {
+  it("does not write it back when an overview read it just before", () =>
+    runTest(
+      Effect.gen(function* stale() {
+        const store = yield* Store;
+        const fs = yield* FileSystem.FileSystem;
+        const account = yield* createAccount({ label: "Gone", presetId: "default" });
+        const paths = yield* store.pathsOf(account.id);
+        yield* handlers.deleteAccount(account.id);
+        const status = yield* syncStatus(account);
+        expect(status.status).toBe("pending");
+        expect(yield* fs.exists(paths.root)).toBe(false);
       }),
     ));
 });

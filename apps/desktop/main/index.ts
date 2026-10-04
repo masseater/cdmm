@@ -6,6 +6,7 @@ import { registerIpc } from "./ipc.ts";
 import { appLayer } from "./layers.ts";
 import { handleRequest, requestFrom } from "./requests.ts";
 import type { LaunchRequest } from "./requests.ts";
+import { syncAll } from "./sync.ts";
 import { createTray, makeUi } from "./ui.ts";
 import type { Locations } from "./ui.ts";
 
@@ -38,6 +39,7 @@ const start = (
   app.on("window-all-closed", () => {
     runtime.runFork(Effect.logInfo("window closed, staying in the tray"));
   });
+  runtime.runFork(syncAll());
   return runtime.runPromise(handleRequest({ request: input.initial, ui }));
 };
 

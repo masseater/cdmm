@@ -27,6 +27,7 @@ type IdentityCheck =
   | Readonly<{ status: "mismatch"; expected: string; actual: string }>;
 
 type SyncStatus =
+  | Readonly<{ status: "pending" }>
   | Readonly<{ status: "synced"; skipped: readonly string[] }>
   | Readonly<{ status: "missing-secrets"; names: readonly string[] }>
   | Readonly<{ status: "failed"; message: string }>;
@@ -84,6 +85,7 @@ const API_INPUTS = {
   pendingChoice: Schema.Void,
   choose: Schema.Struct({ link: Schema.String, accountId: Schema.String }),
   dismissChoice: Schema.String,
+  fitWindow: Schema.Literals(["picker", "manage"]),
 } satisfies Readonly<Record<keyof ApiOutputs, Schema.Top>>;
 
 type ApiOutputs = Readonly<{
@@ -105,6 +107,7 @@ type ApiOutputs = Readonly<{
   pendingChoice: readonly PendingChoice[];
   choose: Done;
   dismissChoice: Done;
+  fitWindow: Done;
 }>;
 
 type ApiMethod = keyof typeof API_INPUTS;

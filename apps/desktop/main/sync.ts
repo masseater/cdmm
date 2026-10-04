@@ -91,11 +91,15 @@ const syncAccount = Effect.fn("syncAccount")(function* syncAccount(account: Acco
 const syncStatus = Effect.fn("syncStatus")(function* syncStatus(account: Account) {
   const session = yield* Session;
   const results = yield* Ref.get(session.syncResults);
-  const cached = Option.fromNullishOr(results.get(account.id));
-  if (Option.isSome(cached)) {
-    return cached.value;
-  }
-  return yield* syncAccount(account);
+  return Option.getOrElse(Option.fromNullishOr(results.get(account.id)), (): SyncStatus => ({
+    status: "pending",
+  }));
+});
+
+const syncAll = Effect.fn("syncAll")(function* syncAll() {
+  const store = yield* Store;
+  const accounts = yield* store.accounts;
+  yield* Effect.forEach(accounts, (account) => syncAccount(account), { discard: true });
 });
 
 const syncPreset = Effect.fn("syncPreset")(function* syncPreset(presetId: string) {
@@ -108,4 +112,4 @@ const syncPreset = Effect.fn("syncPreset")(function* syncPreset(presetId: string
   );
 });
 
-export { syncAccount, syncPreset, syncStatus };
+export { syncAccount, syncAll, syncPreset, syncStatus };

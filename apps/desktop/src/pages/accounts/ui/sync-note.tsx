@@ -4,6 +4,13 @@ import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/accounts/config/copy";
 
+const skippedOf = (skipped: readonly string[]): Option.Option<string> => {
+  if (Arr.isReadonlyArrayNonEmpty(skipped)) {
+    return Option.some(COPY.skipped(skipped.join(", ")));
+  }
+  return Option.none();
+};
+
 const problemOf = (sync: SyncStatus): Option.Option<string> => {
   if (sync.status === "failed") {
     return Option.some(COPY.syncFailed(sync.message));
@@ -11,8 +18,8 @@ const problemOf = (sync: SyncStatus): Option.Option<string> => {
   if (sync.status === "missing-secrets") {
     return Option.some(COPY.missingSecrets(sync.names.join(", ")));
   }
-  if (Arr.isReadonlyArrayNonEmpty(sync.skipped)) {
-    return Option.some(COPY.skipped(sync.skipped.join(", ")));
+  if (sync.status === "synced") {
+    return skippedOf(sync.skipped);
   }
   return Option.none();
 };
