@@ -7,5 +7,7 @@ state: bare
 ask: This code represents one piece of state with several boolean flags or optional fields that can contradict each other, instead of one exclusive status expressed as a discriminated union.
 criteria:
   "true": A state is split into flags or optional fields whose combinations can contradict each other.
-  "false": Every state is a single exclusive status, or the file holds no such state.
+  "false":
+    what: Every state is a single exclusive status, or the file holds no such state.
+    not_for: An options or settings type handed to a function, whose optional fields are independent switches that are valid in every combination; constant lookup tables; functions that return a boolean or query an object such as a window. None of these are one piece of state that moves between statuses.
 severity: error
