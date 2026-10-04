@@ -58,41 +58,12 @@
     },
   },
   "duplicates": { "threshold": 1, "ignore": ["**/generated/**"] },
-  "flags": {
-    "sdkPatterns": [
-      { "function": "getBooleanValue", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getStringValue", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getNumberValue", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getObjectValue", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getBooleanDetails", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getStringDetails", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getNumberDetails", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getObjectDetails", "nameArg": 0, "provider": "OpenFeature" },
-      { "function": "getBoolean", "nameArg": 0, "provider": "OpenFeature (Effect service)" },
-    ],
-  },
   "framework": [
-    {
-      "name": "tanstack-start-fsd",
-      "enablers": ["@tanstack/react-start"],
-      "entryPointRole": "runtime",
-      "entryPoints": [
-        "src/app/{router,start,client,server}.{ts,tsx}",
-        "src/app/server/index.{ts,tsx}",
-        "src/app/routes/**/*.{ts,tsx}",
-      ],
-      "alwaysUsed": ["src/app/routeTree.gen.ts"],
-    },
-    {
-      "name": "alchemy",
-      "enablers": ["alchemy"],
-      "entryPoints": ["alchemy.run.ts"],
-    },
     {
       "name": "vite-plus",
       "enablers": ["vite-plus"],
       "entryPoints": ["vite.config.ts"],
-      "toolingDependencies": ["eslint-plugin-drizzle", "eslint-plugin-no-comments"],
+      "toolingDependencies": ["eslint-plugin-no-comments"],
     },
     {
       "name": "syncpack-ts",

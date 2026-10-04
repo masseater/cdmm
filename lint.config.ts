@@ -4,7 +4,6 @@ const REACT_STATE_HOOKS: readonly string[] = [
   "createContext",
   "useContext",
 ];
-const HAND_WRITTEN_SQL = "SQL を手書きせず Drizzle のクエリビルダーを使う";
 
 const requiredStack: Readonly<Record<string, readonly string[]>> = {
   "UI 状態は effect-atom だけで扱う": [
@@ -23,7 +22,7 @@ const requiredStack: Readonly<Record<string, readonly string[]>> = {
     "@nanostores/*",
     "@preact/signals*",
   ],
-  "サーバー状態は TanStack Query と Eden だけで扱う": [
+  "メインプロセスとの通信状態は TanStack Query だけで扱う": [
     "swr",
     "react-query",
     "@apollo/*",
@@ -36,40 +35,6 @@ const requiredStack: Readonly<Record<string, readonly string[]>> = {
     "node-fetch",
     "graphql-request",
     "@trpc/*",
-  ],
-  "ルーティングとサーバーは TanStack Start と Elysia だけで扱う": [
-    "react-router",
-    "react-router-dom",
-    "next",
-    "@remix-run/*",
-    "wouter",
-    "express",
-    "hono",
-    "fastify",
-    "koa",
-    "@nestjs/*",
-  ],
-  "データベースは Drizzle だけで扱い、スキーマはマイグレーションで生成する": [
-    "prisma",
-    "@prisma/*",
-    "typeorm",
-    "sequelize",
-    "kysely",
-    "knex",
-    "@mikro-orm/*",
-    "better-sqlite3",
-    "pg",
-    "mysql2",
-  ],
-  "認証は better-auth だけで扱う": [
-    "next-auth",
-    "@auth/*",
-    "lucia",
-    "passport",
-    "passport-*",
-    "@clerk/*",
-    "firebase/auth",
-    "@supabase/*",
   ],
   "UI は shadcn/ui と Tailwind CSS だけで組む": [
     "@mui/*",
@@ -106,26 +71,7 @@ const requiredStack: Readonly<Record<string, readonly string[]>> = {
     "ts-results",
     "purify-ts",
   ],
-  "フィーチャーフラグは OpenFeature だけで扱う": [
-    "launchdarkly-*",
-    "@launchdarkly/*",
-    "@growthbook/*",
-    "unleash-client",
-    "flagsmith",
-    "@vercel/flags",
-  ],
   "計装は Effect のトレーシングだけで扱う": ["@opentelemetry/*", "dd-trace", "newrelic"],
-  "インフラは Alchemy の IaC と Cloudflare だけで扱い、wrangler は使わない": [
-    "wrangler",
-    "miniflare",
-    "@cloudflare/vite-plugin",
-    "@vercel/*",
-    "@netlify/*",
-    "aws-cdk",
-    "aws-cdk-lib",
-    "@pulumi/*",
-    "cdktf",
-  ],
 };
 
 const requiredStackEntries = Object.entries(requiredStack).flatMap(([message, modules]) =>
@@ -152,17 +98,13 @@ const restrictedImports = {
       importNames: [...REACT_STATE_HOOKS],
       message: "UI 状態は effect-atom だけで扱う",
     },
-    { name: "drizzle-orm", importNames: ["sql"], message: HAND_WRITTEN_SQL },
-    { name: "drizzle-orm/sql", message: HAND_WRITTEN_SQL },
     ...requiredStackPaths,
   ],
   patterns: [...requiredStackPatterns],
 };
 
 const generated = [
-  "**/routeTree.gen.ts",
   "**/generated/**",
-  "**/drizzle/**/snapshot.json",
   ".claude/skills/**",
   ".claude/hooks/fallow-gate.sh",
   ".intent/**",
