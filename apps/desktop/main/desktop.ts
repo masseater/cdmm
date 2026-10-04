@@ -3,6 +3,7 @@ import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
 import { ManagerError } from "./errors.ts";
+import { STOP_SCRIPT } from "./powershell.ts";
 
 type DesktopTarget = Readonly<{
   userDataDir: Option.Option<string>;
@@ -73,13 +74,6 @@ const registryEntries = (executable: string): readonly (readonly string[])[] => 
   [String.raw`${APP_KEY}\Capabilities\URLAssociations`, "/v", "claude", "/d", PROG_ID],
   [REGISTERED_APPS, "/v", APP_NAME, "/d", String.raw`Software\ClaudeMaxManager\Capabilities`],
 ];
-
-const STOP_SCRIPT = [
-  "$dir = $env:CMM_USER_DATA_DIR",
-  "Get-CimInstance Win32_Process -Filter \"Name='claude.exe'\" |",
-  "Where-Object { $_.CommandLine -and $_.CommandLine.Contains($dir) -and -not $_.CommandLine.Contains('--type=') } |",
-  "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }",
-].join(" ");
 
 const codeArgs = (title: string): readonly string[] => [
   "/c",
