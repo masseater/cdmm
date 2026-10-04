@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { http, override, preset, stdio } from "./fixtures.test-helpers.ts";
+import { http, override, preset, stdio } from "./fixtures.test.helpers.ts";
 import type { McpMap } from "./model.ts";
 import { findSecretsInOverride, findSecretsInPreset } from "./secret-guard.ts";
 

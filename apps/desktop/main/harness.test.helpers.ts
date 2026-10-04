@@ -3,19 +3,22 @@ import { Context, Effect, FileSystem, Layer, Ref } from "effect";
 import { Base64 } from "effect/encoding";
 
 import { Desktop } from "./desktop.ts";
-import type { DesktopTarget } from "./desktop.ts";
 import { ManagerError } from "./errors.ts";
 import { Host } from "./host.ts";
 import { sessionLayer } from "./session.ts";
 import { storeLayer } from "./store.ts";
 
+type LaunchTarget = Desktop["Service"]["launch"] extends (target: infer Target) => unknown
+  ? Target
+  : never;
+
 type RecorderShape = Readonly<{
-  launched: Ref.Ref<readonly DesktopTarget[]>;
+  launched: Ref.Ref<readonly LaunchTarget[]>;
   running: Ref.Ref<ReadonlySet<string>>;
 }>;
 
 class Recorder extends Context.Service<Recorder, RecorderShape>()(
-  "@claude-max-manager/desktop/main/harness.test-helpers/Recorder",
+  "@claude-max-manager/desktop/main/harness.test.helpers/Recorder",
 ) {}
 
 const SEALED = "sealed:";
@@ -23,7 +26,7 @@ const SEALED = "sealed:";
 const recorderLayer = Layer.effect(
   Recorder,
   Effect.gen(function* makeRecorder() {
-    const launched = yield* Ref.make<readonly DesktopTarget[]>([]);
+    const launched = yield* Ref.make<readonly LaunchTarget[]>([]);
     const running = yield* Ref.make<ReadonlySet<string>>(new Set());
     return Recorder.of({ launched, running });
   }),

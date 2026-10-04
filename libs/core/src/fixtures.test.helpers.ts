@@ -94,6 +94,7 @@ const serverOf = (
   spec: Readonly<{ file: Readonly<Record<string, unknown>>; name: string }>,
 ): Readonly<Record<string, unknown>> => asRecord(asRecord(spec.file["mcpServers"])[spec.name]);
 
+export type { RenderSpec, StringMap };
 export {
   contextFor,
   GITHUB,

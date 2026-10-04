@@ -56,5 +56,5 @@ const accountPaths = (
   };
 };
 
-export type { AccountPaths, RootPaths };
+export type { AccountPaths, Join, RootPaths };
 export { accountPaths, isValidId, rootPaths };

@@ -11,7 +11,7 @@ import {
   serverNames,
   serverOf,
   stdio,
-} from "./fixtures.test-helpers.ts";
+} from "./fixtures.test.helpers.ts";
 import { emptyManaged, emptyOverride } from "./model.ts";
 import { render } from "./render.ts";
 import { asRecord, resolveEffective } from "./resolve.ts";

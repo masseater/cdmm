@@ -226,5 +226,13 @@ const render = (input: RenderInput): RenderResult => {
   };
 };
 
-export type { CurrentFiles, IsolatedHome, RenderContext, Rendered, RenderResult };
+export type {
+  CurrentFiles,
+  IsolatedHome,
+  RenderContext,
+  Rendered,
+  RenderInput,
+  RenderResult,
+  Secrets,
+};
 export { render };

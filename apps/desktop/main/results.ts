@@ -43,4 +43,5 @@ const saveChecked = <Failure extends Failable, Services>(
   );
 };
 
+export type { Failable };
 export { ensure, saveChecked, settle };

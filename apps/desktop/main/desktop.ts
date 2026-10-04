@@ -266,5 +266,5 @@ const unsupportedLayer = Layer.succeed(
   }),
 );
 
-export type { DesktopShape, DesktopTarget };
+export type { WindowsServices };
 export { Desktop, unsupportedLayer, windowsLayer };

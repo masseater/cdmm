@@ -4,6 +4,7 @@
   "typeAware": { "enabled": true, "require": "complete" },
   "failOnParseError": true,
   "ignorePatterns": [".claude/**"],
+  "entry": ["apps/desktop/main/index.ts", "apps/desktop/main/preload.ts"],
   "audit": { "gate": "all" },
   "security": {
     "categories": {

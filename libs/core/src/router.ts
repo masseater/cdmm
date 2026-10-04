@@ -26,19 +26,24 @@ const LOGIN_PATH = /callback|magic|auth|sso|login/iu;
 const MAX_LINK_LENGTH = 32_768;
 const ONE = 1;
 
-const classifyLink = (raw: string): LinkKind => {
-  if (raw.length > MAX_LINK_LENGTH || !URL.canParse(raw)) {
-    return "invalid";
-  }
-  const url = new URL(raw);
-  if (url.protocol !== "claude:") {
-    return "invalid";
-  }
-  if (url.hostname === LOGIN_HOST || LOGIN_PATH.test(url.pathname)) {
+type ClaudeLink = Readonly<{ host: string; path: string }>;
+
+const parseLink = (raw: string): Option.Option<ClaudeLink> =>
+  Option.liftPredicate(raw, (value) => value.length <= MAX_LINK_LENGTH && URL.canParse(value)).pipe(
+    Option.map((value) => new URL(value)),
+    Option.filter((url) => url.protocol === "claude:"),
+    Option.map((url) => ({ host: url.hostname, path: url.pathname })),
+  );
+
+const kindOf = (link: ClaudeLink): LinkKind => {
+  if (link.host === LOGIN_HOST || LOGIN_PATH.test(link.path)) {
     return "login";
   }
   return "general";
 };
+
+const classifyLink = (raw: string): LinkKind =>
+  Option.match(parseLink(raw), { onNone: (): LinkKind => "invalid", onSome: kindOf });
 
 const single = (ids: readonly string[]): Option.Option<string> =>
   Option.filter(Arr.head(ids), () => ids.length === ONE);

@@ -244,7 +244,6 @@ catalogs:
 overrides:
   effect: 4.0.0
   '@effect/platform-node-shared': 4.0.0
-  '@effect/vitest': 4.0.0
   vite@*: npm:@voidzero-dev/vite-plus-core@1.0.0
   eslint-plugin-react-hooks>zod-validation-error: ^5.0.0
 

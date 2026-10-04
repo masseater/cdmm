@@ -3,7 +3,7 @@ import type { Account, McpEntry, Preset } from "@claude-max-manager/core";
 import { Effect } from "effect";
 import { describe, expect, it } from "vite-plus/test";
 
-import { runTest } from "./harness.test-helpers.ts";
+import { runTest } from "./harness.test.helpers.ts";
 import { handlers } from "./manager.ts";
 import {
   accountFile,
@@ -13,7 +13,7 @@ import {
   GITHUB,
   treeText,
   WORK,
-} from "./scenario.test-helpers.ts";
+} from "./scenario.test.helpers.ts";
 import { Store } from "./store.ts";
 
 const TOKEN_A = "token-for-account-a-0123456789";

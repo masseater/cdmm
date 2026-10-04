@@ -4,7 +4,7 @@ import { Effect, FileSystem, Option, Path, pipe, Ref } from "effect";
 
 import { ManagerError } from "./errors.ts";
 import { readJson, writeJson } from "./files.ts";
-import { Recorder } from "./harness.test-helpers.ts";
+import { Recorder } from "./harness.test.helpers.ts";
 import { handlers } from "./manager.ts";
 import { Store } from "./store.ts";
 import { overview } from "./views.ts";

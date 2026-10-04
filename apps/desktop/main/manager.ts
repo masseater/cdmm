@@ -87,4 +87,5 @@ const handlers: Handlers = {
   dismissChoice: (link) => settle(takeChoice(link)),
 };
 
+export type { Handlers };
 export { handlers };

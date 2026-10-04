@@ -54,16 +54,24 @@ const checkMap = (path: string, map: Readonly<Record<string, string>>): readonly
     checkNamed({ path: `${path}.${name}`, name, value }),
   );
 
-const checkArg = (
-  input: Readonly<{ path: string; arg: string; next: string }>,
-): readonly SecretFinding[] => {
-  const groups = Option.fromNullishOr(FLAG.exec(input.arg)).pipe(
+const flagOf = (arg: string): Readonly<{ name: string; value: Option.Option<string> }> => {
+  const groups = Option.fromNullishOr(FLAG.exec(arg)).pipe(
     Option.flatMapNullishOr((match) => match.groups),
     Option.getOrElse((): Readonly<Record<string, string>> => ({})),
   );
-  const name = groups["name"] ?? "";
-  if (SECRET_NAME.test(name)) {
-    return checkNamed({ path: input.path, name, value: groups["value"] ?? input.next });
+  return { name: groups["name"] ?? "", value: Option.fromNullishOr(groups["value"]) };
+};
+
+const checkArg = (
+  input: Readonly<{ path: string; arg: string; next: string }>,
+): readonly SecretFinding[] => {
+  const flag = flagOf(input.arg);
+  if (SECRET_NAME.test(flag.name)) {
+    return checkNamed({
+      path: input.path,
+      name: flag.name,
+      value: Option.getOrElse(flag.value, () => input.next),
+    });
   }
   if (looksSecret(input.arg)) {
     return [{ path: input.path, reason: "secret-shape" }];

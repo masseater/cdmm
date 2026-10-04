@@ -55,4 +55,5 @@ const registerIpc = (input: Readonly<{ run: Run; ui: Ui }>): void => {
   }
 };
 
+export type { Run };
 export { registerIpc };

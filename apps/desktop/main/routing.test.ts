@@ -2,10 +2,10 @@ import type { Account } from "@claude-max-manager/core";
 import { Effect, Option, Ref } from "effect";
 import { describe, expect, it } from "vite-plus/test";
 
-import { Recorder, runTest } from "./harness.test-helpers.ts";
+import { Recorder, runTest } from "./harness.test.helpers.ts";
 import { handleLink } from "./links.ts";
 import { handlers } from "./manager.ts";
-import { createAccount, setRunning, signInAs } from "./scenario.test-helpers.ts";
+import { createAccount, setRunning, signInAs } from "./scenario.test.helpers.ts";
 import { Store } from "./store.ts";
 
 const LAST = -1;

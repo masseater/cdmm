@@ -224,5 +224,5 @@ const makeStore = Effect.gen(function* makeStore() {
 
 const storeLayer = Layer.effect(Store, makeStore);
 
-export type { Secrets, State, StoreError };
-export { DEFAULT_PRESET, Store, storeLayer };
+export type { StoreError };
+export { Store, storeLayer };
