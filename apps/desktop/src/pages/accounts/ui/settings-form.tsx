@@ -34,13 +34,14 @@ const SettingsForm = ({ view }: Readonly<{ view: AccountView }>): ReactNode => {
     [account, label, mutate, preset],
   );
   return (
-    <form className="flex flex-col gap-3 rounded-md border p-4" onSubmit={submit}>
-      <h2 className="font-semibold">{COPY.settings}</h2>
+    <form className="mt-4 flex flex-col gap-3" onSubmit={submit}>
       <LabelField draft={label} />
       <PresetSelect draft={preset} />
-      <Button type="submit" size="sm">
-        {COPY.save}
-      </Button>
+      <div>
+        <Button type="submit" size="sm">
+          {COPY.save}
+        </Button>
+      </div>
       <OutcomeMessage outcome={Option.fromNullishOr(action.data)} />
     </form>
   );

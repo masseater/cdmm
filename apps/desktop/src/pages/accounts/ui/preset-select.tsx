@@ -12,6 +12,7 @@ const PresetSelect = ({ draft }: Readonly<{ draft: DraftAtom }>): ReactNode => {
   return (
     <select
       aria-label={COPY.preset}
+      title={COPY.preset}
       className="border-input h-9 rounded-md border bg-transparent px-2 text-sm"
       value={draft.value}
       onChange={choose}

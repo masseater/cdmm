@@ -12,7 +12,7 @@ const DesktopStatus = ({ install }: Readonly<{ install: DesktopInstall }>): Reac
     return <Badge variant="outline">{COPY.windowsOnly}</Badge>;
   }
   if (install.testedVersion) {
-    return <Badge variant="secondary">{COPY.desktopVersion(install.version)}</Badge>;
+    return "";
   }
   return <Badge variant="outline">{COPY.desktopUntested(install.version)}</Badge>;
 };

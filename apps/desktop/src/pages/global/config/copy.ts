@@ -1,18 +1,15 @@
 const COPY = {
-  intro:
-    "Global presets hold settings shared by several accounts. They never hold credentials: write {{secret:NAME}} and give each account its own value.",
   newPreset: "New preset name",
-  create: "Create",
+  create: "Add",
   name: "Name",
   mcp: "MCP servers (JSON)",
   mcpHelp:
-    'Map of name to {"server": {"kind": "stdio", "command", "args", "env"} or {"kind": "http", "url", "headers"}, "targets": "desktop" | "code" | "both", "shareHome": false}.',
+    'Map of name to {"server": {"kind": "stdio", "command", "args", "env"} or {"kind": "http", "url", "headers"}, "targets": "desktop" | "code" | "both", "shareHome": false}. Write credentials as {{secret:NAME}} and set the value in each account.',
   codeSettings: "Claude Code settings.json (JSON)",
-  rules: "Rules added to CLAUDE.md",
+  rules: "CLAUDE.md rules",
   save: "Save",
   delete: "Delete preset",
-  usedBy: (labels: string): string => `Used by: ${labels}`,
-  unused: "No account uses this preset.",
+  unused: "Unused",
   invalid: (field: string, message: string): string => `${field}: ${message}`,
 } as const;
 

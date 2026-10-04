@@ -5,14 +5,14 @@ Claude Maxのアカウントを2つ（以下AとB）と、MSIX版のClaude Deskt
 
 ## 準備
 
-インストーラーでこのアプリを入れて起動し、ヘッダーにDesktopの版が出ることを確かめる。
-「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Managerを選ぶ。
-ヘッダーの表示が「claude:// links routed」に変われば準備は終わりである。
+インストーラーでこのアプリを入れて起動し、ヘッダーに「Claude Desktop not installed」が出ないことを確かめる。
+ヘッダーの「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Managerを選ぶ。
+ヘッダーからそのボタンが消えれば準備は終わりである。
 
 ## ログインと同時起動
 
 Accountsでアカウント環境AとBを作る。
-Aで「Sign in」を押してブラウザでアカウントAにログインし、Aが● Runningになり、IdentityにアカウントAが出ることを確かめる。
+Aで「Sign in」を押してブラウザでアカウントAにログインし、一覧のAが「● Running」になり「Not signed in」が消えることを確かめる。
 Bも同じ手順でアカウントBにログインする。
 AとBのDesktopが同時に開き、それぞれ別のアカウントで会話できれば合格である。
 
@@ -25,14 +25,14 @@ Aのトークンを取り消してもBの接続が切れなければ、認証情
 ## 切り替えとリンク
 
 Aを停止してBだけを動かし、`claude://`のリンクを開く。
-リンクがBに届いたことは、Bの`desktop\logs\main.log`で確かめる。
+リンクの開く画面がBのDesktopに出ることを確かめる。
 次にAとBの両方をログイン待ちにしてから、ログインの戻りを開く。
 このときは渡し先を選ぶ画面が出て、推測で配送されないことを確かめる。
 
 ## 再起動とDesktopの更新
 
 Windowsを再起動した後も、AとBがログイン済みのまま起動し、`claude://`のリンクがこのアプリへ届くことを確かめる。
-Desktopを更新した後は、ヘッダーの版が新しくなり、AとBが起動してログイン状態が残っていることを確かめる。
+Desktopを更新した後は、ヘッダーに「(untested version)」と新しい版が出て、AとBが起動してログイン状態が残っていることを確かめる。
 
 ## 設定の継承
 

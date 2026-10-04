@@ -5,7 +5,6 @@ import type { ReactNode } from "react";
 
 import { COPY } from "#/app/config/copy";
 import { managerApi, useAction } from "#/shared/api";
-import { Badge } from "#/shared/ui/badge";
 import { Button } from "#/shared/ui/button";
 import { OutcomeMessage } from "#/shared/ui/outcome-message";
 
@@ -15,10 +14,7 @@ const RouterStatus = ({ router }: Readonly<{ router: RouterState }>): ReactNode 
   const register = useCallback(() => {
     mutate();
   }, [mutate]);
-  if (router.status === "active") {
-    return <Badge variant="secondary">{COPY.routerActive}</Badge>;
-  }
-  if (router.status === "unsupported-platform") {
+  if (router.status === "active" || router.status === "unsupported-platform") {
     return "";
   }
   return (

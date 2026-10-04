@@ -45,7 +45,7 @@ const NewPresetForm = (): ReactNode => {
         value={name.value}
         onChange={typeName}
       />
-      <Button type="submit" size="sm">
+      <Button type="submit" variant="outline">
         {COPY.create}
       </Button>
     </form>

@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/global/config/copy";
 import { useDraftAtomChange } from "#/shared/lib/draft-atom";
-import { Button } from "#/shared/ui/button";
 import { Input } from "#/shared/ui/input";
 import { LabeledField } from "#/shared/ui/labeled-field";
 import { Textarea } from "#/shared/ui/textarea";
@@ -32,9 +31,6 @@ const PresetFields = ({ form }: Readonly<{ form: PresetDraftAtoms }>): ReactNode
       <LabeledField label={COPY.rules}>
         <Textarea rows={RULES_ROWS} value={form.rules.value} onChange={editRules} />
       </LabeledField>
-      <Button type="submit" size="sm">
-        {COPY.save}
-      </Button>
     </>
   );
 };

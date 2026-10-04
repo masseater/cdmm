@@ -8,39 +8,37 @@ import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
 import { Button } from "#/shared/ui/button";
 import { Input } from "#/shared/ui/input";
 
-import { PresetSelect } from "./preset-select";
-
 const DEFAULT_COLOR = "#d97757";
+const DEFAULT_PRESET = "default";
 
 const NewAccountForm = (): ReactNode => {
   const label = useDraftAtom({ key: "new-account:label", saved: "" });
-  const preset = useDraftAtom({ key: "new-account:preset", saved: "default" });
   const { mutate } = useAction({
     key: "create-account",
-    run: (input: Readonly<{ label: string; presetId: string }>) =>
-      managerApi().createAccount({ ...input, color: DEFAULT_COLOR }),
+    run: (name: string) =>
+      managerApi().createAccount({ label: name, color: DEFAULT_COLOR, presetId: DEFAULT_PRESET }),
   });
   const typeLabel = useDraftAtomChange(label);
   const submit: SubmitEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
-      if (Str.isNonEmpty(label.value.trim())) {
-        mutate({ label: label.value.trim(), presetId: preset.value }, { onSuccess: label.reset });
+      const name = label.value.trim();
+      if (Str.isNonEmpty(name)) {
+        mutate(name, { onSuccess: label.reset });
       }
     },
-    [label, mutate, preset.value],
+    [label, mutate],
   );
   return (
-    <form className="flex flex-col gap-2 rounded-md border p-3" onSubmit={submit}>
+    <form className="flex gap-2" onSubmit={submit}>
       <Input
-        aria-label={COPY.label}
+        aria-label={COPY.newAccount}
         placeholder={COPY.newAccount}
         value={label.value}
         onChange={typeLabel}
       />
-      <PresetSelect draft={preset} />
-      <Button type="submit" size="sm">
-        {COPY.create}
+      <Button type="submit" variant="outline">
+        {COPY.add}
       </Button>
     </form>
   );

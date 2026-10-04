@@ -45,13 +45,15 @@ const OverrideEditor = ({ view }: Readonly<{ view: AccountView }>): ReactNode =>
     [draft, mutate],
   );
   return (
-    <form className="flex flex-col gap-2 rounded-md border p-4" onSubmit={submit}>
-      <h2 className="font-semibold">{COPY.override}</h2>
+    <form className="mt-6 flex flex-col gap-2" onSubmit={submit}>
+      <h3 className="text-sm font-medium">{COPY.override}</h3>
       <p className="text-muted-foreground text-xs">{COPY.overrideHelp}</p>
-      <Textarea aria-label={COPY.override} rows={12} value={draft.value} onChange={edit} />
-      <Button type="submit" size="sm">
-        {COPY.save}
-      </Button>
+      <Textarea aria-label={COPY.override} rows={8} value={draft.value} onChange={edit} />
+      <div>
+        <Button type="submit" size="sm">
+          {COPY.save}
+        </Button>
+      </div>
       <OutcomeMessage outcome={Option.fromNullishOr(action.data)} />
     </form>
   );
