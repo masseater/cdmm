@@ -14,8 +14,8 @@ type Ui = Readonly<{
 }>;
 
 const CHANGED = "cmm:changed";
-const WINDOW_WIDTH = 1180;
-const WINDOW_HEIGHT = 780;
+const WINDOW_WIDTH = 800;
+const WINDOW_HEIGHT = 500;
 const FIRST = 0;
 
 const createWindow = (locations: Locations): void => {

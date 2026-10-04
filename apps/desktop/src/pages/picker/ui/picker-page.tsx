@@ -10,8 +10,8 @@ import { ProfileList } from "./profile-list";
 const PickerPage = ({ onManage }: Readonly<{ onManage: () => void }>): ReactNode => {
   const { accounts } = useSuspenseQuery(overviewQuery).data;
   return (
-    <div className="flex flex-col gap-16">
-      <div className="flex justify-end">
+    <div className="relative flex flex-1 items-center justify-center">
+      <div className="absolute top-0 right-0">
         <Button
           variant="ghost"
           size="icon"
@@ -22,9 +22,7 @@ const PickerPage = ({ onManage }: Readonly<{ onManage: () => void }>): ReactNode
           {COPY.manageIcon}
         </Button>
       </div>
-      <div className="flex justify-center">
-        <ProfileList accounts={accounts} onManage={onManage} />
-      </div>
+      <ProfileList accounts={accounts} onManage={onManage} />
     </div>
   );
 };

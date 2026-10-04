@@ -24,7 +24,7 @@ const ProfileButton = ({ view }: Readonly<{ view: AccountView }>): ReactNode => 
     mutate(account.id);
   }, [mutate, account.id]);
   return (
-    <li className="flex w-28 flex-col items-center gap-1">
+    <li className="flex w-36 flex-col items-center gap-1">
       <button
         type="button"
         disabled={action.isPending}
@@ -32,7 +32,7 @@ const ProfileButton = ({ view }: Readonly<{ view: AccountView }>): ReactNode => 
         onClick={open}
       >
         <ProfileIcon label={account.label} running={view.running} />
-        <span className="w-full truncate text-center text-sm">{account.label}</span>
+        <span className="w-full truncate text-center text-base">{account.label}</span>
       </button>
       <OutcomeMessage outcome={Option.fromNullishOr(action.data)} />
     </li>

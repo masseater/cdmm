@@ -15,7 +15,7 @@ const ProfileList = ({
     return <Button onClick={onManage}>{COPY.add}</Button>;
   }
   return (
-    <ul className="flex flex-wrap justify-center gap-4">
+    <ul className="flex flex-wrap justify-center gap-6">
       {accounts.map((view) => (
         <ProfileButton key={view.account.id} view={view} />
       ))}
