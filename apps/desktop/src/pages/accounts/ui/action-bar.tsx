@@ -2,8 +2,8 @@ import type { AccountView, Done } from "@claude-max-manager/core";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 
+import { isSignedIn } from "#/entities/account";
 import { COPY } from "#/pages/accounts/config/copy";
-import { isSignedIn } from "#/pages/accounts/model/identity";
 import { managerApi } from "#/shared/api";
 import { ActionButton } from "#/shared/ui/action-button";
 

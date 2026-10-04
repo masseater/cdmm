@@ -1,8 +1,8 @@
 import type { AccountView } from "@claude-max-manager/core";
 import type { ReactNode } from "react";
 
-import { COPY } from "#/pages/accounts/config/copy";
-import { isSignedIn, whoOf } from "#/pages/accounts/model/identity";
+import { COPY } from "#/entities/account/config/copy";
+import { isSignedIn, whoOf } from "#/entities/account/model/identity";
 
 const runningOf = (view: AccountView): string => {
   if (view.running) {

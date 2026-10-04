@@ -1,8 +1,8 @@
 import { Atom } from "effect/reactivity";
 
-type Section = "accounts" | "global";
+type Section = "picker" | "accounts" | "global";
 
-const sectionAtom = Atom.make<Section>("accounts");
+const sectionAtom = Atom.make<Section>("picker");
 
 export type { Section };
 export { sectionAtom };

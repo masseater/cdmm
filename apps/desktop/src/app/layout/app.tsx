@@ -23,7 +23,7 @@ const App = (): ReactNode => {
   );
   return (
     <div className="bg-background text-foreground flex min-h-screen flex-col">
-      <Header />
+      <Header section={section} />
       <Suspense>
         <ChoiceBanner />
       </Suspense>

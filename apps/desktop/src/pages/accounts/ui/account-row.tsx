@@ -3,10 +3,9 @@ import { useAtomSet } from "@effect/atom-react";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 
+import { StatusLabel } from "#/entities/account";
 import { selectedAccountAtom } from "#/pages/accounts/model/selection";
 import { ListRow } from "#/shared/ui/list-row";
-
-import { StatusLabel } from "./status-label";
 
 const AccountRow = ({
   view,

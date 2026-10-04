@@ -5,14 +5,14 @@ Claude Maxのアカウントを2つ（以下AとB）と、MSIX版のClaude Deskt
 
 ## 準備
 
-インストーラーでこのアプリを入れて起動し、ヘッダーに「Claude Desktop not installed」が出ないことを確かめる。
-ヘッダーの「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Managerを選ぶ。
-ヘッダーからそのボタンが消えれば準備は終わりである。
+インストーラーでこのアプリを入れて起動し、プロファイルのアイコンが並ぶ画面だけが出て、「Claude Desktop not installed」が出ないことを確かめる。
+右上の「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Managerを選ぶ。
+そのボタンが消えれば準備は終わりである。
 
 ## ログインと同時起動
 
-Accountsでアカウント環境AとBを作る。
-Aで「Sign in」を押してブラウザでアカウントAにログインし、一覧のAが「● Running」になり「Not signed in」が消えることを確かめる。
+右上の歯車ボタンからProfilesを開き、プロファイルAとBを作る。
+「← Back」で選択画面に戻ってAを押し、ブラウザでアカウントAにログインする。選択画面のAのアイコンに緑の点が付き、ProfilesのAから「Not signed in」が消えることを確かめる。
 Bも同じ手順でアカウントBにログインする。
 AとBのDesktopが同時に開き、それぞれ別のアカウントで会話できれば合格である。
 

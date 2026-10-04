@@ -1,6 +1,7 @@
 const COPY = {
   title: "Claude Max Manager",
-  accounts: "Accounts",
+  back: "← Back",
+  accounts: "Profiles",
   global: "Global",
   desktopMissing: "Claude Desktop not installed",
   windowsOnly: "Windows only",
