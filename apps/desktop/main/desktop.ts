@@ -1,4 +1,4 @@
-import type { DesktopInstall, RouterStatus } from "@claude-max-manager/core";
+import type { DesktopInstall, RouterStatus } from "@cdmm/core";
 import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
@@ -24,16 +24,14 @@ type DesktopShape = Readonly<{
   defaultAppsSettings: string;
 }>;
 
-class Desktop extends Context.Service<Desktop, DesktopShape>()(
-  "@claude-max-manager/desktop/main/desktop",
-) {}
+class Desktop extends Context.Service<Desktop, DesktopShape>()("@cdmm/desktop/main/desktop") {}
 
 const PACKAGE_NAME = "Claude";
 const ALIAS = "claude-desktop.exe";
-const PROG_ID = "ClaudeMaxManager.Url";
-const APP_NAME = "ClaudeMaxManager";
-const APP_KEY = String.raw`HKCU\Software\ClaudeMaxManager`;
-const CLASSES_KEY = String.raw`HKCU\Software\Classes\ClaudeMaxManager.Url`;
+const PROG_ID = "cdmm.Url";
+const APP_NAME = "cdmm";
+const APP_KEY = String.raw`HKCU\Software\cdmm`;
+const CLASSES_KEY = String.raw`HKCU\Software\Classes\cdmm.Url`;
 const REGISTERED_APPS = String.raw`HKCU\Software\RegisteredApplications`;
 const ASSOCIATION = String.raw`HKCU\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\claude`;
 const TESTED_VERSIONS: readonly string[] = ["2.19675."];
@@ -59,11 +57,17 @@ const codeEnv = (target: DesktopTarget): Readonly<Record<string, string>> =>
 const routeCommand = (executable: string): string => `"${executable}" --route -- "%1"`;
 
 const registryEntries = (executable: string): readonly (readonly string[])[] => [
-  [CLASSES_KEY, "/ve", "/d", "URL:Claude (Claude Max Manager)"],
+  [CLASSES_KEY, "/ve", "/d", "URL:Claude (Claude Max Desktop Manager)"],
   [CLASSES_KEY, "/v", "URL Protocol", "/d", ""],
   [String.raw`${CLASSES_KEY}\DefaultIcon`, "/ve", "/d", executable],
   [String.raw`${CLASSES_KEY}\shell\open\command`, "/ve", "/d", routeCommand(executable)],
-  [String.raw`${APP_KEY}\Capabilities`, "/v", "ApplicationName", "/d", "Claude Max Manager"],
+  [
+    String.raw`${APP_KEY}\Capabilities`,
+    "/v",
+    "ApplicationName",
+    "/d",
+    "Claude Max Desktop Manager",
+  ],
   [
     String.raw`${APP_KEY}\Capabilities`,
     "/v",
@@ -72,7 +76,7 @@ const registryEntries = (executable: string): readonly (readonly string[])[] => 
     "Opens claude:// links in the Claude account they belong to",
   ],
   [String.raw`${APP_KEY}\Capabilities\URLAssociations`, "/v", "claude", "/d", PROG_ID],
-  [REGISTERED_APPS, "/v", APP_NAME, "/d", String.raw`Software\ClaudeMaxManager\Capabilities`],
+  [REGISTERED_APPS, "/v", APP_NAME, "/d", String.raw`Software\cdmm\Capabilities`],
 ];
 
 const codeArgs = (title: string): readonly string[] => [

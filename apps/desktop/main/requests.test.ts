@@ -2,7 +2,7 @@ import { describe, expect, it } from "vite-plus/test";
 
 import { requestFrom } from "./requests.ts";
 
-const EXE = String.raw`C:\Programs\Claude Max Manager.exe`;
+const EXE = String.raw`C:\Programs\Claude Max Desktop Manager.exe`;
 const LINK = "claude://claude.ai/new?q=1";
 
 describe("requestFrom", () => {

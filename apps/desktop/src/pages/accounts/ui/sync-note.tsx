@@ -1,4 +1,4 @@
-import type { SyncStatus } from "@claude-max-manager/core";
+import type { SyncStatus } from "@cdmm/core";
 import { Array as Arr, Option } from "effect";
 import type { ReactNode } from "react";
 

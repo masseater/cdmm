@@ -1,5 +1,5 @@
-import { McpMapSchema, SettingsSchema } from "@claude-max-manager/core";
-import type { Preset, Saved } from "@claude-max-manager/core";
+import { McpMapSchema, SettingsSchema } from "@cdmm/core";
+import type { Preset, Saved } from "@cdmm/core";
 import { Result, Schema } from "effect";
 import { useCallback } from "react";
 import type { SubmitEventHandler } from "react";

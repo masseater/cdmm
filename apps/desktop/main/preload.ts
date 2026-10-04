@@ -1,4 +1,4 @@
-import { API_METHODS } from "@claude-max-manager/core/methods";
+import { API_METHODS } from "@cdmm/core/methods";
 import { contextBridge, ipcRenderer } from "electron";
 
 const CHANGED = "cmm:changed";
@@ -10,7 +10,7 @@ const api = Object.fromEntries(
   ]),
 );
 
-contextBridge.exposeInMainWorld("claudeMaxManager", {
+contextBridge.exposeInMainWorld("cdmm", {
   api,
   onChanged: (listener: () => void): (() => void) => {
     const handler = (): void => {

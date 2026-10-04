@@ -1,4 +1,4 @@
-import type { AccountView, Preset } from "@claude-max-manager/core";
+import type { AccountView, Preset } from "@cdmm/core";
 import { useAtomValue } from "@effect/atom-react";
 import type { ReactNode } from "react";
 

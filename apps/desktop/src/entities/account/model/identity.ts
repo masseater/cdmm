@@ -1,4 +1,4 @@
-import type { AccountView } from "@claude-max-manager/core";
+import type { AccountView } from "@cdmm/core";
 import { String as Str } from "effect";
 
 const isSignedIn = (view: AccountView): boolean => Str.isNonEmpty(view.identity.desktopAccountUuid);

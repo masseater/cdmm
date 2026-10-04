@@ -1,5 +1,5 @@
 const COPY = {
-  title: "Claude Max Manager",
+  title: "Claude Max Desktop Manager",
   back: "← Back",
   accounts: "Profiles",
   global: "Global",

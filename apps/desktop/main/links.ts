@@ -1,5 +1,5 @@
-import { decideRoute } from "@claude-max-manager/core";
-import type { Account, AccountRuntime, RouteDecision } from "@claude-max-manager/core";
+import { decideRoute } from "@cdmm/core";
+import type { Account, AccountRuntime, RouteDecision } from "@cdmm/core";
 import { Clock, Effect, FileSystem, Match, Option, pipe, Ref, String as Str } from "effect";
 import type { Path } from "effect";
 

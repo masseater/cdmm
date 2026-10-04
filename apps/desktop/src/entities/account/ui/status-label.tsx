@@ -1,4 +1,4 @@
-import type { AccountView } from "@claude-max-manager/core";
+import type { AccountView } from "@cdmm/core";
 import type { ReactNode } from "react";
 
 import { COPY } from "#/entities/account/config/copy";

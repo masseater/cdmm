@@ -1,4 +1,4 @@
-import type { Done, Saved } from "@claude-max-manager/core";
+import type { Done, Saved } from "@cdmm/core";
 import { useMutation } from "@tanstack/react-query";
 import type { UseMutationResult } from "@tanstack/react-query";
 

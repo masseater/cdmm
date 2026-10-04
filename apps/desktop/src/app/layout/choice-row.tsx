@@ -1,4 +1,4 @@
-import type { AccountView, PendingChoice } from "@claude-max-manager/core";
+import type { AccountView, PendingChoice } from "@cdmm/core";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 

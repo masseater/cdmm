@@ -1,5 +1,5 @@
-import { AccountOverrideSchema } from "@claude-max-manager/core";
-import type { AccountView, Saved } from "@claude-max-manager/core";
+import { AccountOverrideSchema } from "@cdmm/core";
+import type { AccountView, Saved } from "@cdmm/core";
 import { Option, Result, Schema } from "effect";
 import { useCallback } from "react";
 import type { ReactNode, SubmitEventHandler } from "react";

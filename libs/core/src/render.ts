@@ -41,8 +41,8 @@ type RenderInput = Readonly<{
 type Target = "desktop" | "code";
 
 const PLACEHOLDER = /\{\{secret:(?<name>[A-Za-z0-9_]+)\}\}/gu;
-const RULES_BEGIN = "<!-- claude-max-manager:begin -->";
-const RULES_END = "<!-- claude-max-manager:end -->";
+const RULES_BEGIN = "<!-- cdmm:begin -->";
+const RULES_END = "<!-- cdmm:end -->";
 const NOT_FOUND = -1;
 const START = 0;
 

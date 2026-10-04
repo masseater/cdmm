@@ -1,5 +1,5 @@
-import { asRecord } from "@claude-max-manager/core";
-import type { Account, Identity, IdentityCheck } from "@claude-max-manager/core";
+import { asRecord } from "@cdmm/core";
+import type { Account, Identity, IdentityCheck } from "@cdmm/core";
 import { Effect, Option, Path, Predicate, String as Str } from "effect";
 
 import { readJson } from "./files.ts";

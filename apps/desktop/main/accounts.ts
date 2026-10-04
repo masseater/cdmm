@@ -1,5 +1,5 @@
-import { emptyOverride } from "@claude-max-manager/core";
-import type { Account, ApiInput } from "@claude-max-manager/core";
+import { emptyOverride } from "@cdmm/core";
+import type { Account, ApiInput } from "@cdmm/core";
 import { Crypto, Effect, Ref, String as Str } from "effect";
 
 import { identityOf } from "./identity.ts";

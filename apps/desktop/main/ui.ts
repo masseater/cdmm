@@ -1,4 +1,4 @@
-import type { ApiInput } from "@claude-max-manager/core";
+import type { ApiInput } from "@cdmm/core";
 import { Effect, Option } from "effect";
 import { app, BrowserWindow, Menu, Tray } from "electron";
 
@@ -26,7 +26,7 @@ const FIRST = 0;
 const createWindow = (locations: Locations): void => {
   const window = new BrowserWindow({
     ...SIZES.picker,
-    title: "Claude Max Manager",
+    title: "Claude Max Desktop Manager",
     icon: locations.icon,
     autoHideMenuBar: true,
     webPreferences: {
@@ -74,7 +74,7 @@ const makeUi = (locations: Locations): Ui => {
 
 const createTray = (input: Readonly<{ locations: Locations; ui: Ui }>): Tray => {
   const tray = new Tray(input.locations.tray);
-  tray.setToolTip("Claude Max Manager");
+  tray.setToolTip("Claude Max Desktop Manager");
   tray.setContextMenu(
     Menu.buildFromTemplate([
       { label: "Open", click: input.ui.showWindow },

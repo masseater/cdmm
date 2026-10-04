@@ -1,4 +1,4 @@
-import type { IsolatedHome } from "@claude-max-manager/core";
+import type { IsolatedHome } from "@cdmm/core";
 
 type Join = (...segments: readonly string[]) => string;
 
@@ -19,7 +19,7 @@ type RootPaths = Readonly<{
   state: string;
 }>;
 
-const ROOT_NAME = "ClaudeMaxManager";
+const ROOT_NAME = "cdmm";
 const ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,62}$/u;
 
 const isValidId = (id: string): boolean => ID_PATTERN.test(id);

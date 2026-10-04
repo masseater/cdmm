@@ -1,4 +1,4 @@
-import type { Preset } from "@claude-max-manager/core";
+import type { Preset } from "@cdmm/core";
 import { useAtomValue } from "@effect/atom-react";
 import { Option } from "effect";
 import type { ReactNode } from "react";

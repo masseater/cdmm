@@ -1,5 +1,5 @@
-import { findSecretsInOverride, findSecretsInPreset } from "@claude-max-manager/core";
-import type { ApiInput, ApiMethod, ApiOutputs } from "@claude-max-manager/core";
+import { findSecretsInOverride, findSecretsInPreset } from "@cdmm/core";
+import type { ApiInput, ApiMethod, ApiOutputs } from "@cdmm/core";
 import { Effect, Option } from "effect";
 
 import {

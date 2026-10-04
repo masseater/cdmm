@@ -65,7 +65,7 @@ Overrideでは、プリセットのMCPサーバーの無効化、追加、差し
 ## データの配置
 
 ```text
-%APPDATA%\ClaudeMaxManager\
+%APPDATA%\cdmm\
 ├── global\presets\<id>.json
 ├── state.json
 └── accounts\<id>\

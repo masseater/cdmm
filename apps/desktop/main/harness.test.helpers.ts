@@ -18,7 +18,7 @@ type RecorderShape = Readonly<{
 }>;
 
 class Recorder extends Context.Service<Recorder, RecorderShape>()(
-  "@claude-max-manager/desktop/main/harness.test.helpers/Recorder",
+  "@cdmm/desktop/main/harness.test.helpers/Recorder",
 ) {}
 
 const SEALED = "sealed:";

@@ -329,7 +329,7 @@ importers:
 
   apps/desktop:
     dependencies:
-      '@claude-max-manager/core':
+      '@cdmm/core':
         specifier: workspace:*
         version: link:../../libs/core
       '@effect/atom-react':

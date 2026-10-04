@@ -1,4 +1,4 @@
-import type { SyncStatus } from "@claude-max-manager/core";
+import type { SyncStatus } from "@cdmm/core";
 import { Context, Effect, Layer, Ref } from "effect";
 
 type SessionShape = Readonly<{
@@ -6,9 +6,7 @@ type SessionShape = Readonly<{
   choices: Ref.Ref<ReadonlyMap<string, readonly string[]>>;
 }>;
 
-class Session extends Context.Service<Session, SessionShape>()(
-  "@claude-max-manager/desktop/main/session",
-) {}
+class Session extends Context.Service<Session, SessionShape>()("@cdmm/desktop/main/session") {}
 
 const sessionLayer = Layer.effect(
   Session,

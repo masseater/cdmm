@@ -155,7 +155,7 @@ describe("rules", () => {
   it("rewrite only their own block in CLAUDE.md", () => {
     const rendered = renderOk({ context, current: { ...noFiles, rules: "My notes\n" } });
     expect(rendered.rules).toBe(
-      "<!-- claude-max-manager:begin -->\nAnswer in Japanese.\n<!-- claude-max-manager:end -->\n\nMy notes\n",
+      "<!-- cdmm:begin -->\nAnswer in Japanese.\n<!-- cdmm:end -->\n\nMy notes\n",
     );
   });
 

@@ -1,4 +1,4 @@
-import type { Done, Saved } from "@claude-max-manager/core";
+import type { Done, Saved } from "@cdmm/core";
 import { Option } from "effect";
 import type { ReactNode } from "react";
 

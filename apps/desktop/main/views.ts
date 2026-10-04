@@ -1,4 +1,4 @@
-import type { Account, AccountView, Overview } from "@claude-max-manager/core";
+import type { Account, AccountView, Overview } from "@cdmm/core";
 import { Clock, Effect, pipe } from "effect";
 
 import { Desktop } from "./desktop.ts";

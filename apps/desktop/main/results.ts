@@ -1,4 +1,4 @@
-import type { Done, Saved, SecretFinding } from "@claude-max-manager/core";
+import type { Done, Saved, SecretFinding } from "@cdmm/core";
 import { Array as Arr, Effect } from "effect";
 
 import { ManagerError } from "./errors.ts";

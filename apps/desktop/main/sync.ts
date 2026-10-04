@@ -1,5 +1,5 @@
-import { asRecord, render, resolveEffective } from "@claude-max-manager/core";
-import type { Account, SyncStatus } from "@claude-max-manager/core";
+import { asRecord, render, resolveEffective } from "@cdmm/core";
+import type { Account, SyncStatus } from "@cdmm/core";
 import { Effect, Option, Path, Ref } from "effect";
 
 import { readJson, readText, writeJson, writeText } from "./files.ts";

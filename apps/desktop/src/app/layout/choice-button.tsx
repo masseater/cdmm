@@ -1,4 +1,4 @@
-import type { Account } from "@claude-max-manager/core";
+import type { Account } from "@cdmm/core";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 

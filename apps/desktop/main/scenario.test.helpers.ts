@@ -1,5 +1,5 @@
-import { asRecord } from "@claude-max-manager/core";
-import type { Account, McpEntry, Preset } from "@claude-max-manager/core";
+import { asRecord } from "@cdmm/core";
+import type { Account, McpEntry, Preset } from "@cdmm/core";
 import { Effect, FileSystem, Option, Path, pipe, Ref } from "effect";
 
 import { ManagerError } from "./errors.ts";

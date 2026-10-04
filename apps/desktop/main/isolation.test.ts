@@ -1,5 +1,5 @@
-import { emptyOverride } from "@claude-max-manager/core";
-import type { Account, McpEntry, Preset } from "@claude-max-manager/core";
+import { emptyOverride } from "@cdmm/core";
+import type { Account, McpEntry, Preset } from "@cdmm/core";
 import { Effect, FileSystem } from "effect";
 import { describe, expect, it } from "vite-plus/test";
 

@@ -1,7 +1,7 @@
-appId: io.github.masseater.claude-max-manager
-productName: Claude Max Manager
+appId: io.github.masseater.cdmm
+productName: Claude Max Desktop Manager
 extraMetadata:
-  name: claude-max-manager
+  name: cdmm
 directories:
   output: release
 files:

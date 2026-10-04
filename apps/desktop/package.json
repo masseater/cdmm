@@ -1,5 +1,5 @@
 {
-  "name": "@claude-max-manager/desktop",
+  "name": "@cdmm/desktop",
   "version": "0.0.0",
   "private": true,
   "description": "Run several Claude Max accounts in the official Claude Desktop on Windows",
@@ -18,7 +18,7 @@
     "fallow": "fallow --production --quiet --format compact && fallow dupes --quiet --format compact && fallow security --fail-on-issues --quiet"
   },
   "dependencies": {
-    "@claude-max-manager/core": "workspace:*",
+    "@cdmm/core": "workspace:*",
     "@effect/atom-react": "catalog:stack",
     "@effect/platform-node": "catalog:",
     "@tanstack/react-query": "catalog:stack",

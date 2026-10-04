@@ -1,4 +1,4 @@
-import type { DesktopInstall } from "@claude-max-manager/core";
+import type { DesktopInstall } from "@cdmm/core";
 import type { ReactNode } from "react";
 
 import { COPY } from "#/app/config/copy";

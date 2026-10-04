@@ -1,5 +1,5 @@
-import { AccountSchema, emptyManaged, ManagedSchema, PresetSchema } from "@claude-max-manager/core";
-import type { Account, Managed, Preset } from "@claude-max-manager/core";
+import { AccountSchema, emptyManaged, ManagedSchema, PresetSchema } from "@cdmm/core";
+import type { Account, Managed, Preset } from "@cdmm/core";
 import { Context, Effect, Layer, Option, Path, pipe, Schema } from "effect";
 import type { Crypto, FileSystem, PlatformError } from "effect";
 
@@ -76,9 +76,7 @@ type StoreShape = Readonly<{
   saveSecrets: (input: Readonly<{ id: string; value: Secrets }>) => Io<WriteResult>;
 }>;
 
-class Store extends Context.Service<Store, StoreShape>()(
-  "@claude-max-manager/desktop/main/store",
-) {}
+class Store extends Context.Service<Store, StoreShape>()("@cdmm/desktop/main/store") {}
 
 const checkedId = (id: string): Effect.Effect<string, ManagerError> => {
   if (isValidId(id)) {

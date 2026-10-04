@@ -1,4 +1,4 @@
-import type { Preset } from "@claude-max-manager/core";
+import type { Preset } from "@cdmm/core";
 import { Atom } from "effect/reactivity";
 
 const selectedPresetAtom = Atom.make("default");

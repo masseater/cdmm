@@ -1,4 +1,4 @@
-import type { ManagerApi } from "@claude-max-manager/core";
+import type { ManagerApi } from "@cdmm/core";
 
 type Bridge = Readonly<{
   api: ManagerApi;
@@ -6,12 +6,12 @@ type Bridge = Readonly<{
 }>;
 
 declare global {
-  var claudeMaxManager: Bridge;
+  var cdmm: Bridge;
 }
 
-const managerApi = (): ManagerApi => globalThis.claudeMaxManager.api;
+const managerApi = (): ManagerApi => globalThis.cdmm.api;
 
 const onManagerChanged = (listener: () => void): (() => void) =>
-  globalThis.claudeMaxManager.onChanged(listener);
+  globalThis.cdmm.onChanged(listener);
 
 export { managerApi, onManagerChanged };

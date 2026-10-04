@@ -10,7 +10,7 @@ import { syncAll } from "./sync.ts";
 import { createTray, makeUi } from "./ui.ts";
 import type { Locations } from "./ui.ts";
 
-const APP_ID = "com.masseater.claude-max-manager";
+const APP_ID = "com.masseater.cdmm";
 
 const locate = Effect.gen(function* locate() {
   const path = yield* Path.Path;

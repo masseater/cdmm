@@ -1,4 +1,4 @@
-import type { AccountView, Preset } from "@claude-max-manager/core";
+import type { AccountView, Preset } from "@cdmm/core";
 import { useAtomSet } from "@effect/atom-react";
 import { Array as Arr } from "effect";
 import { useCallback } from "react";

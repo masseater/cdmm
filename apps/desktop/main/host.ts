@@ -1,4 +1,4 @@
-import type { ApiInput } from "@claude-max-manager/core";
+import type { ApiInput } from "@cdmm/core";
 import { Context } from "effect";
 import type { Effect } from "effect";
 
@@ -15,6 +15,6 @@ class Host extends Context.Service<
     choicesChanged: Effect.Effect<void>;
     fitWindow: (mode: ApiInput<"fitWindow">) => Effect.Effect<void>;
   }>
->()("@claude-max-manager/desktop/main/host") {}
+>()("@cdmm/desktop/main/host") {}
 
 export { Host };

@@ -6,7 +6,7 @@ Claude Maxのアカウントを2つ（以下AとB）と、MSIX版のClaude Deskt
 ## 準備
 
 インストーラーでこのアプリを入れて起動し、プロファイルのアイコンが並ぶ画面だけが出て、「Claude Desktop not installed」が出ないことを確かめる。
-右上の「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Managerを選ぶ。
+右上の「Route claude:// links here」を押すとWindowsが選択画面を出すので、Claude Max Desktop Managerを選ぶ。
 そのボタンが消えれば準備は終わりである。
 
 ## ログインと同時起動

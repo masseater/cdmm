@@ -1,4 +1,4 @@
-import type { Preset } from "@claude-max-manager/core";
+import type { Preset } from "@cdmm/core";
 import { Option } from "effect";
 import { useCallback } from "react";
 import type { ReactNode } from "react";

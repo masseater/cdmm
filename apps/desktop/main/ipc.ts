@@ -1,5 +1,5 @@
-import { API_INPUTS, API_METHODS } from "@claude-max-manager/core";
-import type { ApiMethod, ApiOutputs } from "@claude-max-manager/core";
+import { API_INPUTS, API_METHODS } from "@cdmm/core";
+import type { ApiMethod, ApiOutputs } from "@cdmm/core";
 import { Effect, Option, Schema } from "effect";
 import type { Layer } from "effect";
 import { ipcMain } from "electron";

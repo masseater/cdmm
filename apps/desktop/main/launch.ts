@@ -1,4 +1,4 @@
-import type { ApiInput } from "@claude-max-manager/core";
+import type { ApiInput } from "@cdmm/core";
 import { Clock, Effect, FileSystem, Option } from "effect";
 
 import { Desktop } from "./desktop.ts";

@@ -1,4 +1,4 @@
-import type { Account } from "@claude-max-manager/core";
+import type { Account } from "@cdmm/core";
 import { Effect, Option, Ref } from "effect";
 import { describe, expect, it } from "vite-plus/test";
 
