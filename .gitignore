@@ -44,3 +44,4 @@ dist-ssr
 
 # Electron builder output
 release
+.jev-lint/rules/**/last.json

@@ -7,7 +7,7 @@ import baselineJs from "eslint-plugin-baseline-js";
 import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig } from "vite-plus";
 
-import { generated, restrictedImports } from "./lint.config.ts";
+import { generated, restrictedImports, ruleFixtures } from "./lint.config.ts";
 
 type Rules = Readonly<Record<string, "error">>;
 
@@ -44,7 +44,7 @@ export default defineConfig({
     sortPackageJson: true,
   },
   lint: {
-    ignorePatterns: generated,
+    ignorePatterns: [...generated, ...ruleFixtures],
     plugins: [
       "eslint",
       "typescript",
@@ -158,6 +158,9 @@ export default defineConfig({
   run: {
     cache: true,
     tasks: {
+      "jev-lint-eval": {
+        command: "jev-lint eval .jev-lint/rules --replay",
+      },
       "jev-lint": {
         command: "jev-lint check",
         cache: {

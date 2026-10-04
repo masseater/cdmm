@@ -113,4 +113,6 @@ const generated = [
   "CHANGELOG.md",
 ];
 
-export { generated, requiredStack, restrictedImports };
+const ruleFixtures = [".jev-lint/rules/**/fixtures/**"];
+
+export { generated, requiredStack, restrictedImports, ruleFixtures };
