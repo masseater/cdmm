@@ -1,7 +1,16 @@
+import type { AccountView } from "@claude-max-manager/core";
 import { Atom } from "effect/reactivity";
 
 const selectedAccountAtom = Atom.make("");
 
 const armedDeleteAtom = Atom.make("");
 
-export { armedDeleteAtom, selectedAccountAtom };
+const FIRST = 0;
+
+const shownAccount = ({
+  accounts,
+  selected,
+}: Readonly<{ accounts: readonly AccountView[]; selected: string }>): AccountView | undefined =>
+  accounts.find((each) => each.account.id === selected) ?? accounts.at(FIRST);
+
+export { armedDeleteAtom, selectedAccountAtom, shownAccount };

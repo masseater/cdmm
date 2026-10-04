@@ -1,5 +1,5 @@
 import type { AccountView, Preset } from "@claude-max-manager/core";
-import { useAtom } from "@effect/atom-react";
+import { useAtomSet } from "@effect/atom-react";
 import { Array as Arr } from "effect";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
@@ -19,13 +19,14 @@ const usersOf = (accounts: readonly AccountView[], presetId: string): string => 
 const PresetRow = ({
   preset,
   accounts,
-}: Readonly<{ preset: Preset; accounts: readonly AccountView[] }>): ReactNode => {
-  const [selected, setSelected] = useAtom(selectedPresetAtom);
+  pressed,
+}: Readonly<{ preset: Preset; accounts: readonly AccountView[]; pressed: boolean }>): ReactNode => {
+  const setSelected = useAtomSet(selectedPresetAtom);
   const select = useCallback(() => {
     setSelected(preset.id);
   }, [preset.id, setSelected]);
   return (
-    <ListRow title={preset.name} pressed={selected === preset.id} onSelect={select}>
+    <ListRow title={preset.name} pressed={pressed} onSelect={select}>
       <span className="text-muted-foreground truncate text-xs">{usersOf(accounts, preset.id)}</span>
     </ListRow>
   );

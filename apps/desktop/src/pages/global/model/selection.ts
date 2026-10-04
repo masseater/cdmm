@@ -1,5 +1,14 @@
+import type { Preset } from "@claude-max-manager/core";
 import { Atom } from "effect/reactivity";
 
 const selectedPresetAtom = Atom.make("default");
 
-export { selectedPresetAtom };
+const FIRST = 0;
+
+const shownPreset = ({
+  presets,
+  selected,
+}: Readonly<{ presets: readonly Preset[]; selected: string }>): Preset | undefined =>
+  presets.find((each) => each.id === selected) ?? presets.at(FIRST);
+
+export { selectedPresetAtom, shownPreset };
