@@ -66,7 +66,7 @@ Overrideでは、プリセットのMCPサーバーの無効化、追加、差し
 ```text
 %APPDATA%\ClaudeMaxManager\
 ├── global\presets\<id>.json
-├── settings.json
+├── state.json
 └── accounts\<id>\
     ├── account.json
     ├── secrets.bin
