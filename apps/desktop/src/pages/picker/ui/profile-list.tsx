@@ -16,8 +16,8 @@ const ProfileList = ({
   }
   return (
     <ul className="flex flex-wrap justify-center gap-6">
-      {accounts.map((view) => (
-        <ProfileButton key={view.account.id} view={view} />
+      {accounts.map((view, index) => (
+        <ProfileButton key={view.account.id} view={view} index={index} />
       ))}
     </ul>
   );

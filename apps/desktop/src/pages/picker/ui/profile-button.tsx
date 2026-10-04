@@ -16,7 +16,10 @@ const openOf = (view: AccountView): ((id: string) => Promise<Done>) => {
   return (id) => managerApi().signIn(id);
 };
 
-const ProfileButton = ({ view }: Readonly<{ view: AccountView }>): ReactNode => {
+const ProfileButton = ({
+  view,
+  index,
+}: Readonly<{ view: AccountView; index: number }>): ReactNode => {
   const { account } = view;
   const action = useAction({ key: "open-profile", run: openOf(view) });
   const { mutate } = action;
@@ -31,7 +34,7 @@ const ProfileButton = ({ view }: Readonly<{ view: AccountView }>): ReactNode => 
         className="hover:bg-muted flex w-full flex-col items-center gap-2 rounded-xl p-3 disabled:opacity-50"
         onClick={open}
       >
-        <ProfileIcon label={account.label} running={view.running} />
+        <ProfileIcon label={account.label} index={index} running={view.running} />
         <span className="w-full truncate text-center text-base">{account.label}</span>
       </button>
       <OutcomeMessage outcome={Option.fromNullishOr(action.data)} />

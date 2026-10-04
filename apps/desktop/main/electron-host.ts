@@ -33,6 +33,10 @@ const hostLayer = (ui: Ui): Layer.Layer<Host> =>
         ui.showWindow();
         ui.notify();
       }),
+      fitWindow: (mode) =>
+        Effect.sync(() => {
+          ui.fit(mode);
+        }),
     }),
   );
 

@@ -10,6 +10,7 @@ import {
   updateSecrets,
 } from "./accounts.ts";
 import {
+  fitWindow,
   launchCode,
   launchDesktop,
   openFolder,
@@ -85,6 +86,7 @@ const handlers: Handlers = {
   pendingChoice: () => pendingChoices,
   choose: (input) => settle(choose(input)),
   dismissChoice: (link) => settle(takeChoice(link)),
+  fitWindow: (mode) => settle(fitWindow(mode)),
 };
 
 export type { Handlers };

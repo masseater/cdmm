@@ -49,6 +49,7 @@ const hostLayer = Layer.effect(
       openPath: () => Effect.void,
       openExternal: () => Effect.void,
       choicesChanged: Effect.void,
+      fitWindow: () => Effect.void,
     });
   }),
 );

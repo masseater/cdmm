@@ -1,3 +1,4 @@
+import type { ApiInput } from "@claude-max-manager/core";
 import { Clock, Effect, FileSystem, Option } from "effect";
 
 import { Desktop } from "./desktop.ts";
@@ -58,4 +59,9 @@ const registerRouter = Effect.gen(function* registerRouter() {
   yield* host.openExternal(desktop.defaultAppsSettings);
 });
 
-export { launchCode, launchDesktop, openFolder, registerRouter, signIn, stopDesktop };
+const fitWindow = Effect.fn("fitWindow")(function* fitWindow(mode: ApiInput<"fitWindow">) {
+  const host = yield* Host;
+  yield* host.fitWindow(mode);
+});
+
+export { fitWindow, launchCode, launchDesktop, openFolder, registerRouter, signIn, stopDesktop };

@@ -1,3 +1,4 @@
+import type { ApiInput } from "@claude-max-manager/core";
 import { Context } from "effect";
 import type { Effect } from "effect";
 
@@ -12,6 +13,7 @@ class Host extends Context.Service<
     openPath: (path: string) => Effect.Effect<void, ManagerError>;
     openExternal: (url: string) => Effect.Effect<void, ManagerError>;
     choicesChanged: Effect.Effect<void>;
+    fitWindow: (mode: ApiInput<"fitWindow">) => Effect.Effect<void>;
   }>
 >()("@claude-max-manager/desktop/main/host") {}
 

@@ -4,8 +4,8 @@ import { Effect } from "effect";
 import { Suspense, useEffect } from "react";
 import type { ReactNode } from "react";
 
-import { sectionAtom } from "#/app/model/section";
-import { onManagerChanged } from "#/shared/api";
+import { sectionAtom, windowModeOf } from "#/app/model/section";
+import { managerApi, onManagerChanged } from "#/shared/api";
 
 import { ChoiceBanner } from "./choice-banner";
 import { Header } from "./header";
@@ -21,6 +21,9 @@ const App = (): ReactNode => {
       }),
     [queryClient],
   );
+  useEffect(() => {
+    Effect.runFork(Effect.promise(() => managerApi().fitWindow(windowModeOf(section))));
+  }, [section]);
   return (
     <div className="bg-background text-foreground flex min-h-screen flex-col">
       <Header section={section} />

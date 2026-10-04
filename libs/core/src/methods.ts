@@ -19,6 +19,7 @@ const API_METHODS: readonly ApiMethod[] = [
   "pendingChoice",
   "choose",
   "dismissChoice",
+  "fitWindow",
 ];
 
 export { API_METHODS };

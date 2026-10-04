@@ -1,15 +1,22 @@
 import type { ReactNode } from "react";
 
-import { RunningDot } from "./running-dot";
+import { initialsOf, toneOf } from "#/pages/picker/model/look";
+import { cn } from "#/shared/lib/utils";
 
-const FIRST = 0;
+import { RunningDot } from "./running-dot";
 
 const ProfileIcon = ({
   label,
+  index,
   running,
-}: Readonly<{ label: string; running: boolean }>): ReactNode => (
-  <span className="bg-primary text-primary-foreground relative flex size-28 items-center justify-center rounded-3xl text-5xl font-semibold">
-    {label.charAt(FIRST).toUpperCase()}
+}: Readonly<{ label: string; index: number; running: boolean }>): ReactNode => (
+  <span
+    className={cn(
+      "relative flex size-28 items-center justify-center rounded-3xl text-4xl font-semibold text-white",
+      toneOf(index),
+    )}
+  >
+    {initialsOf(label)}
     <RunningDot running={running} />
   </span>
 );

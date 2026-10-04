@@ -1,3 +1,4 @@
+import type { ApiInput } from "@claude-max-manager/core";
 import { Effect, Option } from "effect";
 import { app, BrowserWindow, Menu, Tray } from "electron";
 
@@ -11,17 +12,20 @@ type Locations = Readonly<{
 type Ui = Readonly<{
   showWindow: () => void;
   notify: () => void;
+  fit: (mode: ApiInput<"fitWindow">) => void;
 }>;
 
 const CHANGED = "cmm:changed";
-const WINDOW_WIDTH = 800;
-const WINDOW_HEIGHT = 500;
+const SIZES: Readonly<Record<ApiInput<"fitWindow">, Readonly<{ width: number; height: number }>>> =
+  {
+    picker: { width: 560, height: 340 },
+    manage: { width: 820, height: 560 },
+  };
 const FIRST = 0;
 
 const createWindow = (locations: Locations): void => {
   const window = new BrowserWindow({
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
+    ...SIZES.picker,
     title: "Claude Max Manager",
     icon: locations.icon,
     autoHideMenuBar: true,
@@ -45,6 +49,13 @@ const notify = (): void => {
   }
 };
 
+const fit = (mode: ApiInput<"fitWindow">): void => {
+  const { width, height } = SIZES[mode];
+  for (const window of BrowserWindow.getAllWindows()) {
+    window.setSize(width, height, true);
+  }
+};
+
 const makeUi = (locations: Locations): Ui => {
   const showWindow = (): void => {
     const existing = Option.fromNullishOr(BrowserWindow.getAllWindows().at(FIRST));
@@ -58,7 +69,7 @@ const makeUi = (locations: Locations): Ui => {
     existing.value.show();
     existing.value.focus();
   };
-  return { showWindow, notify };
+  return { showWindow, notify, fit };
 };
 
 const createTray = (input: Readonly<{ locations: Locations; ui: Ui }>): Tray => {
