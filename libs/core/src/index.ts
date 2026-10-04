@@ -16,7 +16,7 @@ export {
   PresetSchema,
 } from "./model.ts";
 export type { Effective } from "./resolve.ts";
-export { resolveEffective } from "./resolve.ts";
+export { asRecord, resolveEffective } from "./resolve.ts";
 export type { SecretFinding } from "./secret-guard.ts";
 export { findSecretsInOverride, findSecretsInPreset } from "./secret-guard.ts";
 export type {
@@ -29,3 +29,21 @@ export type {
 export { render } from "./render.ts";
 export type { AccountRuntime, LinkKind, RouteDecision, RouteState } from "./router.ts";
 export { classifyLink, decideRoute } from "./router.ts";
+export type {
+  AccountView,
+  ApiInput,
+  ApiMethod,
+  ApiOutputs,
+  DesktopInstall,
+  Done,
+  Identity,
+  IdentityCheck,
+  ManagerApi,
+  Overview,
+  PendingChoice,
+  RouterStatus,
+  Saved,
+  SyncStatus,
+} from "./api.ts";
+export { API_INPUTS } from "./api.ts";
+export { API_METHODS } from "./methods.ts";
