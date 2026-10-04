@@ -9,11 +9,14 @@ export type {
   Settings,
 } from "./model.ts";
 export {
+  AccountOverrideSchema,
   AccountSchema,
   emptyManaged,
   emptyOverride,
   ManagedSchema,
+  McpMapSchema,
   PresetSchema,
+  SettingsSchema,
 } from "./model.ts";
 export type { Effective } from "./resolve.ts";
 export { asRecord, resolveEffective } from "./resolve.ts";

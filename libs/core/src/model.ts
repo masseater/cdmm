@@ -70,4 +70,13 @@ const emptyOverride: AccountOverride = { disabledMcp: [], mcp: {}, codeSettings:
 const emptyManaged: Managed = { desktopMcp: [], codeMcp: [], codeSettings: [] };
 
 export type { Account, AccountOverride, Managed, McpEntry, McpMap, McpServer, Preset, Settings };
-export { AccountSchema, emptyManaged, emptyOverride, ManagedSchema, PresetSchema };
+export {
+  AccountOverrideSchema,
+  AccountSchema,
+  emptyManaged,
+  emptyOverride,
+  ManagedSchema,
+  McpMapSchema,
+  PresetSchema,
+  SettingsSchema,
+};
