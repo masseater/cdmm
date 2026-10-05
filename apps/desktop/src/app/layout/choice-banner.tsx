@@ -9,11 +9,11 @@ const ChoiceBanner = (): ReactNode => {
   const pending = useSuspenseQuery(pendingChoiceQuery).data;
   const { accounts } = useSuspenseQuery(overviewQuery).data;
   return (
-    <section aria-label="Waiting links" className="flex flex-col gap-2 px-6 empty:hidden">
+    <div aria-live="polite" className="flex flex-col gap-2 px-6 empty:hidden">
       {pending.map((choice) => (
         <ChoiceRow key={choice.link} choice={choice} accounts={accounts} />
       ))}
-    </section>
+    </div>
   );
 };
 

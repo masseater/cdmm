@@ -66,3 +66,7 @@ For non-skill agents, treat the task map below as the local onboarding source: r
 | understand a finding | `fallow explain <issue-type>` |
 | scope a monorepo | `--workspace <glob> / --changed-workspaces <ref>` (global flags, prefix any command) |
 <!-- fallow:setup-hooks:end -->
+
+## Browser support
+
+- renderer は Electron 同梱の Chromium だけで動くため、Baseline Newly available の機能も polyfill や fallback なしで使う

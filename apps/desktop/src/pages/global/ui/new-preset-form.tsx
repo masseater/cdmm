@@ -9,6 +9,7 @@ import { managerApi, useAction } from "#/shared/api";
 import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
 import { Button } from "#/shared/ui/button";
 import { Input } from "#/shared/ui/input";
+import { LabeledField } from "#/shared/ui/labeled-field";
 
 const NOT_ID = /[^a-z0-9]+/gu;
 const EDGE_DASH = /^-+|-+$/gu;
@@ -38,13 +39,10 @@ const NewPresetForm = (): ReactNode => {
     [mutate, name, select],
   );
   return (
-    <form className="flex gap-2" onSubmit={submit}>
-      <Input
-        aria-label={COPY.newPreset}
-        placeholder={COPY.newPreset}
-        value={name.value}
-        onChange={typeName}
-      />
+    <form className="flex items-end gap-2" onSubmit={submit}>
+      <LabeledField label={COPY.newPreset}>
+        {(id) => <Input id={id} name="name" required value={name.value} onChange={typeName} />}
+      </LabeledField>
       <Button type="submit" variant="outline">
         {COPY.create}
       </Button>

@@ -15,7 +15,7 @@ const ListRow = ({
     <button
       type="button"
       aria-pressed={pressed}
-      className="hover:bg-muted aria-pressed:bg-secondary flex w-full flex-col items-start rounded-md px-3 py-2 text-left text-sm font-medium"
+      className="hover:bg-muted aria-pressed:bg-secondary focus-visible:ring-ring/50 flex w-full flex-col items-start rounded-md px-3 py-2 text-left text-sm font-medium outline-none focus-visible:ring-3"
       onClick={onSelect}
     >
       {title}

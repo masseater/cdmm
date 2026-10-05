@@ -8,6 +8,7 @@ import { managerApi, useAction } from "#/shared/api";
 import { OutcomeMessage } from "#/shared/ui/outcome-message";
 
 import { ProfileIcon } from "./profile-icon";
+import { RunningNote } from "./running-note";
 
 const openOf = (view: AccountView): ((id: string) => Promise<Done>) => {
   if (view.running || isSignedIn(view)) {
@@ -31,11 +32,12 @@ const ProfileButton = ({
       <button
         type="button"
         disabled={action.isPending}
-        className="hover:bg-muted flex w-full flex-col items-center gap-2 rounded-xl p-3 disabled:opacity-50"
+        className="hover:bg-muted focus-visible:ring-ring/50 flex w-full flex-col items-center gap-2 rounded-xl p-3 outline-none focus-visible:ring-3 disabled:opacity-50"
         onClick={open}
       >
         <ProfileIcon label={account.label} index={index} running={view.running} />
         <span className="w-full truncate text-center text-base">{account.label}</span>
+        <RunningNote running={view.running} />
       </button>
       <OutcomeMessage outcome={Option.fromNullishOr(action.data)} />
     </li>

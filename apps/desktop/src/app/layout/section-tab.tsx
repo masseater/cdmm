@@ -13,6 +13,13 @@ const variantOf = (selected: boolean): "default" | "ghost" => {
   return "ghost";
 };
 
+const currentOf = (selected: boolean): "page" | false => {
+  if (selected) {
+    return "page";
+  }
+  return false;
+};
+
 const SectionTab = ({
   section,
   label,
@@ -22,7 +29,12 @@ const SectionTab = ({
     setCurrent(section);
   }, [section, setCurrent]);
   return (
-    <Button size="sm" variant={variantOf(current === section)} onClick={select}>
+    <Button
+      size="sm"
+      variant={variantOf(current === section)}
+      aria-current={currentOf(current === section)}
+      onClick={select}
+    >
       {label}
     </Button>
   );

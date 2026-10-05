@@ -10,7 +10,9 @@ import { SettingsForm } from "./settings-form";
 
 const SettingsPanel = ({ view }: Readonly<{ view: AccountView }>): ReactNode => (
   <details className="flex flex-col gap-6 border-t pt-4">
-    <summary className="cursor-pointer text-sm font-medium">{COPY.settings}</summary>
+    <summary className="focus-visible:ring-ring/50 w-fit cursor-pointer rounded-sm text-sm font-medium outline-none focus-visible:ring-3">
+      {COPY.settings}
+    </summary>
     <SettingsForm view={view} />
     <OverrideEditor view={view} />
     <SecretsEditor view={view} />

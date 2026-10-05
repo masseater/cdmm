@@ -10,7 +10,7 @@ const LabelField = ({ draft }: Readonly<{ draft: DraftAtom }>): ReactNode => {
   const typeLabel = useDraftAtomChange(draft);
   return (
     <LabeledField label={COPY.label}>
-      <Input value={draft.value} onChange={typeLabel} />
+      {(id) => <Input id={id} name="label" required value={draft.value} onChange={typeLabel} />}
     </LabeledField>
   );
 };

@@ -4,7 +4,7 @@ import { Effect } from "effect";
 import { Suspense, useEffect } from "react";
 import type { ReactNode } from "react";
 
-import { sectionAtom, windowModeOf } from "#/app/model/section";
+import { sectionAtom, titleOf, windowModeOf } from "#/app/model/section";
 import { managerApi, onManagerChanged } from "#/shared/api";
 
 import { ChoiceBanner } from "./choice-banner";
@@ -22,6 +22,7 @@ const App = (): ReactNode => {
     [queryClient],
   );
   useEffect(() => {
+    document.title = titleOf(section);
     Effect.runFork(Effect.promise(() => managerApi().fitWindow(windowModeOf(section))));
   }, [section]);
   return (

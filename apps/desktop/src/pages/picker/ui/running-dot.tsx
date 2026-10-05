@@ -5,7 +5,10 @@ const RunningDot = ({ running }: Readonly<{ running: boolean }>): ReactNode => {
     return "";
   }
   return (
-    <span className="border-background bg-running absolute -right-1 -bottom-1 size-6 rounded-full border-4" />
+    <span
+      aria-hidden="true"
+      className="border-background bg-running absolute -right-1 -bottom-1 size-6 rounded-full border-4"
+    />
   );
 };
 

@@ -1,6 +1,6 @@
 import type { ApiInput } from "@cdmm/core";
 import { Effect, Option } from "effect";
-import { app, BrowserWindow, Menu, Tray } from "electron";
+import { app, BrowserWindow, Menu, nativeTheme, Tray } from "electron";
 
 type Locations = Readonly<{
   preload: string;
@@ -22,11 +22,21 @@ const SIZES: Readonly<Record<ApiInput<"fitWindow">, Readonly<{ width: number; he
     manage: { width: 820, height: 560 },
   };
 const FIRST = 0;
+const LIGHT_BACKGROUND = "#ffffff";
+const DARK_BACKGROUND = "#09090b";
+
+const backgroundOf = (): string => {
+  if (nativeTheme.shouldUseDarkColors) {
+    return DARK_BACKGROUND;
+  }
+  return LIGHT_BACKGROUND;
+};
 
 const createWindow = (locations: Locations): void => {
   const window = new BrowserWindow({
     ...SIZES.picker,
     title: "Claude Max Desktop Manager",
+    backgroundColor: backgroundOf(),
     icon: locations.icon,
     autoHideMenuBar: true,
     webPreferences: {

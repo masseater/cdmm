@@ -6,6 +6,7 @@ import { Input } from "#/shared/ui/input";
 import { LabeledField } from "#/shared/ui/labeled-field";
 import { Textarea } from "#/shared/ui/textarea";
 
+import { McpField } from "./mcp-field";
 import type { PresetDraftAtoms } from "./use-preset-draft-atoms";
 
 const MCP_ROWS = 14;
@@ -20,16 +21,33 @@ const PresetFields = ({ form }: Readonly<{ form: PresetDraftAtoms }>): ReactNode
   return (
     <>
       <LabeledField label={COPY.name}>
-        <Input value={form.name.value} onChange={typeName} />
+        {(id) => <Input id={id} name="name" required value={form.name.value} onChange={typeName} />}
       </LabeledField>
       <LabeledField label={COPY.mcp}>
-        <Textarea rows={MCP_ROWS} title={COPY.mcpHelp} value={form.mcp.value} onChange={editMcp} />
+        {(id) => <McpField id={id} draft={form.mcp} onChange={editMcp} rows={MCP_ROWS} />}
       </LabeledField>
       <LabeledField label={COPY.codeSettings}>
-        <Textarea rows={SETTINGS_ROWS} value={form.codeSettings.value} onChange={editSettings} />
+        {(id) => (
+          <Textarea
+            id={id}
+            name="codeSettings"
+            spellCheck={false}
+            rows={SETTINGS_ROWS}
+            value={form.codeSettings.value}
+            onChange={editSettings}
+          />
+        )}
       </LabeledField>
       <LabeledField label={COPY.rules}>
-        <Textarea rows={RULES_ROWS} value={form.rules.value} onChange={editRules} />
+        {(id) => (
+          <Textarea
+            id={id}
+            name="rules"
+            rows={RULES_ROWS}
+            value={form.rules.value}
+            onChange={editRules}
+          />
+        )}
       </LabeledField>
     </>
   );

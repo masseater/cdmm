@@ -16,7 +16,7 @@ const ProfileIcon = ({
       toneOf(index),
     )}
   >
-    {initialsOf(label)}
+    <span aria-hidden="true">{initialsOf(label)}</span>
     <RunningDot running={running} />
   </span>
 );

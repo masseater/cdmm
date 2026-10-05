@@ -7,6 +7,7 @@ import { managerApi, useAction } from "#/shared/api";
 import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
 import { Button } from "#/shared/ui/button";
 import { Input } from "#/shared/ui/input";
+import { LabeledField } from "#/shared/ui/labeled-field";
 
 const DEFAULT_COLOR = "#d97757";
 const DEFAULT_PRESET = "default";
@@ -30,13 +31,10 @@ const NewAccountForm = (): ReactNode => {
     [label, mutate],
   );
   return (
-    <form className="flex gap-2" onSubmit={submit}>
-      <Input
-        aria-label={COPY.newAccount}
-        placeholder={COPY.newAccount}
-        value={label.value}
-        onChange={typeLabel}
-      />
+    <form className="flex items-end gap-2" onSubmit={submit}>
+      <LabeledField label={COPY.newAccount}>
+        {(id) => <Input id={id} name="label" required value={label.value} onChange={typeLabel} />}
+      </LabeledField>
       <Button type="submit" variant="outline">
         {COPY.add}
       </Button>

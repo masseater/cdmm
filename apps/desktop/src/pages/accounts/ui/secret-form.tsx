@@ -4,18 +4,17 @@ import type { ReactNode, SubmitEventHandler } from "react";
 
 import { COPY } from "#/pages/accounts/config/copy";
 import { managerApi, useAction } from "#/shared/api";
-import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
+import { useDraftAtom } from "#/shared/lib/draft-atom";
 import { Button } from "#/shared/ui/button";
-import { Input } from "#/shared/ui/input";
 import { OutcomeMessage } from "#/shared/ui/outcome-message";
+
+import { SecretFields } from "./secret-fields";
 
 const SecretForm = ({ accountId }: Readonly<{ accountId: string }>): ReactNode => {
   const name = useDraftAtom({ key: `account:${accountId}:secret-name`, saved: "" });
   const value = useDraftAtom({ key: `account:${accountId}:secret-value`, saved: "" });
   const action = useAction({ key: "set-secret", run: managerApi().setSecret });
   const { mutate } = action;
-  const typeName = useDraftAtomChange(name);
-  const typeValue = useDraftAtomChange(value);
   const submit: SubmitEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
@@ -32,20 +31,8 @@ const SecretForm = ({ accountId }: Readonly<{ accountId: string }>): ReactNode =
     [accountId, mutate, name, value],
   );
   return (
-    <form className="flex flex-wrap items-center gap-2" onSubmit={submit}>
-      <Input
-        aria-label={COPY.secretName}
-        placeholder="GITHUB_TOKEN"
-        value={name.value}
-        onChange={typeName}
-      />
-      <Input
-        aria-label={COPY.secretValue}
-        type="password"
-        autoComplete="off"
-        value={value.value}
-        onChange={typeValue}
-      />
+    <form className="flex flex-wrap items-end gap-2" onSubmit={submit}>
+      <SecretFields name={name} value={value} />
       <Button type="submit" size="sm">
         {COPY.addSecret}
       </Button>

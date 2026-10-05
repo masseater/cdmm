@@ -6,11 +6,12 @@ import type { ReactNode, SubmitEventHandler } from "react";
 
 import { COPY } from "#/pages/accounts/config/copy";
 import { managerApi, useAction } from "#/shared/api";
-import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
+import { useDraftAtom } from "#/shared/lib/draft-atom";
 import { formatJson } from "#/shared/lib/json";
 import { Button } from "#/shared/ui/button";
 import { OutcomeMessage } from "#/shared/ui/outcome-message";
-import { Textarea } from "#/shared/ui/textarea";
+
+import { OverrideField } from "./override-field";
 
 const parseOverride = Schema.decodeUnknownResult(Schema.fromJsonString(AccountOverrideSchema));
 
@@ -30,7 +31,6 @@ const OverrideEditor = ({ view }: Readonly<{ view: AccountView }>): ReactNode =>
   );
   const action = useAction({ key: "save-override", run });
   const { mutate } = action;
-  const edit = useDraftAtomChange(draft);
   const submit: SubmitEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
@@ -46,9 +46,7 @@ const OverrideEditor = ({ view }: Readonly<{ view: AccountView }>): ReactNode =>
   );
   return (
     <form className="mt-6 flex flex-col gap-2" onSubmit={submit}>
-      <h3 className="text-sm font-medium">{COPY.override}</h3>
-      <p className="text-muted-foreground text-xs">{COPY.overrideHelp}</p>
-      <Textarea aria-label={COPY.override} rows={8} value={draft.value} onChange={edit} />
+      <OverrideField draft={draft} />
       <div>
         <Button type="submit" size="sm">
           {COPY.save}
