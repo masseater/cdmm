@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/@effect/tsgo/schema.json",
+  "extends": "../../tsconfig.base.json",
+  "include": ["src", "main", "*.ts"],
+  "compilerOptions": {
+    "types": ["vite/client", "node"],
+    "paths": {
+      "#/*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "allowedUnstableApis": [
+          "effect/reactivity/Atom",
+          "effect/process/ChildProcess",
+          "effect/process/ChildProcessSpawner#ChildProcessSpawner"
+        ]
+      }
+    ]
+  }
+}

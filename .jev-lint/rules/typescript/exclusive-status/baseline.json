@@ -1,0 +1,244 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-10-04T17:48:03.336Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/exclusive-status",
+  "rules": [
+    {
+      "id": "exclusive-status",
+      "draft": "0dcdd3d23152",
+      "at": 0.5
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/dialog-flags.tsx",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/status-union.ts",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.17,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/optional-result.ts",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/options-bag.ts",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/connection-class.ts",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/window-sizes.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/loading-flags.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/predicates.ts",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/dialog-flags.tsx",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/optional-result.ts",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.7,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/connection-class.ts",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.64,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/predicates.ts",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/options-bag.ts",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.37,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/status-union.ts",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/window-sizes.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/loading-flags.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.77,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/dialog-flags.tsx",
+        "line": 1,
+        "endLine": 24,
+        "kind": "noul",
+        "value": 0.72,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/window-sizes.ts",
+        "line": 1,
+        "endLine": 26,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/status-union.ts",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.18,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/loading-flags.ts",
+        "line": 1,
+        "endLine": 21,
+        "kind": "noul",
+        "value": 0.76,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/options-bag.ts",
+        "line": 1,
+        "endLine": 17,
+        "kind": "noul",
+        "value": 0.38,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/predicates.ts",
+        "line": 1,
+        "endLine": 9,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/connection-class.ts",
+        "line": 1,
+        "endLine": 20,
+        "kind": "noul",
+        "value": 0.62,
+        "confidence": null
+      },
+      {
+        "rule": "exclusive-status",
+        "file": ".jev-lint/rules/typescript/exclusive-status/fixtures/optional-result.ts",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.67,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 24,
+    "inputTokens": 16707,
+    "usd": 0.000701694,
+    "ms": 432
+  }
+}
