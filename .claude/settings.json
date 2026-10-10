@@ -3,14 +3,11 @@
   "env": {
     "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1"
   },
-  "enabledMcpjsonServers": ["fallow"],
+  "permissions": {
+    "deny": ["Bash(pnpm *)", "Bash(pnpx *)", "Bash(pn *)", "Bash(pnx *)"]
+  },
+  "enabledMcpjsonServers": ["fallow", "grafana"],
   "extraKnownMarketplaces": {
-    "typesafe-ai": {
-      "source": {
-        "source": "github",
-        "repo": "typesafe-ai/skills"
-      }
-    },
     "jev-lint": {
       "source": {
         "source": "github",
@@ -25,7 +22,6 @@
     }
   },
   "enabledPlugins": {
-    "typesafe@typesafe-ai": true,
     "jev-lint@jev-lint": true,
     "cc-jev-teacher@cc-jev-teacher": true
   },
