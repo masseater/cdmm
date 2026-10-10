@@ -4,9 +4,10 @@ import { HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http";
 import { projectDir, runHook, writeJson } from "./env.ts";
 
 const TEMPLATE_REPOSITORY = "masseater/typescript-template";
-const MANIFEST_FILE = ".release-please-manifest.json";
+const MANIFEST_FILE = ".github/release-please/manifest.json";
 const REQUEST_TIMEOUT = "5 seconds";
 const NOTES_LENGTH = 4000;
+const WORKTREE_SEGMENT = "/.claude/worktrees/";
 
 const Manifest = Schema.Struct({ ".": Schema.String });
 
@@ -63,6 +64,9 @@ const instructions = (current: string, release: typeof Release.Type): string => 
 
 runHook(
   Effect.gen(function* templateRelease() {
+    if ((yield* projectDir).includes(WORKTREE_SEGMENT)) {
+      return;
+    }
     const current = yield* currentVersion;
     const release = yield* latestRelease;
     if (release.tag_name === current) {
