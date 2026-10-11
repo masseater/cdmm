@@ -102,6 +102,8 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 既存ライブラリを探した。FlaUI（.NET、NuGet）、pywinauto（Pythonランタイム）、WinAppDriver（別プロセスのHTTP）は、いずれもWindowsのUI Automationを薄く包んだものである。どれも難所の「隠しデスクトップ上で動かすこと」を肩代わりしない。クライアントは対象と同じデスクトップに居る必要があるため、FlaUIやpywinautoを使っても結局そのランタイムごと`lpDesktop`付きで隠しデスクトップに起動することになり、自作のランチャはそのまま要る。これらが包むのは要素検索の書き味だけで、本実装の読み取りは窓の子孫を一度なめるだけ、送信は入力欄1つに値を入れてEnterを送るだけなので、ラッパーの利点がほとんど効かない。ElectronアプリにPythonやNuGetの依存を足す代わりに、OS同梱のUIAutomationClientを、stopやバージョン取得と同じPowerShell経路から直接使う。
 
+Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。起動をkoffi・読み取りをPowerShellの二本立てにするより、UIAがPowerShell一本にならざるを得ない以上、起動も同じPowerShell層に寄せる。koffiによる起動部の置き換えは、将来UIA側もNodeのネイティブaddonにするなら一括で検討する余地がある。
+
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
 同じことをするツールも個別に評価した。lowlevel-computer-use のMCPサーバー（<https://glama.ai/mcp/servers/codingmachineedge/lowlevel-computer-use-mcp>）は、見えないWin32デスクトップを作ってGUIアプリを起動する点は同じだが、Python製の独立したMCPサーバーで、ライセンスの記載が無く、入力はAutoHotkey系（`ahk_control_send`、`win_send_keys`）で、画面の読み取りはUIAではなくPrintWindowのキャプチャである。Electronアプリに別ランタイム（Python）と別プロセスを足すうえ、本実装が要る「UIAでの本文読み取り」を備えない。trycua/cua（<https://github.com/trycua/cua>）とArdurAI/ardur-bot（<https://github.com/ArdurAI/ardur-bot>）は、ElectronのUIA露出に関する不具合報告（cua #1616、ardur-bot #213・#180）であって、組み込めるライブラリではない。これらは採らず、知見だけを引く。
