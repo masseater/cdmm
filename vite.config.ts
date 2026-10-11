@@ -140,7 +140,7 @@ export default defineConfig({
     },
     overrides: [
       {
-        files: ["**/*.config.ts", "**/*.config.mjs"],
+        files: ["**/*.config.ts", "apps/desktop/steiger.config.mjs"],
         rules: { "import/no-default-export": "off" },
       },
       {

@@ -200,8 +200,8 @@ UIAクライアントは自分のスレッドが属するデスクトップの�
 ElectronのUIA露出が最大の落とし穴だった。
 Windows/UIAでこれを確かめたのはtrycua/cua #1616である（2026-10-11にWebFetchで確認）。
 VS Code（Electron）はUIAにタイトルバーの3要素しか見せない。
-Chromiumのツリーは「`--force-renderer-accessibility`やUIAイベント購読でクライアントが要求したときだけ」構築されると報告する。
-microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのアクセシビリティ構築を制御することを示す。
+Chromiumのツリーは、ATがツリーを要求したときに構築されると報告する。典型的な契機は`--force-renderer-accessibility`やUIAイベント購読である。
+microsoft/vscode #84833（同日確認）は、VS CodeがLinuxで同じフラグを受け付けるようにした変更である。フラグの扱いはElectron/Chromium側の前提とされ、仕組み自体は実証していない。
 ただし文脈はLinux/Orcaで、Windows/UIAには言及しない。
 よってWindowsでの根拠はcua #1616と本実装の実測に置く。
 実測では、隠し起動の引数に`--force-renderer-accessibility`を付けると結果が変わった。
@@ -229,7 +229,7 @@ UIAクライアントは対話デスクトップ側に居る。
 確認状況は次のとおりである（2026-10-11、WebFetchで一次確認したもの）。
 
 - trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せないと本文にある。Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築されるとある。Windows/UIAの根拠として採用する。
-- microsoft/vscode #84833 — 確認。フラグがChromiumのアクセシビリティ構築を制御する点は確かである。ただし文脈はLinux/Orcaなので、Windows/UIAには言及しない。限定して引用する。
+- microsoft/vscode #84833 — 確認。内容はVS CodeがLinuxで`--force-renderer-accessibility`を受け付けるようにした変更である。フラグの扱いはChromium側の前提にとどまる。文脈はLinux/Orcaなので、Windows/UIAには言及しない。根拠としては補助的に扱う。
 - Playwright `_electron` 公式ドキュメント — 確認。`executablePath`を指定して自分から起動する前提である。既存インスタンスへの接続は記載がない。Nodeのinspect系に依存する。本件には合わないと判断する。
 - lowlevel-computer-use（glama一覧） — 確認済み（前述）。
 - ArdurAI/ardur-bot #213・#180、Windows-MCP — 未確認。根拠としては使わず、補足情報としてのみ記す。
