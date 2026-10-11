@@ -2,8 +2,9 @@ import type { DesktopInstall, RouterStatus } from "@cdmm/core";
 import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
+import { READ_SCRIPT, SEND_SCRIPT } from "./drive-scripts.ts";
 import { ManagerError } from "./errors.ts";
-import { HIDDEN_LAUNCH_SCRIPT, READ_SCRIPT, SEND_SCRIPT, STOP_SCRIPT } from "./powershell.ts";
+import { HIDDEN_LAUNCH_SCRIPT, STOP_SCRIPT } from "./powershell.ts";
 
 type DesktopTarget = Readonly<{
   userDataDir: Option.Option<string>;

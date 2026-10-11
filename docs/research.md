@@ -110,6 +110,12 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 ElectronのUIA露出が最大の落とし穴だった。Chromiumはレンダラのアクセシビリティツリーを、支援技術クライアントの要求を検知したときか、`--force-renderer-accessibility`付きで起動したときにしか構築しない（microsoft/vscode #84833）。これが無いと、UIAからはタイトルバーの数要素しか見えない（trycua/cua #1616 は VS Code で3要素のみと報告、本実装の初回読み取りも窓名と最小化・最大化・閉じるの4件だった）。そこで隠し起動の引数に`--force-renderer-accessibility`を付けた。付けた後は実測で、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。加えてツリー構築には初回問い合わせ後に1〜2秒ほどの遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告がある（ArdurAI/ardur-bot #213、#180）。ログイン済みチャットの本文読み取りと送信先セレクタはここでしか最終確認できないため、公式UI変更で壊れる前提で追従する。
 
+Electron向けの自動化手段も当たった。Playwrightの`_electron`は、Electronアプリを自分で`executablePath`付きで起動し、Chromium/Nodeのインスペクタ経由で駆動する。既に起動しているインスタンスへ後から接ぐのではなく自分の管理下で起動する前提で、しかも通信路はCDP/インスペクタなので、`app.asar`が署名付きで塞ぐデバッグ経路（`--remote-debugging-port`は起動直後に終了するのを本セッションで確認済み）と同じ壁に当たる。Electronの`--inspect`はメインプロセスのNodeインスペクタで、レンダラのチャットUIには届かない。Windows-MCP（CursorTouch）系はUIAを使うWindows自動化のMCPサーバーだが、lowlevel-computer-useと同じく独立プロセス・汎用で、UIAクライアントは対話デスクトップ側に居るため隠しデスクトップを見るには結局`lpDesktop`起動の自作が要る。いずれも採らない。
+
+確認状況: WebFetchで実際に開いたのは lowlevel-computer-use の一覧ページ（glama）のみ。microsoft/vscode #84833、trycua/cua #1616、ArdurAI/ardur-bot #213・#180、Playwright `_electron`、Windows-MCP は検索結果の要約に基づく一次未確認で、実装前にリポジトリとドキュメントで裏取りする。
+
+利用規約: 本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。公式クライアントを自動化すること、複数アカウントを同時に動かすことがAnthropicの規約に触れないかは、アカウント保有者である利用者が判断する事項で、本調査では未確認。UIAは署名付き制御（CDPブロック）を回避せず、OSのアクセシビリティAPIをそのまま使う。
+
 起動の同期も要る。`PROCESS_INFORMATION`のドキュメントは、子ハンドルを閉じても親が生きていれば子は残ると述べるが、本方式では短命のランチャが先に終わると、作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちる。そこで公式アプリ起動後、`WaitForInputIdle`で子がデスクトップに付くまで待ってからランチャを終える（実測で生存プロセスが0、待つと7）。`WaitForInputIdle`は初期化してメッセージ待ちになるまで1回だけ待つ関数で、2回目以降は即座に返る。
 
 | 依存                                             | 壊れた場合の影響 | 検知                                     |

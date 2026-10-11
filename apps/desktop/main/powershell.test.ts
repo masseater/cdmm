@@ -2,15 +2,9 @@ import { Effect, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import { describe, expect, it } from "vite-plus/test";
 
+import { READ_SCRIPT, SEND_SCRIPT } from "./drive-scripts.ts";
 import { runTest } from "./harness.test.helpers.ts";
-import {
-  HIDDEN_LAUNCH_SCRIPT,
-  NO_DESKTOP_EXIT,
-  NO_DIR_EXIT,
-  READ_SCRIPT,
-  SEND_SCRIPT,
-  STOP_SCRIPT,
-} from "./powershell.ts";
+import { HIDDEN_LAUNCH_SCRIPT, NO_DESKTOP_EXIT, NO_DIR_EXIT, STOP_SCRIPT } from "./powershell.ts";
 
 const PARSE = [
   "$errors = $null",
