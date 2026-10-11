@@ -58,6 +58,8 @@ Windowsの既定のアプリ機構は、パッケージの登録より優先さ�
 これがcallback routerの根拠である。
 Desktopは起動のたびに自分をプロトコルの既定に登録し直そうとするが、ユーザーの選択は書き換えない（推定、統合テストで確かめる）。
 
+Electron公式の`app.setAsDefaultProtocolClient`も当たった（2026-10-11にWebで確認）。これはレジストリに書いて成否をbooleanで返すだけで、trueでもWindowsが使うとは限らない。Windows 10/11は既定を`...\UrlAssociations\<scheme>\UserChoice`のProgIdと改ざん検知Hashで保護し、Hashは設定アプリだけが計算するため、ProgIdだけ書いても無視される。つまり公式APIでも既定を強制できず、サポートされた唯一の道は候補登録＋設定アプリでユーザーに選ばせることである。本アプリの`RegisteredApplications`＋`Capabilities`登録と`ms-settings:defaultapps`誘導はこの結論に沿う。SetUserFTA等の第三者ツールはHashを計算できるが、非公式なので採らない。
+
 ## Claude Code
 
 Claude Codeは`CLAUDE_CONFIG_DIR`を設定ディレクトリとして使い、未指定なら`~/.claude`を使う。
@@ -102,7 +104,9 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 既存ライブラリを探した。FlaUI（.NET、NuGet）、pywinauto（Pythonランタイム）、WinAppDriver（別プロセスのHTTP）は、いずれもWindowsのUI Automationを薄く包んだものである。どれも難所の「隠しデスクトップ上で動かすこと」を肩代わりしない。クライアントは対象と同じデスクトップに居る必要があるため、FlaUIやpywinautoを使っても結局そのランタイムごと`lpDesktop`付きで隠しデスクトップに起動することになり、自作のランチャはそのまま要る。これらが包むのは要素検索の書き味だけで、本実装の読み取りは窓の子孫を一度なめるだけ、送信は入力欄1つに値を入れてEnterを送るだけなので、ラッパーの利点がほとんど効かない。ElectronアプリにPythonやNuGetの依存を足す代わりに、OS同梱のUIAutomationClientを、stopやバージョン取得と同じPowerShell経路から直接使う。
 
-Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。起動をkoffi・読み取りをPowerShellの二本立てにするより、UIAがPowerShell一本にならざるを得ない以上、起動も同じPowerShell層に寄せる。koffiによる起動部の置き換えは、将来UIA側もNodeのネイティブaddonにするなら一括で検討する余地がある。
+Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
+
+ここでの選択は「自作のロジック」対「既存ライブラリ」ではない点に注意する。埋め込みC#のP/InvokeもkoffiもCreateDesktop/CreateProcessを再実装せず、同じOS APIに薄く束ねるFFIである。違いは束ね方だけで、koffiはElectronの配布物にネイティブのプリビルドモジュールを増やし（electron-builderでアーキ別に同梱・署名する対象が増える）、Add-Typeはどのwindowsにもある.NETに対してその場でコンパイルするので追加依存がない。UIAはPowerShell一本にならざるを得ないので、起動をkoffiに移すとPowerShellのUIA層とkoffiのネイティブ層の二本立てになり、ネイティブ依存を足してなお機構が増える。したがって起動も同じPowerShell+Add-Type層にまとめる。これは好みではなく、UIA側の制約とネイティブ依存の費用に基づく判断である。koffiへの一本化は、将来UIA側もNodeのネイティブaddonにできたときに一括で見直す。
 
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
@@ -115,6 +119,7 @@ ElectronのUIA露出が最大の落とし穴だった。Windows/UIAでこれを�
 Electron向けの自動化手段も当たった。Playwrightの`_electron`は、Electronアプリを自分で`executablePath`付きで起動し、Chromium/Nodeのインスペクタ経由で駆動する。既に起動しているインスタンスへ後から接ぐのではなく自分の管理下で起動する前提で、しかも通信路はCDP/インスペクタなので、`app.asar`が署名付きで塞ぐデバッグ経路（`--remote-debugging-port`は起動直後に終了するのを本セッションで確認済み）と同じ壁に当たる。Electronの`--inspect`はメインプロセスのNodeインスペクタで、レンダラのチャットUIには届かない。Windows-MCP（CursorTouch）系はUIAを使うWindows自動化のMCPサーバーだが、lowlevel-computer-useと同じく独立プロセス・汎用で、UIAクライアントは対話デスクトップ側に居るため隠しデスクトップを見るには結局`lpDesktop`起動の自作が要る。いずれも採らない。
 
 確認状況（2026-10-11、WebFetchで一次確認したもの）:
+
 - trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せず、Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築される、と本文にある。Windows/UIAの根拠として採用。
 - microsoft/vscode #84833 — 確認。フラグがChromiumのアクセシビリティ構築を制御する点は確かだが、文脈はLinux/Orcaで、Windows/UIAには言及しない。限定して引用する。
 - Playwright `_electron` 公式ドキュメント — 確認。`executablePath`で自分で起動する前提で、既存インスタンスへの接続は記載がなく、Nodeのinspect系に依存する。本件（独立起動済みの隠しインスタンスを駆動）には合わないと判断。
