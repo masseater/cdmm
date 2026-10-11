@@ -296,3 +296,7 @@ jev-lintの文書によるとpass間のぶれは最大0.30である。
 `--retry 3`は3回の平均で判定を安定させる。
 これは「cutoff付近ではretryを使う」というjev-lint公式の指針に沿う。
 平均で判定するため、毎回cutoffを超える本物の指摘は隠れない。
+
+cutoff（`exclusive-status`が0.5、`ui-state-effect-atom`が0.67）は`1860d2a`の校正値のままである。
+今回変えたのは判定器（`model`・`baseUrl`・`apiKeyEnv`）と`--retry`だけで、閾値は下げていない。
+`vp run verify`の`jev-lint eval --replay`が、その校正値とfixturesの整合を毎回確かめる。
