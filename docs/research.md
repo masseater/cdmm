@@ -277,3 +277,22 @@ UIを素のブラウザ（`vp dev`）で描画・確認するには、この注�
 preload/contextBridgeの公式ドキュメントが示す注入の仕組みに沿う。
 ただし、そのグローバルを素のブラウザで代替する専用ガイドはWeb検索でも見つからなかった。
 本番バンドルに混入しないことはビルド成果物で確認済みである。
+
+## jev-lintの判定器（2026-10-11）
+
+jev-lintの判定は、typesafeではなくOpenRouterのdeciderモデルで行う。
+ローカルとCIのどちらにも`TYPESAFE_API_KEY`が無いためである。
+`.jev-lint.yaml`に`baseUrl`・`apiKeyEnv`・`model`を設定する。
+値は`https://openrouter.ai/api`・`OPENROUTER_API_KEY`・`perplexity/pplx-decider-v1.1-27b`である。
+siblingの`asunaro-dashboard`も同じ構成を使う。
+
+CIでは`jev-lint check --retry 3`を使う。
+LLMの判定は非決定的で、1回だけではcutoff付近の結果がぶれる。
+実測では、全420件のうち最も高いのは`server-state-tanstack-query`の0.440だった。
+この規則のcutoffは0.5である。
+他は`exclusive-status`が0.178、`ui-state-effect-atom`が0.133だった。
+jev-lintの文書によるとpass間のぶれは最大0.30である。
+よって0.440の件は、1回の実行では0.5を超えて誤検出になりうる。
+`--retry 3`は3回の平均で判定を安定させる。
+これは「cutoff付近ではretryを使う」というjev-lint公式の指針に沿う。
+平均で判定するため、毎回cutoffを超える本物の指摘は隠れない。
