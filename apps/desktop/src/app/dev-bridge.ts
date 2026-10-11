@@ -1,22 +1,21 @@
 import { emptyOverride } from "@cdmm/core";
 import type { ManagerApi, Overview, Preset } from "@cdmm/core";
 
-// Dev-only stand-in for the Electron preload bridge. In the packaged app the
-// preload defines `globalThis.cdmm`, so `installDevBridge` returns untouched.
-// It lets the renderer run in a plain browser (`vite dev`) for UI work.
-
 type Listener = () => void;
 
 const PRESETS: Preset[] = [
-  { id: "p-default", name: "Default", mcp: {}, codeSettings: {}, rules: "Be concise and act first." },
+  {
+    id: "p-default",
+    name: "Default",
+    mcp: {},
+    codeSettings: {},
+    rules: "Be concise and act first.",
+  },
 ];
 
-const SCREEN_TEXT = [
-  "Claude",
-  "How can I help you today?",
-  "Ask Claude anything",
-  "Send",
-].join("\n");
+const SCREEN_TEXT = ["Claude", "How can I help you today?", "Ask Claude anything", "Send"].join(
+  "\n",
+);
 
 const makeOverview = (): Overview => ({
   desktop: { status: "found", version: "0.13.0", testedVersion: true },
@@ -24,20 +23,40 @@ const makeOverview = (): Overview => ({
   presets: PRESETS,
   accounts: [
     {
-      account: { id: "work", label: "Work", color: "#4f46e5", presetId: "p-default", override: emptyOverride },
+      account: {
+        id: "work",
+        label: "Work",
+        color: "#4f46e5",
+        presetId: "p-default",
+        override: emptyOverride,
+      },
       running: true,
       waitingForLogin: false,
-      identity: { desktopAccountUuid: "d-work", codeAccountUuid: "c-work", codeEmail: "work@example.com" },
+      identity: {
+        desktopAccountUuid: "d-work",
+        codeAccountUuid: "c-work",
+        codeEmail: "work@example.com",
+      },
       identityCheck: { status: "matching" },
       secretNames: ["ANTHROPIC_API_KEY"],
       sync: { status: "synced", skipped: [] },
       paths: { desktop: "C:\\cdmm\\work\\desktop", code: "C:\\cdmm\\work\\code" },
     },
     {
-      account: { id: "personal", label: "Personal", color: "#16a34a", presetId: "p-default", override: emptyOverride },
+      account: {
+        id: "personal",
+        label: "Personal",
+        color: "#16a34a",
+        presetId: "p-default",
+        override: emptyOverride,
+      },
       running: false,
       waitingForLogin: false,
-      identity: { desktopAccountUuid: "d-personal", codeAccountUuid: "c-personal", codeEmail: "me@example.com" },
+      identity: {
+        desktopAccountUuid: "d-personal",
+        codeAccountUuid: "c-personal",
+        codeEmail: "me@example.com",
+      },
       identityCheck: { status: "unbound" },
       secretNames: [],
       sync: { status: "pending" },
@@ -74,13 +93,17 @@ const devApi = (): ManagerApi => {
 };
 
 const installDevBridge = (): void => {
-  if (globalThis.cdmm !== undefined) return;
+  if ("cdmm" in globalThis) {
+    return;
+  }
   const listeners = new Set<Listener>();
   globalThis.cdmm = {
     api: devApi(),
     onChanged: (listener: Listener): (() => void) => {
       listeners.add(listener);
-      return () => listeners.delete(listener);
+      return () => {
+        listeners.delete(listener);
+      };
     },
   };
 };

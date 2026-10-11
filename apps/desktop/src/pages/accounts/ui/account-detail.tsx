@@ -14,7 +14,7 @@ const AccountDetail = ({ view }: Readonly<{ view: AccountView }>): ReactNode => 
     <ActionBar view={view} />
     <IdentityWarning view={view} />
     <SyncNote sync={view.sync} />
-    {view.running ? <DrivePanel view={view} /> : ""}
+    <DrivePanel view={view} />
     <SettingsPanel view={view} />
   </section>
 );

@@ -9,13 +9,14 @@ import {
   saveAccount,
   updateSecrets,
 } from "./accounts.ts";
-import { readScreen, sendText } from "./driver.ts";
 import {
   fitWindow,
   launchCode,
   launchDesktop,
   openFolder,
+  readScreen,
   registerRouter,
+  sendText,
   signIn,
   stopDesktop,
 } from "./launch.ts";
@@ -83,9 +84,10 @@ const handlers: Handlers = {
   stopDesktop: (id) => settle(stopDesktop(id)),
   readScreen: (id) =>
     readScreen(id).pipe(
-      Effect.catch((error) =>
-        Effect.succeed({ status: "failed", message: error.message } satisfies Screen),
-      ),
+      Effect.match({
+        onSuccess: (screen) => screen,
+        onFailure: (error): Screen => ({ status: "failed", message: error.message }),
+      }),
     ),
   sendText: (input) => settle(sendText(input)),
   launchCode: (id) => settle(launchCode(id)),

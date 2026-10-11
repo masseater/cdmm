@@ -1,9 +1,10 @@
-import type { ApiInput } from "@cdmm/core";
+import type { ApiInput, Screen } from "@cdmm/core";
 import { Clock, Effect, FileSystem, Option } from "effect";
 
 import { Desktop } from "./desktop.ts";
 import { Host } from "./host.ts";
 import { findAccount, startDesktop } from "./links.ts";
+import { desktopName } from "./paths.ts";
 import { Store } from "./store.ts";
 import { syncAccount } from "./sync.ts";
 
@@ -64,4 +65,31 @@ const fitWindow = Effect.fn("fitWindow")(function* fitWindow(mode: ApiInput<"fit
   yield* host.fitWindow(mode);
 });
 
-export { fitWindow, launchCode, launchDesktop, openFolder, registerRouter, signIn, stopDesktop };
+const readScreen = Effect.fn("readScreen")(function* readScreen(accountId: string) {
+  const desktop = yield* Desktop;
+  const account = yield* findAccount(accountId);
+  return yield* desktop.read({ desktop: desktopName(account.id) }).pipe(
+    Effect.match({
+      onSuccess: (text): Screen => ({ status: "read", text }),
+      onFailure: (error): Screen => ({ status: "failed", message: error.message }),
+    }),
+  );
+});
+
+const sendText = Effect.fn("sendText")(function* sendText(input: ApiInput<"sendText">) {
+  const desktop = yield* Desktop;
+  const account = yield* findAccount(input.accountId);
+  yield* desktop.send({ desktop: desktopName(account.id), text: input.text });
+});
+
+export {
+  fitWindow,
+  launchCode,
+  launchDesktop,
+  openFolder,
+  readScreen,
+  registerRouter,
+  sendText,
+  signIn,
+  stopDesktop,
+};
