@@ -24,11 +24,7 @@ if (import.meta.env.DEV) {
   Effect.runFork(
     Effect.andThen(
       Effect.promise(() => import("./dev-bridge")),
-      (devBridge) =>
-        Effect.sync(() => {
-          devBridge.installDevBridge();
-          mount();
-        }),
+      () => Effect.sync(mount),
     ),
   );
 } else {

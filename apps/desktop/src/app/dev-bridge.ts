@@ -92,10 +92,7 @@ const devApi = (): ManagerApi => {
   return api;
 };
 
-const installDevBridge = (): void => {
-  if ("cdmm" in globalThis) {
-    return;
-  }
+if (!("cdmm" in globalThis)) {
   const listeners = new Set<Listener>();
   globalThis.cdmm = {
     api: devApi(),
@@ -106,6 +103,4 @@ const installDevBridge = (): void => {
       };
     },
   };
-};
-
-export { installDevBridge };
+}

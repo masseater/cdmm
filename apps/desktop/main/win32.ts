@@ -1,4 +1,6 @@
-import { Data, Effect, Option } from "effect";
+import { Effect, Option } from "effect";
+
+import { ManagerError } from "./errors.ts";
 
 const DESKTOP_ALL_ACCESS = 0x10_00_00_00;
 const CREATE_UNICODE_ENVIRONMENT = 0x00_00_04_00;
@@ -33,8 +35,6 @@ const PROCESS_LAYOUT: Record<string, string> = {
   tid: "uint32",
 };
 
-class Win32Error extends Data.TaggedError("Win32Error")<{ message: string }> {}
-
 interface Call {
   (...args: readonly unknown[]): unknown;
   readonly async: (...args: readonly unknown[]) => void;
@@ -64,15 +64,15 @@ type Native = Readonly<{
   readEnv: () => readonly string[];
 }>;
 type Win32 = Readonly<{
-  launch: (input: LaunchInput) => Effect.Effect<void, Win32Error>;
-  run: (input: RunInput) => Effect.Effect<void, Win32Error>;
+  launch: (input: LaunchInput) => Effect.Effect<void, ManagerError>;
+  run: (input: RunInput) => Effect.Effect<void, ManagerError>;
 }>;
 
-const fail = (cause: unknown, fallback: string): Win32Error => {
+const fail = (cause: unknown, fallback: string): ManagerError => {
   if (cause instanceof Error) {
-    return new Win32Error({ message: cause.message });
+    return new ManagerError({ message: cause.message });
   }
-  return new Win32Error({ message: fallback });
+  return new ManagerError({ message: fallback });
 };
 
 const nameOf = (entry: string): string => {
@@ -95,7 +95,7 @@ const entriesOf = (decoded: unknown): readonly string[] => {
   return block.split("\0").filter(Boolean);
 };
 
-const loadNative: Effect.Effect<Native, Win32Error> = Effect.gen(function* loadBindings() {
+const loadNative: Effect.Effect<Native, ManagerError> = Effect.gen(function* loadBindings() {
   const mod = yield* Effect.tryPromise({
     try: () => import("koffi"),
     catch: (cause) => fail(cause, "koffi import failed"),
@@ -129,7 +129,7 @@ const loadNative: Effect.Effect<Native, Win32Error> = Effect.gen(function* loadB
 });
 
 let memo: Option.Option<Native> = Option.none();
-const native: Effect.Effect<Native, Win32Error> = Effect.suspend(() =>
+const native: Effect.Effect<Native, ManagerError> = Effect.suspend(() =>
   Option.match(memo, {
     onSome: (value) => Effect.succeed(value),
     onNone: () =>
@@ -156,7 +156,7 @@ const startupFor = (bound: Native, desktop: string): Readonly<Record<string, unk
   desktop: `WinSta0\\${desktop}`,
 });
 
-const spawn = (bound: Native, input: SpawnInput): Effect.Effect<ProcessInfo, Win32Error> =>
+const spawn = (bound: Native, input: SpawnInput): Effect.Effect<ProcessInfo, ManagerError> =>
   Effect.gen(function* performSpawn() {
     const station: unknown = bound.createDesktop(
       input.desktop,
@@ -167,7 +167,7 @@ const spawn = (bound: Native, input: SpawnInput): Effect.Effect<ProcessInfo, Win
       NULL_PTR,
     );
     if (Option.isNone(Option.fromNullishOr(station))) {
-      return yield* new Win32Error({ message: "CreateDesktop failed" });
+      return yield* new ManagerError({ message: "CreateDesktop failed" });
     }
     const info: Record<string, unknown> = {};
     const ok: unknown = bound.createProcess(
@@ -183,7 +183,7 @@ const spawn = (bound: Native, input: SpawnInput): Effect.Effect<ProcessInfo, Win
       info,
     );
     if (ok !== true) {
-      return yield* new Win32Error({ message: "CreateProcess failed" });
+      return yield* new ManagerError({ message: "CreateProcess failed" });
     }
     return decodeInfo(info);
   });
@@ -195,7 +195,7 @@ const waitHandle = (call: Call, handle: unknown, ms: number): Effect.Effect<numb
     });
   });
 
-const launch = (input: LaunchInput): Effect.Effect<void, Win32Error> =>
+const launch = (input: LaunchInput): Effect.Effect<void, ManagerError> =>
   Effect.gen(function* performLaunch() {
     const bound = yield* native;
     const info = yield* spawn(bound, input);
@@ -204,7 +204,7 @@ const launch = (input: LaunchInput): Effect.Effect<void, Win32Error> =>
     bound.closeHandle(info.process);
   });
 
-const run = (input: RunInput): Effect.Effect<void, Win32Error> =>
+const run = (input: RunInput): Effect.Effect<void, ManagerError> =>
   Effect.gen(function* performRun() {
     const bound = yield* native;
     const info = yield* spawn(bound, input);

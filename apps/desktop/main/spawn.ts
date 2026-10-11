@@ -66,5 +66,4 @@ const detached = Effect.fn("Desktop.detached")(function* detached(input: Invocat
   yield* handle.unref.pipe(Effect.mapError(asFailure), Effect.asVoid);
 }, Effect.scoped);
 
-export type { Invocation };
 export { asFailure, checked, detached, failed, output, powershellArgs };

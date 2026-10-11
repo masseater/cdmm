@@ -140,7 +140,7 @@ export default defineConfig({
     },
     overrides: [
       {
-        files: ["**/*.config.ts"],
+        files: ["**/*.config.ts", "**/*.config.mjs"],
         rules: { "import/no-default-export": "off" },
       },
       {
