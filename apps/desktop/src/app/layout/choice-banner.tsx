@@ -9,7 +9,7 @@ const ChoiceBanner = (): ReactNode => {
   const pending = useSuspenseQuery(pendingChoiceQuery).data;
   const { accounts } = useSuspenseQuery(overviewQuery).data;
   return (
-    <div aria-live="polite" className="flex flex-col gap-2 px-6 empty:hidden">
+    <div aria-live="polite" className="flex flex-col gap-2 px-6">
       {pending.map((choice) => (
         <ChoiceRow key={choice.link} choice={choice} accounts={accounts} />
       ))}
