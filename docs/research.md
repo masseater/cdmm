@@ -300,3 +300,16 @@ jev-lintの文書によるとpass間のぶれは最大0.30である。
 cutoff（`exclusive-status`が0.5、`ui-state-effect-atom`が0.67）は`1860d2a`の校正値のままである。
 今回変えたのは判定器（`model`・`baseUrl`・`apiKeyEnv`）と`--retry`だけで、閾値は下げていない。
 `vp run verify`の`jev-lint eval --replay`が、その校正値とfixturesの整合を毎回確かめる。
+
+## スクロール領域のキーボード操作（2026-10-11）
+
+Drive画面の履歴は`max-h-56 overflow-auto`のスクロール領域である。
+axeの`scrollable-region-focusable`は、この`<pre>`に`tabindex`が無いと指摘する。
+しかし`tabindex={0}`を足すと`jsx-a11y/no-noninteractive-tabindex`がlintで落ちる。
+roleの無い要素をフォーカス可能にするなという規則であり、公式のアクセシビリティ指針とも一致する。
+
+rendererはElectron44同梱のChromium142である。
+Chromiumは125以降、フォーカス可能な子を持たないスクロール領域を自動でキーボードフォーカス可能にする。
+この機能はBaselineで既定有効であり、CLAUDE.mdの方針どおりfallbackなしで使える。
+よって手書きの`tabindex`は不要で、履歴はキーボードで読める。
+axeの指摘は、この実行環境では静的解析の偽陽性である。
