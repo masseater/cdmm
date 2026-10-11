@@ -112,7 +112,7 @@ Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke�
 
 同じことをするツールも個別に評価した。lowlevel-computer-use のMCPサーバー（<https://glama.ai/mcp/servers/codingmachineedge/lowlevel-computer-use-mcp>）は、見えないWin32デスクトップを作ってGUIアプリを起動する点は同じだが、Python製の独立したMCPサーバーで、ライセンスの記載が無く、入力はAutoHotkey系（`ahk_control_send`、`win_send_keys`）で、画面の読み取りはUIAではなくPrintWindowのキャプチャである。Electronアプリに別ランタイム（Python）と別プロセスを足すうえ、本実装が要る「UIAでの本文読み取り」を備えない。trycua/cua（<https://github.com/trycua/cua>）とArdurAI/ardur-bot（<https://github.com/ArdurAI/ardur-bot>）は、ElectronのUIA露出に関する不具合報告（cua #1616、ardur-bot #213・#180）であって、組み込めるライブラリではない。これらは採らず、知見だけを引く。
 
-隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採っていた。C++フォーラムには、アクティブなデスクトップを切り替えると自動化が続かないという報告があり、切り替えではなく対象と自動化を同じ隠しデスクトップに置く本方式の裏付けになる。`SetThreadDesktop`は、呼ぶスレッドが窓を持つと`ERROR_BUSY`（170）で失敗するため使わない。
+隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採っていた。UIAクライアントは自分のスレッドが属するデスクトップの窓しか見えないため、対象と読み取りヘルパーを同じ隠しデスクトップに置く。スレッドを後から切り替える`SetThreadDesktop`は、呼ぶスレッドが窓を持つと`ERROR_BUSY`（170、本実装で実測）で失敗したので使わず、ヘルパーを隠しデスクトップ上の別プロセスとして起動する。
 
 ElectronのUIA露出が最大の落とし穴だった。Windows/UIAでこれを確かめたのは trycua/cua #1616（2026-10-11にWebFetchで確認）で、VS Code（Electron）がUIAにタイトルバーの3要素しか見せず、Chromiumのツリーは「`--force-renderer-accessibility`やUIAイベント購読でクライアントが要求したときだけ」構築されると報告する。microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのアクセシビリティ構築を制御することを示すが、文脈はLinux/Orcaで、Windows/UIAには言及しない。よってWindowsでの根拠はcua #1616と本実装の実測に置く。実測では、隠し起動の引数に`--force-renderer-accessibility`を付けると、付ける前はタイトルバー相当の4件（窓名・最小化・最大化・閉じる）だったのが、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。ツリー構築には初回問い合わせ後に遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告（ArdurAI/ardur-bot #213・#180、未確認）もあるため、ログイン済みチャットの本文読み取りと送信先セレクタは公式UI変更で壊れる前提で追従する。
 
