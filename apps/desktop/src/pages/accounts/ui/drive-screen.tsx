@@ -8,34 +8,26 @@ import { screenQuery } from "#/pages/accounts/api/queries";
 import { COPY } from "#/pages/accounts/config/copy";
 import { Button } from "#/shared/ui/button";
 
-const readValue = (screen: Screen): Option.Option<string> => {
+const readText = (screen: Screen): Option.Option<string> => {
   if (screen.status === "read") {
-    return Option.some(screen.text);
+    return Option.some(Str.trim(screen.text));
   }
   return Option.none();
 };
 
-const failure = (screen: Screen): Option.Option<string> => {
+const failureText = (screen: Screen): Option.Option<string> => {
   if (screen.status === "failed") {
     return Option.some(screen.message);
   }
   return Option.none();
 };
 
-const trimmedRead = (data: Option.Option<Screen>): Option.Option<string> =>
-  data.pipe(Option.flatMap(readValue), Option.map(Str.trim));
-
-const blankNote = (text: string): Option.Option<string> => {
-  if (Str.isEmpty(text)) {
-    return Option.some(COPY.screenEmpty);
-  }
-  return Option.none();
-};
-
-const noteText = (data: Option.Option<Screen>, loading: boolean): Option.Option<string> => {
-  const read = trimmedRead(data);
+const noteFor = (read: Option.Option<string>, loading: boolean): Option.Option<string> => {
   if (Option.isSome(read)) {
-    return blankNote(read.value);
+    if (Str.isEmpty(read.value)) {
+      return Option.some(COPY.screenEmpty);
+    }
+    return Option.none();
   }
   if (loading) {
     return Option.some(COPY.reading);
@@ -43,9 +35,9 @@ const noteText = (data: Option.Option<Screen>, loading: boolean): Option.Option<
   return Option.none();
 };
 
-const transcriptView = (data: Option.Option<Screen>): ReactNode => (
+const transcriptView = (read: Option.Option<string>): ReactNode => (
   <div role="log" aria-label={COPY.screen}>
-    {Option.match(trimmedRead(data).pipe(Option.filter(Str.isNonEmpty)), {
+    {Option.match(read.pipe(Option.filter(Str.isNonEmpty)), {
       onNone: () => "",
       onSome: (text) => (
         <pre className="border-input bg-muted/40 max-h-56 overflow-auto rounded-md border p-2 font-mono text-xs whitespace-pre-wrap">
@@ -56,14 +48,14 @@ const transcriptView = (data: Option.Option<Screen>): ReactNode => (
   </div>
 );
 
-const noteView = (data: Option.Option<Screen>, loading: boolean): ReactNode =>
-  Option.match(noteText(data, loading), {
+const noteView = (note: Option.Option<string>): ReactNode =>
+  Option.match(note, {
     onNone: () => "",
     onSome: (text) => <p className="text-muted-foreground text-xs">{text}</p>,
   });
 
-const failureView = (data: Option.Option<Screen>): ReactNode =>
-  Option.match(data.pipe(Option.flatMap(failure)), {
+const failureView = (fail: Option.Option<string>): ReactNode =>
+  Option.match(fail, {
     onNone: () => "",
     onSome: (message) => (
       <p role="alert" className="text-destructive text-sm">
@@ -79,11 +71,12 @@ const DriveScreen = ({ accountId }: Readonly<{ accountId: string }>): ReactNode 
     Effect.runFork(Effect.promise(() => refetch()));
   }, [refetch]);
   const data = Option.fromNullishOr(screen.data);
+  const read = data.pipe(Option.flatMap(readText));
   return (
     <>
-      {transcriptView(data)}
-      {noteView(data, screen.isFetching)}
-      {failureView(data)}
+      {transcriptView(read)}
+      {noteView(noteFor(read, screen.isFetching))}
+      {failureView(data.pipe(Option.flatMap(failureText)))}
       <Button size="sm" variant="outline" disabled={screen.isFetching} onClick={refresh}>
         {COPY.readScreen}
       </Button>
