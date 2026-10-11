@@ -318,3 +318,22 @@ Chromiumは125以降、フォーカス可能な子を持たないスクロール
 この機能はBaselineで既定有効であり、CLAUDE.mdの方針どおりfallbackなしで使える。
 よって手書きの`tabindex`は不要で、履歴はキーボードで読める。
 axeの指摘は、この実行環境では静的解析の偽陽性である。
+
+## 秘密情報ガードの調査（2026-10-11）
+
+`libs/core/src/secret-guard.ts`は、PresetとAccountOverrideの設定オブジェクトを実行時に検査する。
+MCPサーバのstdioの引数・env、httpのURLとヘッダ、codeSettings、rulesをたどる。
+値が`{{secret:...}}`プレースホルダなら許し、生のシークレットなら`mcp.foo.env.KEY`のようなパス付きで報告する。
+これはアプリ固有の規約に基づく実行時の検証であり、リポジトリ走査ではない。
+
+既存の秘密情報検出ツールを探した。gitleaks・secretlint・detect-secretsである。
+gitleaksはGo製のCLIで、git履歴・ファイル・stdinを走査する。TSの実行時に型付きオブジェクトを渡す口が無い。
+secretlintはファイルやglobを対象にするlinterで、文字列を渡すにもファイル名が要り、ルールがファイル名に依存する。
+detect-secretsはPython製で、リポジトリのbaseline走査に向く。
+どれも`{{secret:...}}`プレースホルダ規約を解さず、生の値かプレースホルダかを区別しない。
+設定オブジェクトをたどってパス付きで報告する用途にも合わない。
+
+これらは「リポジトリやファイルに混入したシークレットを探す」ツールである。
+目的は「ユーザーの入力した設定がプレースホルダを使っているか実行時に確かめる」ことで、別の問題である。
+`SECRET_SHAPES`の正規表現（`sk-`・`ghp_`・`AKIA`・`AIza`・JWT等）はsecretlintのrecommendプリセットが見る形式と重なる。
+よって形式の網羅は既存ツールに倣いつつ、実行時の検証は自作を最終手段として残す。
