@@ -141,9 +141,9 @@ win32-api（<https://www.npmjs.com/package/win32-api>）にもFFI定義がある
 どちらも埋め込みC#の代替になりうる。
 一方でUIAの読み取り・送信側は事情が違う。
 古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。
-NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的である。
-umbrielはBun向けである。
-winaxは汎用のCOMブリッジである。
+NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで、実験的な位置づけにとどまる。
+umbrielはBun向けに作られている。
+winaxは汎用のCOMブリッジにすぎない。
 しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要がある。
 ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
 
@@ -213,9 +213,9 @@ microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのア�
 
 Electron向けの自動化手段も当たった。
 Playwrightの`_electron`は、Electronアプリを`executablePath`付きで自分から起動する。
-駆動はChromium/Nodeのインスペクタ経由である。
-既に起動したインスタンスへ後から接ぐのではなく、自分の管理下で起動する前提である。
-しかも通信路はCDP/インスペクタである。
+駆動はChromium/Nodeのインスペクタを経由する。
+既に起動したインスタンスへ後から接ぐのではなく、自分の管理下で起動する前提に立つ。
+しかも通信路はCDP/インスペクタに限られる。
 `app.asar`が署名付きで塞ぐデバッグ経路と同じ壁に当たる。
 `--remote-debugging-port`は起動直後に終了するのを本セッションで確認した。
 Electronの`--inspect`はメインプロセスのNodeインスペクタである。
