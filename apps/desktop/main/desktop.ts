@@ -2,9 +2,8 @@ import type { DesktopInstall, RouterStatus } from "@cdmm/core";
 import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
-import { READ_BODY, SEND_BODY } from "./drive-scripts.ts";
 import { ManagerError } from "./errors.ts";
-import { STOP_SCRIPT } from "./powershell.ts";
+import { READ_BODY, SEND_BODY, STOP_SCRIPT } from "./powershell.ts";
 import { win32 } from "./win32.ts";
 
 type DesktopTarget = Readonly<{
