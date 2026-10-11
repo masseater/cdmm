@@ -25,6 +25,7 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "effect": "catalog:stack",
+    "koffi": "catalog:stack",
     "radix-ui": "catalog:stack",
     "react": "19.3.0",
     "react-dom": "19.3.0",

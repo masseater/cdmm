@@ -2,9 +2,9 @@ import { Effect, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import { describe, expect, it } from "vite-plus/test";
 
-import { READ_SCRIPT, SEND_SCRIPT } from "./drive-scripts.ts";
+import { READ_BODY, SEND_BODY } from "./drive-scripts.ts";
 import { runTest } from "./harness.test.helpers.ts";
-import { HIDDEN_LAUNCH_SCRIPT, NO_DESKTOP_EXIT, NO_DIR_EXIT, STOP_SCRIPT } from "./powershell.ts";
+import { NO_DIR_EXIT, STOP_SCRIPT } from "./powershell.ts";
 
 const PARSE = [
   "$errors = $null",
@@ -46,34 +46,12 @@ describe("STOP_SCRIPT", () => {
     ));
 });
 
-describe("HIDDEN_LAUNCH_SCRIPT", () => {
+describe("READ_BODY", () => {
   it("parses as PowerShell", () =>
-    expect(outputOf({ command: PARSE, env: { CMM_SCRIPT: HIDDEN_LAUNCH_SCRIPT } })).resolves.toBe(
-      "0",
-    ));
-
-  it("launches nothing when no desktop name is given", () =>
-    expect(
-      exitCodeOf({ command: HIDDEN_LAUNCH_SCRIPT, env: { CMM_DESKTOP_NAME: "" } }),
-    ).resolves.toBe(NO_DESKTOP_EXIT));
+    expect(outputOf({ command: PARSE, env: { CMM_SCRIPT: READ_BODY } })).resolves.toBe("0"));
 });
 
-describe("READ_SCRIPT", () => {
+describe("SEND_BODY", () => {
   it("parses as PowerShell", () =>
-    expect(outputOf({ command: PARSE, env: { CMM_SCRIPT: READ_SCRIPT } })).resolves.toBe("0"));
-
-  it("reads nothing when no desktop name is given", () =>
-    expect(exitCodeOf({ command: READ_SCRIPT, env: { CMM_DESKTOP_NAME: "" } })).resolves.toBe(
-      NO_DESKTOP_EXIT,
-    ));
-});
-
-describe("SEND_SCRIPT", () => {
-  it("parses as PowerShell", () =>
-    expect(outputOf({ command: PARSE, env: { CMM_SCRIPT: SEND_SCRIPT } })).resolves.toBe("0"));
-
-  it("sends nothing when no desktop name is given", () =>
-    expect(exitCodeOf({ command: SEND_SCRIPT, env: { CMM_DESKTOP_NAME: "" } })).resolves.toBe(
-      NO_DESKTOP_EXIT,
-    ));
+    expect(outputOf({ command: PARSE, env: { CMM_SCRIPT: SEND_BODY } })).resolves.toBe("0"));
 });

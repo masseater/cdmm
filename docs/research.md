@@ -106,11 +106,9 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
 
-koffiは費用だけで退けず、実際に試した（2026-10-11）。`apps/desktop`にkoffi 3.3.2を入れ、Nodeから`CreateDesktopW`→`CreateProcessW`（`STARTUPINFOW.lpDesktop`に`WinSta0\cdmm-koffi`を指定）→`WaitForInputIdle`で、本物の公式Claude Desktopを隠しデスクトップに起動できた（CreateProcess成功、WaitForInputIdleが0を返し、隠しデスクトップ上にプロセスが9本生存、その後停止）。つまり機能としてはkoffiで起動部を置き換えられる。
+koffiを実際に採用した（2026-10-11）。起動とUIAヘルパーの生成は`main/win32.ts`に移し、`CreateDesktopW`→`CreateProcessW`（`STARTUPINFOW.lpDesktop`で隠しデスクトップを指定し、Unicode環境ブロックでCLAUDE_CONFIG_DIRやCMM_OUTを子へ渡す）→`WaitForInputIdle`/`WaitForSingleObject`を、koffiの非同期呼び出し（`func.async`、ワーカースレッド）で呼ぶ。非同期なのでElectronメインのイベントループを止めない（`setTimeout(0)`が飛行中に発火し、WaitForInputIdleが約585msで非同期に完了するのを実測）。埋め込みC#（旧DESKTOP_CSHARP）とそのAdd-Type起動経路は削除した。UIAの読み取り・送信の本文は、Nodeに実用的なUIAバインドが無いのでPowerShell（System.Windows.Automation）のまま残し、その本文スクリプトをwin32.ts経由で隠しデスクトップ上に起動する。
 
-同期ブロックを避けられるかも実際に試した（2026-10-11）。koffiの非同期呼び出し（`func.async(...)`、ワーカースレッド）で`CreateProcessW`と`WaitForInputIdle`を呼ぶと、呼び出しは即座に制御を返し（`setTimeout(0)`が飛行中に発火、イベントループは空いたまま）、`WaitForInputIdle`は585msで非同期に完了、`PROCESS_INFORMATION`の出力引数も正しく埋まった（pid取得、隠しデスクトップにプロセス生存、停止）。したがって「同期呼び出しでイベントループを止める」は障害ではない。先の記述は撤回する。非同期koffiなら起動部を退行なく置き換えられる。
-
-残る相違は機能ではなく、ネイティブ依存の有無である。koffiはネイティブモジュールなので、`vp pack`の`external`へ追加し、electron-builderで`asarUnpack`して同梱し、アーキ別のプリビルドを配布物に含め、pnpmのビルドスクリプト承認を通す必要がある（承認なしでは`ERR_PNPM_IGNORED_BUILDS`で入らないことを確認した）。一方UIAの読み書きはOS同梱のSystem.Windows.AutomationをPowerShellから使うしかなく、起動だけkoffiにしてもPowerShell層は残るため、koffiは「置き換え」ではなく二系統目になる。つまりkoffi採用は、本物のネイティブ依存とその梱包・署名の運用を足して、PowerShell層は消えない取引である。ここは正直に書く。非同期koffiが同じ起動を止めずに実現できる以上、CLAUDE.md原則2（既存ライブラリ優先）に従えば起動部はkoffiで書くのが正しい順序であり、「追加依存を避けたい」は原則2が認める理由ではない。したがって現行の埋め込みC#の起動層は、好みで選んだ既定ではなく、原則2からの既知の逸脱として扱う。暫定的に残しているのは、koffiをネイティブモジュールとして配布物に正しく載せること（`vp pack`のexternal追加、electron-builderの`asarUnpack`、アーキ別プリビルド、ビルド承認）を、この環境ではelectron-builderを回して検証できないためである。起動部（CreateDesktopW/CreateProcessW/WaitForInputIdle）を非同期koffiへ置き換え、埋め込みC#を削除する作業は未完の次タスクとして残す（UIAの読み書きはNodeに実用的なバインドが無いのでPowerShell層は残す。その探索結果は上に記録済み）。現行C#層は、その置き換えが梱包まで検証されるまでの暫定である。
+検証した。`win32.ts`のロジックをNodeハーネスで実機確認し（本物のClaude Desktopを隠しデスクトップに起動し、UIAヘルパーで本文まで読み取れた）、さらにEffectで包んだ実際の`desktop.ts`のwindowsLayer経由でも起動→読み取りが通ることを確認した。ビルドではkoffiを`vp pack`のexternalにし、`createRequire(import.meta.url)("koffi")`で実行時に解決されること（dist/mainから解決成功）を確認した。配布物ではkoffi 3.3.2がネイティブ本体を別パッケージ`@koromix/koffi-<platform>`に持つため、electron-builderの`files`と`asarUnpack`にkoffiと`@koromix`の両方を含め、pnpmの`allowBuilds`でkoffiのビルドを許可した（未許可は`ERR_PNPM_IGNORED_BUILDS`で入らない）。梱包後の`app.asar.unpacked`に`@koromix/koffi-win32-x64/win32_x64/koffi.node`が入り、梱包版koffiがそのバイナリを読み込めることを確認した。完全なインストーラー生成は、electron-builderのアイコン変換ツールがキャッシュのrenameで`EXDEV`（別ボリューム間のリンク不可）になる環境問題で止まるが、これはkoffiともこの変更とも無関係の、アイコン周りの既存問題である。
 
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
@@ -132,7 +130,7 @@ Electron向けの自動化手段も当たった。Playwrightの`_electron`は、
 
 利用規約: 本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。公式クライアントを自動化すること、複数アカウントを同時に動かすことがAnthropicの規約に触れないかは、アカウント保有者である利用者が判断する事項で、本調査では未確認。UIAは署名付き制御（CDPブロック）を回避せず、OSのアクセシビリティAPIをそのまま使う。
 
-起動の同期も要る。`PROCESS_INFORMATION`のドキュメントは、子ハンドルを閉じても親が生きていれば子は残ると述べるが、本方式では短命のランチャが先に終わると、作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちる。そこで公式アプリ起動後、`WaitForInputIdle`で子がデスクトップに付くまで待ってからランチャを終える（実測で生存プロセスが0、待つと7）。`WaitForInputIdle`は初期化してメッセージ待ちになるまで1回だけ待つ関数で、2回目以降は即座に返る。
+起動後は`WaitForInputIdle`で子が初期化してメッセージ待ちになるまで待つ（1回だけ待ち、2回目以降は即座に返る関数である）。koffiはElectronのメインプロセス（常駐）から呼ぶため、作ったデスクトップは親が生きている間は壊れない。これは以前のPowerShell+Add-Type方式と異なる点である。旧方式では、短命のランチャプロセスが子の接続前に終わると、作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちた（旧方式の実測で、待たないと生存プロセス0、`WaitForInputIdle`を待つと7）。現方式でも、子がUIを出す前に読み書きしないよう、非同期の`WaitForInputIdle`を待ってから次へ進む。
 
 | 依存                                             | 壊れた場合の影響 | 検知                                     |
 | ------------------------------------------------ | ---------------- | ---------------------------------------- |

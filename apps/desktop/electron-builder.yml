@@ -9,6 +9,11 @@ files:
   - assets/**
   - package.json
   - "!**/node_modules/**"
+  - node_modules/koffi/**
+  - node_modules/@koromix/**
+asarUnpack:
+  - "**/node_modules/koffi/**"
+  - "**/node_modules/@koromix/**"
 win:
   target:
     - target: nsis

@@ -1,7 +1,3 @@
-import { DESKTOP_CSHARP, NO_DESKTOP_EXIT } from "./powershell.ts";
-
-const DRIVE_TIMEOUT_MS = "40000";
-
 const READ_BODY = String.raw`
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName UIAutomationClient,UIAutomationTypes
@@ -39,23 +35,4 @@ Start-Sleep -Milliseconds 500
 Set-Content -Path $env:CMM_OUT -Value 'SENT' -Encoding UTF8
 `;
 
-const driveScript = (body: string): string => `
-$ErrorActionPreference = 'Stop'
-$desk = $env:CMM_DESKTOP_NAME
-if (-not $desk) { exit ${String(NO_DESKTOP_EXIT)} }
-$self = (Get-Process -Id $PID).Path
-$out = Join-Path $env:TEMP ('cdmm-' + [guid]::NewGuid().ToString('N') + '.txt')
-$bodyFile = [System.IO.Path]::ChangeExtension($out, '.ps1')
-Add-Type @"${DESKTOP_CSHARP}"@
-Set-Content -Path $bodyFile -Value @'${body}'@ -Encoding UTF8
-$env:CMM_OUT = $out
-$cmd = '"' + $self + '" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $bodyFile + '"'
-[CdmmDesktop]::Run($desk, $self, $cmd, ${DRIVE_TIMEOUT_MS})
-if (Test-Path $out) { Get-Content -Path $out -Raw -Encoding UTF8 }
-Remove-Item $bodyFile, $out -ErrorAction SilentlyContinue
-`;
-
-const READ_SCRIPT = driveScript(READ_BODY);
-const SEND_SCRIPT = driveScript(SEND_BODY);
-
-export { READ_SCRIPT, SEND_SCRIPT };
+export { READ_BODY, SEND_BODY };
