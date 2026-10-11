@@ -347,7 +347,12 @@ secretlintは正確な署名に特化する精度優先である。
 
 方針も確認した。GitGuardianは検出器を「generic（高recall）」と「specific（高精度）」に分ける。
 genericは`key=高エントロピー値`のような広い網で、specificが見逃すものを拾う。
-secret-guardの名前とshapeの判定はこのgeneric型に当たり、設定値の広い検査として確立した設計である。
+secret-guardの名前とshapeの判定はこのgeneric型に当たり、設定値の広い検査として確立している。
 どちらを採るかはノイズと見逃しのどちらが痛いかで決める。保存時のガードは見逃しを避けたいのでrecall優先とする。
-gitleaksはGo製でNodeの公式APIが無い。detect-secretsのnpmはPython本体へのwrapperである。
-どちらも実行時の型付き検査には向かない。
+gitleaksはGo製でNodeの公式APIが無い。CLIはstdin走査に対応する。
+detect-secretsのnpmはPython本体へのwrapperである。detect-secrets-jsはWASMで再実装している。
+いずれも外部プロセスのテキスト走査器にあたる。
+保存時に呼ぶなら、Go/Python/WASMのプロセスを起動し、そのバイナリもElectronに同梱する。
+検出結果はテキスト範囲で返る。`mcp.foo.env.KEY`のような型付きのパスには対応しない。
+よって実行時の設定値ガードには向かない。
+secretlintはカスタムルールを足せる。だが汎用shapeのルール化は`SECRET_SHAPES`の再実装であり、原則2の「既にあるものを使う」に当たらない。
