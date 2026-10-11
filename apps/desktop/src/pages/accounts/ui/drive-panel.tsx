@@ -5,7 +5,6 @@ import { useCallback, useId } from "react";
 import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/accounts/config/copy";
-import { isRead, readError, screenText } from "#/pages/accounts/model/screen";
 import { managerApi, useAction } from "#/shared/api";
 import { useDraftAtom, useDraftAtomChange } from "#/shared/lib/draft-atom";
 import { Button } from "#/shared/ui/button";
@@ -14,6 +13,23 @@ import { Textarea } from "#/shared/ui/textarea";
 
 const MESSAGE_ROWS = 3;
 const SCREEN_REFRESH_MS = 4000;
+
+const isRead = (screen: Screen | undefined): screen is Readonly<{ status: "read"; text: string }> =>
+  screen?.status === "read";
+
+const screenText = (screen: Screen | undefined): Option.Option<string> => {
+  if (isRead(screen) && screen.text.trim().length > 0) {
+    return Option.some(screen.text);
+  }
+  return Option.none();
+};
+
+const readError = (screen: Screen | undefined): string => {
+  if (screen?.status === "failed") {
+    return screen.message;
+  }
+  return "";
+};
 
 const readNote = (input: Readonly<{ screen: Screen | undefined; loading: boolean }>): string => {
   const { screen, loading } = input;
