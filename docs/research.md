@@ -108,11 +108,16 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採っていた。C++フォーラムには、アクティブなデスクトップを切り替えると自動化が続かないという報告があり、切り替えではなく対象と自動化を同じ隠しデスクトップに置く本方式の裏付けになる。`SetThreadDesktop`は、呼ぶスレッドが窓を持つと`ERROR_BUSY`（170）で失敗するため使わない。
 
-ElectronのUIA露出が最大の落とし穴だった。Chromiumはレンダラのアクセシビリティツリーを、支援技術クライアントの要求を検知したときか、`--force-renderer-accessibility`付きで起動したときにしか構築しない（microsoft/vscode #84833）。これが無いと、UIAからはタイトルバーの数要素しか見えない（trycua/cua #1616 は VS Code で3要素のみと報告、本実装の初回読み取りも窓名と最小化・最大化・閉じるの4件だった）。そこで隠し起動の引数に`--force-renderer-accessibility`を付けた。付けた後は実測で、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。加えてツリー構築には初回問い合わせ後に1〜2秒ほどの遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告がある（ArdurAI/ardur-bot #213、#180）。ログイン済みチャットの本文読み取りと送信先セレクタはここでしか最終確認できないため、公式UI変更で壊れる前提で追従する。
+ElectronのUIA露出が最大の落とし穴だった。Windows/UIAでこれを確かめたのは trycua/cua #1616（2026-10-11にWebFetchで確認）で、VS Code（Electron）がUIAにタイトルバーの3要素しか見せず、Chromiumのツリーは「`--force-renderer-accessibility`やUIAイベント購読でクライアントが要求したときだけ」構築されると報告する。microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのアクセシビリティ構築を制御することを示すが、文脈はLinux/Orcaで、Windows/UIAには言及しない。よってWindowsでの根拠はcua #1616と本実装の実測に置く。実測では、隠し起動の引数に`--force-renderer-accessibility`を付けると、付ける前はタイトルバー相当の4件（窓名・最小化・最大化・閉じる）だったのが、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。ツリー構築には初回問い合わせ後に遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告（ArdurAI/ardur-bot #213・#180、未確認）もあるため、ログイン済みチャットの本文読み取りと送信先セレクタは公式UI変更で壊れる前提で追従する。
 
 Electron向けの自動化手段も当たった。Playwrightの`_electron`は、Electronアプリを自分で`executablePath`付きで起動し、Chromium/Nodeのインスペクタ経由で駆動する。既に起動しているインスタンスへ後から接ぐのではなく自分の管理下で起動する前提で、しかも通信路はCDP/インスペクタなので、`app.asar`が署名付きで塞ぐデバッグ経路（`--remote-debugging-port`は起動直後に終了するのを本セッションで確認済み）と同じ壁に当たる。Electronの`--inspect`はメインプロセスのNodeインスペクタで、レンダラのチャットUIには届かない。Windows-MCP（CursorTouch）系はUIAを使うWindows自動化のMCPサーバーだが、lowlevel-computer-useと同じく独立プロセス・汎用で、UIAクライアントは対話デスクトップ側に居るため隠しデスクトップを見るには結局`lpDesktop`起動の自作が要る。いずれも採らない。
 
-確認状況: WebFetchで実際に開いたのは lowlevel-computer-use の一覧ページ（glama）のみ。microsoft/vscode #84833、trycua/cua #1616、ArdurAI/ardur-bot #213・#180、Playwright `_electron`、Windows-MCP は検索結果の要約に基づく一次未確認で、実装前にリポジトリとドキュメントで裏取りする。
+確認状況（2026-10-11、WebFetchで一次確認したもの）:
+- trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せず、Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築される、と本文にある。Windows/UIAの根拠として採用。
+- microsoft/vscode #84833 — 確認。フラグがChromiumのアクセシビリティ構築を制御する点は確かだが、文脈はLinux/Orcaで、Windows/UIAには言及しない。限定して引用する。
+- Playwright `_electron` 公式ドキュメント — 確認。`executablePath`で自分で起動する前提で、既存インスタンスへの接続は記載がなく、Nodeのinspect系に依存する。本件（独立起動済みの隠しインスタンスを駆動）には合わないと判断。
+- lowlevel-computer-use（glama一覧） — 確認済み（前述）。
+- ArdurAI/ardur-bot #213・#180、Windows-MCP — 未確認。根拠としては使わず、補足情報としてのみ記す。
 
 利用規約: 本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。公式クライアントを自動化すること、複数アカウントを同時に動かすことがAnthropicの規約に触れないかは、アカウント保有者である利用者が判断する事項で、本調査では未確認。UIAは署名付き制御（CDPブロック）を回避せず、OSのアクセシビリティAPIをそのまま使う。
 
