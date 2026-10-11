@@ -335,9 +335,12 @@ recommendプリセットは28個の提供元別ルール（aws・openai・anthro
 現実的な非例示の値で再検証すると、aws・slack・stripeは検出された。
 openai・anthropic・googleは提供元固有の正確な形式を要し、こちらの擬似値が形式に合わず通った。
 
-secretlintのルールは提供元の署名に特化する。高確度だが、正確な形式を要し、公式例はallowlistで除外する。
-任意の設定値を広く疑う`SECRET_SHAPES`とは設計が異なる。
-したがってsecretlintは広い網の置き換えでなく、提供元別の高確度層として補完的に使うものである。
-secret-guardの広いshape検出・`{{secret:...}}`規約・パス付き走査は、secretlintに委ねても薄い自作層として残る。
-よって実行時ガードは自作のまま残す。
-secretlintの追加採用は、別途ユーザーの承認を得る。
+recallの差を実測した。`sk-`の汎用形・`AIza`・40文字の裸トークン・未知ベンダーのトークンをsecret-guardは検出した。
+secretlintはこれら全てを見逃した。
+secretlintは正確な署名に特化する精度優先である。
+任意の設定値を広く疑う`SECRET_SHAPES`のrecall優先とは目的が逆である。
+
+置き換えると実行時の検出が狭まる。CLAUDE.mdは検出の網を狭めることを禁じる。
+さらにsecretlintは`{{secret:...}}`規約・名前ベース判定・パス付き走査を持たない。
+よって原則2の「既にそれを実現しているライブラリ」には当たらず、実行時ガードは自作のまま残すと決めた。採用は見送る。
+`secret-guard.test.ts`がこのrecallを固定する。
