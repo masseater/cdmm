@@ -106,7 +106,9 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
 
-ここでの選択は「自作のロジック」対「既存ライブラリ」ではない点に注意する。埋め込みC#のP/InvokeもkoffiもCreateDesktop/CreateProcessを再実装せず、同じOS APIに薄く束ねるFFIである。違いは束ね方だけで、koffiはElectronの配布物にネイティブのプリビルドモジュールを増やし（electron-builderでアーキ別に同梱・署名する対象が増える）、Add-Typeはどのwindowsにもある.NETに対してその場でコンパイルするので追加依存がない。UIAはPowerShell一本にならざるを得ないので、起動をkoffiに移すとPowerShellのUIA層とkoffiのネイティブ層の二本立てになり、ネイティブ依存を足してなお機構が増える。したがって起動も同じPowerShell+Add-Type層にまとめる。これは好みではなく、UIA側の制約とネイティブ依存の費用に基づく判断である。koffiへの一本化は、将来UIA側もNodeのネイティブaddonにできたときに一括で見直す。
+koffiは費用だけで退けず、実際に試した（2026-10-11）。`apps/desktop`にkoffi 3.3.2を入れ、Nodeから`CreateDesktopW`→`CreateProcessW`（`STARTUPINFOW.lpDesktop`に`WinSta0\cdmm-koffi`を指定）→`WaitForInputIdle`で、本物の公式Claude Desktopを隠しデスクトップに起動できた（CreateProcess成功、WaitForInputIdleが0を返し、隠しデスクトップ上にプロセスが9本生存、その後停止）。つまり機能としてはkoffiで起動部を置き換えられる。
+
+それでも起動部をkoffiへ移さない理由は、好みでもコスト一般でもなく、試して分かった具体的な障害である。第一に、`WaitForInputIdle`（最大20秒）と読み取りヘルパー待ちの`WaitForSingleObject`（最大40秒）は同期呼び出しで、Electronのメインプロセスのイベントループを最大その秒数ブロックし、IPCとUIを固める。現状は`child_process`（Effectの`ChildProcessSpawner`）で非同期に待っており退行しない。koffiで固めないためにはkoffiの非同期呼び出し（ワーカースレッド）で構造体の出力引数を扱う必要があり、整合が増える。第二に、koffiはネイティブモジュールなので、`vp pack`の`external`へ追加し、electron-builderで`asarUnpack`して同梱し、pnpmのビルドスクリプト承認を通す必要がある（承認なしでは`ERR_PNPM_IGNORED_BUILDS`で入らないことを確認した）。一方UIAの読み書きはPowerShellのSystem.Windows.Automationに依存せざるを得ず、起動だけkoffiにすると二系統になる。以上より、既に非同期で追加依存のない現行のPowerShell+Add-Type層を保つ。Node側にUIAバインディングが現れ、全体をNodeネイティブ化できるようになった時点でkoffiへの一本化を再評価する。
 
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
