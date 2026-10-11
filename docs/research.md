@@ -301,6 +301,11 @@ cutoff（`exclusive-status`が0.5、`ui-state-effect-atom`が0.67）は`1860d2a`
 今回変えたのは判定器（`model`・`baseUrl`・`apiKeyEnv`）と`--retry`だけで、閾値は下げていない。
 `vp run verify`の`jev-lint eval --replay`が、その校正値とfixturesの整合を毎回確かめる。
 
+replayは保存済みスコアを再採点するので、そのスコアを記録した判定器が今の判定器と一致する必要がある。
+`.jev-lint/baseline.json`の`model`は`perplexity/pplx-decider-v1.1-27b-20261006`であり、`.jev-lint.yaml`のOpenRouterの判定器と同じである。
+よってreplayは旧typesafeの`jev-1.13.0`ではなく、今のOpenRouterの判定器に対してfixturesとの整合を検証している。
+判定器を切り替えたときはbaselineを録り直す必要があり、今回はそれが済んでいる。
+
 ## スクロール領域のキーボード操作（2026-10-11）
 
 Drive画面の履歴は`max-h-56 overflow-auto`のスクロール領域である。
