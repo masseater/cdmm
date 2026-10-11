@@ -47,12 +47,13 @@ const transcriptView = (data: Option.Option<Screen>): ReactNode =>
   Option.match(trimmedRead(data).pipe(Option.filter(Str.isNonEmpty)), {
     onNone: () => "",
     onSome: (text) => (
-      <section
+      <pre
+        aria-live="polite"
         aria-label={COPY.screen}
         className="border-input bg-muted/40 max-h-56 overflow-auto rounded-md border p-2 font-mono text-xs whitespace-pre-wrap"
       >
         {text}
-      </section>
+      </pre>
     ),
   });
 
