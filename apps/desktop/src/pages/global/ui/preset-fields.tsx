@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/global/config/copy";
+import type { PresetDraftAtoms } from "#/pages/global/model/use-preset-draft-atoms";
 import { useDraftAtomChange } from "#/shared/lib/draft-atom";
 import { Input } from "#/shared/ui/input";
 import { LabeledField } from "#/shared/ui/labeled-field";
 import { Textarea } from "#/shared/ui/textarea";
 
 import { McpField } from "./mcp-field";
-import type { PresetDraftAtoms } from "./use-preset-draft-atoms";
 
 const MCP_ROWS = 14;
 const SETTINGS_ROWS = 8;

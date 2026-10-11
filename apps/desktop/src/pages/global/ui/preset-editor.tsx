@@ -4,13 +4,13 @@ import { useCallback } from "react";
 import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/global/config/copy";
+import { usePresetDraftAtoms } from "#/pages/global/model/use-preset-draft-atoms";
 import { managerApi } from "#/shared/api";
 import { ActionButton } from "#/shared/ui/action-button";
 import { Button } from "#/shared/ui/button";
 import { OutcomeMessage } from "#/shared/ui/outcome-message";
 
 import { PresetFields } from "./preset-fields";
-import { usePresetDraftAtoms } from "./use-preset-draft-atoms";
 
 const PresetEditor = ({ preset }: Readonly<{ preset: Preset }>): ReactNode => {
   const form = usePresetDraftAtoms(preset);
