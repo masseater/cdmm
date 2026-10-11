@@ -35,6 +35,14 @@ const REFERENCES: McpMap = {
   }),
 };
 
+const SHAPE_ONLY: McpMap = {
+  generic: stdio({ command: "node", env: { DATA: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0" } }),
+  vendor: stdio({
+    command: "node",
+    env: { VALUE: "sk-T3xk9QwErTyUiOpAsDfGhJkLzXcVbNm1234567890" },
+  }),
+};
+
 const SETTINGS_WITH_TOKEN = preset({
   mcp: {},
   codeSettings: { env: { ANTHROPIC_AUTH_TOKEN: "abc" } },
@@ -61,6 +69,10 @@ describe("the secret guard on presets", () => {
 
   it("allows placeholders and ordinary values", () => {
     expect(pathsFor(REFERENCES)).toStrictEqual([]);
+  });
+
+  it("rejects shape-only secrets under innocuous keys", () => {
+    expect(pathsFor(SHAPE_ONLY)).toStrictEqual(["mcp.generic.env.DATA", "mcp.vendor.env.VALUE"]);
   });
 
   it("rejects secrets hidden in Claude Code settings", () => {
