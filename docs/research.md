@@ -108,7 +108,9 @@ Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke�
 
 koffiは費用だけで退けず、実際に試した（2026-10-11）。`apps/desktop`にkoffi 3.3.2を入れ、Nodeから`CreateDesktopW`→`CreateProcessW`（`STARTUPINFOW.lpDesktop`に`WinSta0\cdmm-koffi`を指定）→`WaitForInputIdle`で、本物の公式Claude Desktopを隠しデスクトップに起動できた（CreateProcess成功、WaitForInputIdleが0を返し、隠しデスクトップ上にプロセスが9本生存、その後停止）。つまり機能としてはkoffiで起動部を置き換えられる。
 
-それでも起動部をkoffiへ移さない理由は、好みでもコスト一般でもなく、試して分かった具体的な障害である。第一に、`WaitForInputIdle`（最大20秒）と読み取りヘルパー待ちの`WaitForSingleObject`（最大40秒）は同期呼び出しで、Electronのメインプロセスのイベントループを最大その秒数ブロックし、IPCとUIを固める。現状は`child_process`（Effectの`ChildProcessSpawner`）で非同期に待っており退行しない。koffiで固めないためにはkoffiの非同期呼び出し（ワーカースレッド）で構造体の出力引数を扱う必要があり、整合が増える。第二に、koffiはネイティブモジュールなので、`vp pack`の`external`へ追加し、electron-builderで`asarUnpack`して同梱し、pnpmのビルドスクリプト承認を通す必要がある（承認なしでは`ERR_PNPM_IGNORED_BUILDS`で入らないことを確認した）。一方UIAの読み書きはPowerShellのSystem.Windows.Automationに依存せざるを得ず、起動だけkoffiにすると二系統になる。以上より、既に非同期で追加依存のない現行のPowerShell+Add-Type層を保つ。Node側にUIAバインディングが現れ、全体をNodeネイティブ化できるようになった時点でkoffiへの一本化を再評価する。
+同期ブロックを避けられるかも実際に試した（2026-10-11）。koffiの非同期呼び出し（`func.async(...)`、ワーカースレッド）で`CreateProcessW`と`WaitForInputIdle`を呼ぶと、呼び出しは即座に制御を返し（`setTimeout(0)`が飛行中に発火、イベントループは空いたまま）、`WaitForInputIdle`は585msで非同期に完了、`PROCESS_INFORMATION`の出力引数も正しく埋まった（pid取得、隠しデスクトップにプロセス生存、停止）。したがって「同期呼び出しでイベントループを止める」は障害ではない。先の記述は撤回する。非同期koffiなら起動部を退行なく置き換えられる。
+
+残る相違は機能ではなく、ネイティブ依存の有無である。koffiはネイティブモジュールなので、`vp pack`の`external`へ追加し、electron-builderで`asarUnpack`して同梱し、アーキ別のプリビルドを配布物に含め、pnpmのビルドスクリプト承認を通す必要がある（承認なしでは`ERR_PNPM_IGNORED_BUILDS`で入らないことを確認した）。一方UIAの読み書きはOS同梱のSystem.Windows.AutomationをPowerShellから使うしかなく、起動だけkoffiにしてもPowerShell層は残るため、koffiは「置き換え」ではなく二系統目になる。つまりkoffi採用は、本物のネイティブ依存とその梱包・署名の運用を足して、PowerShell層は消えない取引である。現行のPowerShell+Add-Type層は非同期（`ChildProcessSpawner`）で追加依存ゼロであり機能は同じなので、これを既定として保つ。ただしCLAUDE.md原則2（既存ライブラリ優先）に照らせば、非同期koffiが動く以上、起動部をkoffiへ移すのは妥当な代替であり、プロジェクトがネイティブ依存を受け入れるなら推奨できる。その置き換えはelectron-builderの梱包まで含めて検証する独立した作業として行う。
 
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
