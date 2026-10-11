@@ -15,13 +15,6 @@
       "skillPath": "security/SKILL.md",
       "computedHash": "7a230edf3a24ce18162cb4379f59b6a19b8d24ca04db530609d0f15cede556dc"
     },
-    "cloudflare": {
-      "source": "cloudflare/skills",
-      "ref": "41e0d19858946d18af9ee2c2feebbe2e11d829ff",
-      "sourceType": "github",
-      "skillPath": "skills/cloudflare/SKILL.md",
-      "computedHash": "6f0a70840cad114f020e5950874f255b22e669f07036cf4f81d8f733ae0233a0"
-    },
     "effect-ts": {
       "source": "Effect-TS/skills",
       "ref": "2309e6f27d9955b434c0e3f394b945c136e89fd2",
@@ -82,13 +75,6 @@
       "sourceType": "github",
       "skillPath": "skills/typescript-variables/SKILL.md",
       "computedHash": "a4f4459aa4c0dd16f8fd43401b76c4e9cb68265a73060d7f184ddb438f911afd"
-    },
-    "workers-best-practices": {
-      "source": "cloudflare/skills",
-      "ref": "41e0d19858946d18af9ee2c2feebbe2e11d829ff",
-      "sourceType": "github",
-      "skillPath": "skills/workers-best-practices/SKILL.md",
-      "computedHash": "e1c30e93854345114dfa6a0a077363119eb99c03e5c64a8f2109349802e1f2aa"
     },
     "yomiyasu": {
       "source": "nanaism/yomiyasu",
