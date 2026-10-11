@@ -43,19 +43,18 @@ const noteText = (data: Option.Option<Screen>, loading: boolean): Option.Option<
   return Option.none();
 };
 
-const transcriptView = (data: Option.Option<Screen>): ReactNode =>
-  Option.match(trimmedRead(data).pipe(Option.filter(Str.isNonEmpty)), {
-    onNone: () => "",
-    onSome: (text) => (
-      <pre
-        aria-live="polite"
-        aria-label={COPY.screen}
-        className="border-input bg-muted/40 max-h-56 overflow-auto rounded-md border p-2 font-mono text-xs whitespace-pre-wrap"
-      >
-        {text}
-      </pre>
-    ),
-  });
+const transcriptView = (data: Option.Option<Screen>): ReactNode => (
+  <div role="log" aria-label={COPY.screen}>
+    {Option.match(trimmedRead(data).pipe(Option.filter(Str.isNonEmpty)), {
+      onNone: () => "",
+      onSome: (text) => (
+        <pre className="border-input bg-muted/40 max-h-56 overflow-auto rounded-md border p-2 font-mono text-xs whitespace-pre-wrap">
+          {text}
+        </pre>
+      ),
+    })}
+  </div>
+);
 
 const noteView = (data: Option.Option<Screen>, loading: boolean): ReactNode =>
   Option.match(noteText(data, loading), {

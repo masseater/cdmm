@@ -15,9 +15,7 @@ const DrivePanel = ({ view }: Readonly<{ view: AccountView }>): ReactNode => {
   }
   return (
     <section className="flex flex-col gap-2">
-      <h3 id={`${titleId}-title`} className="text-sm font-medium">
-        {COPY.drive}
-      </h3>
+      <h3 className="text-sm font-medium">{COPY.drive}</h3>
       <p id={`${titleId}-hint`} className="text-muted-foreground text-xs">
         {COPY.driveHelp}
       </p>
