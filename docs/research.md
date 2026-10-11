@@ -138,3 +138,13 @@ Electron向けの自動化手段も当たった。Playwrightの`_electron`は、
 | `--force-renderer-accessibility`で本文が露出する | 本文の読み取り   | 読み取りが窓枠だけなら露出を疑う         |
 | 入力欄のUIA種別（Edit/Document）とEnter          | 送信             | ログイン済みのチャットでのみ最終確認する |
 | トップ窓の名前が`Claude`であること               | 窓の特定         | 見つからなければ空を返す                 |
+
+## 開発用ブリッジ（dev-bridge）の調査（2026-10-11）
+
+レンダラーは`globalThis.cdmm`を読む。これは本番ではElectronのpreloadが`contextBridge`でIPC越しに注入する。UIを素のブラウザ（`vp dev`）で描画・確認するには、この注入を代替する必要がある。公式手段・既存ライブラリを探した結果:
+
+- `electron-mock-ipc` / `electron-ipc-mock` — 確認。`ipcMain`↔`ipcRenderer`のモックで、用途はJest/Mochaの単体テスト。本件のレンダラーは生IPCを直接触らず`globalThis.cdmm`（contextBridgeで公開されたオブジェクト）を読むため、IPCトランスポートのモックは噛み合わない。
+- Storybook — 確認。レンダラー単体の開発環境だが、preload相当のグローバルは「同じオブジェクトをデコレータで定義する」運用になり、結局は手書きのモックである。加えて本リポジトリに未導入で、導入は大掛かり。
+- Vite `define` — 静的な置換のみ。ブリッジは呼び出しにデータで応答する必要があり合わない。MSWはHTTPを横取りする仕組みで、ブリッジはHTTPではないため対象外。
+
+結論: 「preload注入のグローバルを、素のブラウザでのdev描画のために代替する」既存の公式手段・ライブラリは見当たらない。`import.meta.env.DEV`で分岐し、実ブリッジが無いときだけ`globalThis.cdmm`を差すdev専用モジュール（動的importで本番バンドルから除外）を採る。これはElectronの定番パターンで、Web検索でも同じ構成が推奨されていた。本番バンドルに混入しないことはビルド成果物で確認済み。
