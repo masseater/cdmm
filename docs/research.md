@@ -58,7 +58,16 @@ Windowsの既定のアプリ機構は、パッケージの登録より優先さ�
 これがcallback routerの根拠である。
 Desktopは起動のたびに自分をプロトコルの既定に登録し直そうとするが、ユーザーの選択は書き換えない（推定、統合テストで確かめる）。
 
-Electron公式の`app.setAsDefaultProtocolClient`も当たった（2026-10-11にWebで確認）。これはレジストリに書いて成否をbooleanで返すだけで、trueでもWindowsが使うとは限らない。Windows 10/11は既定を`...\UrlAssociations\<scheme>\UserChoice`のProgIdと改ざん検知Hashで保護し、Hashは設定アプリだけが計算するため、ProgIdだけ書いても無視される。つまり公式APIでも既定を強制できず、サポートされた唯一の道は候補登録＋設定アプリでユーザーに選ばせることである。本アプリの`RegisteredApplications`＋`Capabilities`登録と`ms-settings:defaultapps`誘導はこの結論に沿う。SetUserFTA等の第三者ツールはHashを計算できるが、非公式なので採らない。
+Electron公式の`app.setAsDefaultProtocolClient`も当たった（2026-10-11にWebで確認）。
+これはレジストリに書いて成否をbooleanで返すだけである。
+trueでもWindowsが使うとは限らない。
+Windows 10/11は既定を`...\UrlAssociations\<scheme>\UserChoice`のProgIdと改ざん検知Hashで守る。
+Hashは設定アプリだけが計算する。
+そのためProgIdだけ書いても無視される。
+公式APIでも既定は強制できない。
+サポートされた唯一の道は、候補登録のうえ設定アプリでユーザーに選ばせることである。
+本アプリの`RegisteredApplications`＋`Capabilities`登録と`ms-settings:defaultapps`誘導はこの結論に沿う。
+SetUserFTA等の第三者ツールはHashを計算できるが、非公式なので採らない。
 
 ## Claude Code
 
@@ -98,39 +107,150 @@ Anthropicが仕様として公開していないものに依存するのは次�
 
 ## 隠し運用と駆動
 
-アカウントごとのDesktopを、ユーザーに見せず起動し、CDMMから送信と読み取りをする方式を選ぶまでに次を調べた。
+アカウントごとのDesktopを、ユーザーに見せず起動する。
+そのうえでCDMMから送信と読み取りをする。
+この方式を選ぶまでに次を調べた。
 
-公式の統合手段を探した。Desktopアプリのチャットへ外から送信したり読み取ったりする公式のCLIやAPIは見つからなかった。`claude`CLIとAgent SDKはClaude Code（別製品）であり、Desktopのチャット履歴は読み書きしない。Messages APIはDesktopの会話に触れない。SPEC.mdも独自のAPIクライアントや通信の中継を作らないと定める。CDPは`app.asar`が署名付きで塞いでいる。したがってDesktopの画面をそのまま読む以外に手段がない。
+公式の統合手段を探した。
+Desktopのチャットへ外から送受信する公式のCLIやAPIは見つからない。
+`claude`CLIとAgent SDKはClaude Code（別製品）である。
+どちらもDesktopのチャット履歴は読み書きしない。
+Messages APIもDesktopの会話には触れない。
+SPEC.mdも独自のAPIクライアントや中継を作らないと定める。
+CDPは`app.asar`が署名付きで塞ぐ。
+したがってDesktopの画面をそのまま読むしかない。
 
-既存ライブラリを探した。FlaUI（.NET、NuGet）、pywinauto（Pythonランタイム）、WinAppDriver（別プロセスのHTTP）は、いずれもWindowsのUI Automationを薄く包んだものである。どれも難所の「隠しデスクトップ上で動かすこと」を肩代わりしない。クライアントは対象と同じデスクトップに居る必要があるため、FlaUIやpywinautoを使っても結局そのランタイムごと`lpDesktop`付きで隠しデスクトップに起動することになり、自作のランチャはそのまま要る。これらが包むのは要素検索の書き味だけで、本実装の読み取りは窓の子孫を一度なめるだけ、送信は入力欄1つに値を入れてEnterを送るだけなので、ラッパーの利点がほとんど効かない。ElectronアプリにPythonやNuGetの依存を足す代わりに、OS同梱のUIAutomationClientを、stopやバージョン取得と同じPowerShell経路から直接使う。
+既存ライブラリを探した。
+候補はFlaUI（.NET、NuGet）、pywinauto（Pythonランタイム）、WinAppDriver（別プロセスのHTTP）である。
+いずれもWindowsのUI Automationを薄く包む。
+難所の「隠しデスクトップ上で動かすこと」はどれも肩代わりしない。
+UIAクライアントは対象と同じデスクトップに置く必要がある。
+FlaUIやpywinautoでも、結局そのランタイムを`lpDesktop`付きで隠しデスクトップへ起動する。
+自作のランチャはそのまま要る。
+これらが包むのは要素検索の書き味だけである。
+本実装の読み取りは窓の子孫を一度なめるだけで済む。
+送信は入力欄へ値を入れてEnterを送るだけである。
+どちらも単純なのでラッパーの利点は小さい。
+ElectronにPythonやNuGetの依存は足さない。
+OS同梱のUIAutomationClientを、stopやバージョン取得と同じPowerShell経路から使う。
 
-Node側の既存ライブラリも探した（2026-10-11）。起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）は、koffi（<https://koffi.dev>、保守中でElectronでも再ビルド不要のプリビルド）からNodeで直接呼べ、win32-api（<https://www.npmjs.com/package/win32-api>）にFFI定義もあるので、埋め込みC#の代替になりうる。一方でUIAの読み取り・送信側は、古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的、umbrielはBun向け、winaxは汎用のCOMブリッジである。しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要があるため、ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
+Node側の既存ライブラリも探した（2026-10-11）。
+起動のP/Invoke（CreateDesktop・CreateProcess・WaitForInputIdle）はkoffi（<https://koffi.dev>）からNodeで直接呼べる。
+koffiは保守中で、Electronでも再ビルドが要らないプリビルドを配る。
+win32-api（<https://www.npmjs.com/package/win32-api>）にもFFI定義がある。
+どちらも埋め込みC#の代替になりうる。
+一方でUIAの読み取り・送信側は事情が違う。
+古典のIUIAutomation（UIAutomationClient COM）を束ねた実用的なnpmが無い。
+NodeRTの`@nodert-win11/windows.ui.uiautomation.core`はWinRTの別APIで実験的である。
+umbrielはBun向けである。
+winaxは汎用のCOMブリッジである。
+しかもUIAクライアントは隠しデスクトップ上の別プロセスで動かす必要がある。
+ここはOS同梱のSystem.Windows.Automationを使えば依存ゼロで済む。
 
-koffiを実際に採用した（2026-10-11）。起動とUIAヘルパーの生成は`main/win32.ts`に移し、`CreateDesktopW`→`CreateProcessW`（`STARTUPINFOW.lpDesktop`で隠しデスクトップを指定し、Unicode環境ブロックでCLAUDE_CONFIG_DIRやCMM_OUTを子へ渡す）→`WaitForInputIdle`/`WaitForSingleObject`を、koffiの非同期呼び出し（`func.async`、ワーカースレッド）で呼ぶ。非同期なのでElectronメインのイベントループを止めない（`setTimeout(0)`が飛行中に発火し、WaitForInputIdleが約585msで非同期に完了するのを実測）。埋め込みC#（旧DESKTOP_CSHARP）とそのAdd-Type起動経路は削除した。UIAの読み取り・送信の本文は、Nodeに実用的なUIAバインドが無いのでPowerShell（System.Windows.Automation）のまま残し、その本文スクリプトをwin32.ts経由で隠しデスクトップ上に起動する。
+koffiを実際に採用した（2026-10-11）。
+起動とUIAヘルパーの生成は`main/win32.ts`へ移した。
+処理はCreateDesktopW→CreateProcessW→WaitForInputIdle/WaitForSingleObjectの順である。
+`STARTUPINFOW.lpDesktop`で隠しデスクトップを指定する。
+Unicode環境ブロックでCLAUDE_CONFIG_DIRやCMM_OUTを子へ渡す。
+これらをkoffiの非同期呼び出し（`func.async`、ワーカースレッド）で呼ぶ。
+非同期なのでElectronメインのイベントループを止めない。
+`setTimeout(0)`が飛行中に発火し、WaitForInputIdleが約585msで非同期に完了するのを実測した。
+埋め込みC#（旧DESKTOP_CSHARP）とそのAdd-Type起動経路は削除した。
+UIAの本文はPowerShell（System.Windows.Automation）のまま残す。
+Nodeに実用的なUIAバインドが無いためである。
+その本文スクリプトをwin32.ts経由で隠しデスクトップ上に起動する。
 
-検証した。`win32.ts`のロジックをNodeハーネスで実機確認し（本物のClaude Desktopを隠しデスクトップに起動し、UIAヘルパーで本文まで読み取れた）、さらにEffectで包んだ実際の`desktop.ts`のwindowsLayer経由でも起動→読み取りが通ることを確認した。ビルドではkoffiを`vp pack`のexternalにし、`createRequire(import.meta.url)("koffi")`で実行時に解決されること（dist/mainから解決成功）を確認した。配布物ではkoffi 3.3.2がネイティブ本体を別パッケージ`@koromix/koffi-<platform>`に持つため、electron-builderの`files`と`asarUnpack`にkoffiと`@koromix`の両方を含め、pnpmの`allowBuilds`でkoffiのビルドを許可した（未許可は`ERR_PNPM_IGNORED_BUILDS`で入らない）。梱包後の`app.asar.unpacked`に`@koromix/koffi-win32-x64/win32_x64/koffi.node`が入り、梱包版koffiがそのバイナリを読み込めることを確認した。完全なインストーラー生成は、electron-builderのアイコン変換ツールがキャッシュのrenameで`EXDEV`（別ボリューム間のリンク不可）になる環境問題で止まるが、これはkoffiともこの変更とも無関係の、アイコン周りの既存問題である。
+検証した。
+`win32.ts`のロジックをNodeハーネスで実機確認した。
+本物のClaude Desktopを隠しデスクトップに起動し、UIAヘルパーで本文まで読み取れた。
+Effectで包んだ`desktop.ts`のwindowsLayer経由でも起動と読み取りが通った。
+ビルドではkoffiを`vp pack`のexternalにした。
+`createRequire(import.meta.url)("koffi")`で実行時に解決できることを確認した（dist/mainから解決成功）。
+配布物ではkoffi 3.3.2がネイティブ本体を別パッケージ`@koromix/koffi-<platform>`に持つ。
+そこでelectron-builderの`files`と`asarUnpack`にkoffiと`@koromix`の両方を含めた。
+pnpmの`allowBuilds`でkoffiのビルドを許可した（未許可は`ERR_PNPM_IGNORED_BUILDS`で入らない）。
+梱包後の`app.asar.unpacked`に`@koromix/koffi-win32-x64/win32_x64/koffi.node`が入る。
+梱包版koffiがそのバイナリを読み込めることを確認した。
+完全なインストーラー生成はEXDEVで止まる。
+これはelectron-builderのアイコン変換がキャッシュのrenameで起こす環境問題である。
+koffiやこの変更とは無関係の、アイコン周りの既存問題である。
 
 ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
 
-同じことをするツールも個別に評価した。lowlevel-computer-use のMCPサーバー（<https://glama.ai/mcp/servers/codingmachineedge/lowlevel-computer-use-mcp>）は、見えないWin32デスクトップを作ってGUIアプリを起動する点は同じだが、Python製の独立したMCPサーバーで、ライセンスの記載が無く、入力はAutoHotkey系（`ahk_control_send`、`win_send_keys`）で、画面の読み取りはUIAではなくPrintWindowのキャプチャである。Electronアプリに別ランタイム（Python）と別プロセスを足すうえ、本実装が要る「UIAでの本文読み取り」を備えない。trycua/cua（<https://github.com/trycua/cua>）とArdurAI/ardur-bot（<https://github.com/ArdurAI/ardur-bot>）は、ElectronのUIA露出に関する不具合報告（cua #1616、ardur-bot #213・#180）であって、組み込めるライブラリではない。これらは採らず、知見だけを引く。
+同じことをするツールも個別に評価した。
+lowlevel-computer-useのMCPサーバー（<https://glama.ai/mcp/servers/codingmachineedge/lowlevel-computer-use-mcp>）を見た。
+見えないWin32デスクトップを作ってGUIアプリを起動する点は同じである。
+ただしPython製の独立したMCPサーバーである。
+ライセンスの記載が無い。
+入力はAutoHotkey系（`ahk_control_send`、`win_send_keys`）である。
+画面の読み取りはUIAではなくPrintWindowのキャプチャである。
+ElectronにPythonと別プロセスを足すうえ、本実装が要る「UIAでの本文読み取り」を備えない。
+trycua/cua（<https://github.com/trycua/cua>）とArdurAI/ardur-bot（<https://github.com/ArdurAI/ardur-bot>）も見た。
+どちらもElectronのUIA露出に関する不具合報告である（cua #1616、ardur-bot #213・#180）。
+組み込めるライブラリではない。
+これらは採らず、知見だけを引く。
 
-隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採っていた。UIAクライアントは自分のスレッドが属するデスクトップの窓しか見えないため、対象と読み取りヘルパーを同じ隠しデスクトップに置く。スレッドを後から切り替える`SetThreadDesktop`は、呼ぶスレッドが窓を持つと`ERROR_BUSY`（170、本実装で実測）で失敗したので使わず、ヘルパーを隠しデスクトップ上の別プロセスとして起動する。
+隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採る。
+UIAクライアントは自分のスレッドが属するデスクトップの窓しか見えない。
+そこで対象と読み取りヘルパーを同じ隠しデスクトップに置く。
+スレッドを後から切り替える`SetThreadDesktop`は使わない。
+呼ぶスレッドが窓を持つと`ERROR_BUSY`（170、本実装で実測）で失敗したためである。
+代わりにヘルパーを隠しデスクトップ上の別プロセスとして起動する。
 
-ElectronのUIA露出が最大の落とし穴だった。Windows/UIAでこれを確かめたのは trycua/cua #1616（2026-10-11にWebFetchで確認）で、VS Code（Electron）がUIAにタイトルバーの3要素しか見せず、Chromiumのツリーは「`--force-renderer-accessibility`やUIAイベント購読でクライアントが要求したときだけ」構築されると報告する。microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのアクセシビリティ構築を制御することを示すが、文脈はLinux/Orcaで、Windows/UIAには言及しない。よってWindowsでの根拠はcua #1616と本実装の実測に置く。実測では、隠し起動の引数に`--force-renderer-accessibility`を付けると、付ける前はタイトルバー相当の4件（窓名・最小化・最大化・閉じる）だったのが、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。ツリー構築には初回問い合わせ後に遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告（ArdurAI/ardur-bot #213・#180、未確認）もあるため、ログイン済みチャットの本文読み取りと送信先セレクタは公式UI変更で壊れる前提で追従する。
+ElectronのUIA露出が最大の落とし穴だった。
+Windows/UIAでこれを確かめたのはtrycua/cua #1616である（2026-10-11にWebFetchで確認）。
+VS Code（Electron）はUIAにタイトルバーの3要素しか見せない。
+Chromiumのツリーは「`--force-renderer-accessibility`やUIAイベント購読でクライアントが要求したときだけ」構築されると報告する。
+microsoft/vscode #84833（同日確認）は、同じフラグがChromiumのアクセシビリティ構築を制御することを示す。
+ただし文脈はLinux/Orcaで、Windows/UIAには言及しない。
+よってWindowsでの根拠はcua #1616と本実装の実測に置く。
+実測では、隠し起動の引数に`--force-renderer-accessibility`を付けると結果が変わった。
+付ける前はタイトルバー相当の4件（窓名・最小化・最大化・閉じる）だった。
+付けた後はサインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。
+ツリー構築には初回問い合わせ後に遅延がある。
+隠し・不可視の窓は`backgroundThrottling`で更新が止まり、空に見えることがあるという報告もある（ArdurAI/ardur-bot #213・#180、未確認）。
+そのためログイン済みチャットの本文読み取りと送信先セレクタは、公式UIの変更で壊れる前提に立って追従する。
 
-Electron向けの自動化手段も当たった。Playwrightの`_electron`は、Electronアプリを自分で`executablePath`付きで起動し、Chromium/Nodeのインスペクタ経由で駆動する。既に起動しているインスタンスへ後から接ぐのではなく自分の管理下で起動する前提で、しかも通信路はCDP/インスペクタなので、`app.asar`が署名付きで塞ぐデバッグ経路（`--remote-debugging-port`は起動直後に終了するのを本セッションで確認済み）と同じ壁に当たる。Electronの`--inspect`はメインプロセスのNodeインスペクタで、レンダラのチャットUIには届かない。Windows-MCP（CursorTouch）系はUIAを使うWindows自動化のMCPサーバーだが、lowlevel-computer-useと同じく独立プロセス・汎用で、UIAクライアントは対話デスクトップ側に居るため隠しデスクトップを見るには結局`lpDesktop`起動の自作が要る。いずれも採らない。
+Electron向けの自動化手段も当たった。
+Playwrightの`_electron`は、Electronアプリを`executablePath`付きで自分から起動する。
+駆動はChromium/Nodeのインスペクタ経由である。
+既に起動したインスタンスへ後から接ぐのではなく、自分の管理下で起動する前提である。
+しかも通信路はCDP/インスペクタである。
+`app.asar`が署名付きで塞ぐデバッグ経路と同じ壁に当たる。
+`--remote-debugging-port`は起動直後に終了するのを本セッションで確認した。
+Electronの`--inspect`はメインプロセスのNodeインスペクタである。
+レンダラのチャットUIには届かない。
+Windows-MCP（CursorTouch）系はUIAを使うWindows自動化のMCPサーバーである。
+lowlevel-computer-useと同じく独立プロセスで汎用である。
+UIAクライアントは対話デスクトップ側に居る。
+隠しデスクトップを見るには結局`lpDesktop`起動の自作が要る。
+いずれも採らない。
 
-確認状況（2026-10-11、WebFetchで一次確認したもの）:
+確認状況は次のとおりである（2026-10-11、WebFetchで一次確認したもの）。
 
-- trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せず、Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築される、と本文にある。Windows/UIAの根拠として採用。
-- microsoft/vscode #84833 — 確認。フラグがChromiumのアクセシビリティ構築を制御する点は確かだが、文脈はLinux/Orcaで、Windows/UIAには言及しない。限定して引用する。
-- Playwright `_electron` 公式ドキュメント — 確認。`executablePath`で自分で起動する前提で、既存インスタンスへの接続は記載がなく、Nodeのinspect系に依存する。本件（独立起動済みの隠しインスタンスを駆動）には合わないと判断。
+- trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せないと本文にある。Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築されるとある。Windows/UIAの根拠として採用する。
+- microsoft/vscode #84833 — 確認。フラグがChromiumのアクセシビリティ構築を制御する点は確かである。ただし文脈はLinux/Orcaなので、Windows/UIAには言及しない。限定して引用する。
+- Playwright `_electron` 公式ドキュメント — 確認。`executablePath`を指定して自分から起動する前提である。既存インスタンスへの接続は記載がない。Nodeのinspect系に依存する。本件には合わないと判断する。
 - lowlevel-computer-use（glama一覧） — 確認済み（前述）。
 - ArdurAI/ardur-bot #213・#180、Windows-MCP — 未確認。根拠としては使わず、補足情報としてのみ記す。
 
-利用規約: 本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。公式クライアントを自動化すること、複数アカウントを同時に動かすことがAnthropicの規約に触れないかは、アカウント保有者である利用者が判断する事項で、本調査では未確認。UIAは署名付き制御（CDPブロック）を回避せず、OSのアクセシビリティAPIをそのまま使う。
+利用規約について記す。
+本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。
+公式クライアントの自動化や複数アカウントの同時運用がAnthropicの規約に触れないかは、アカウント保有者である利用者が判断する。
+本調査では未確認である。
+UIAは署名付き制御（CDPブロック）を回避しない。
+OSのアクセシビリティAPIをそのまま使う。
 
-起動後は`WaitForInputIdle`で子が初期化してメッセージ待ちになるまで待つ（1回だけ待ち、2回目以降は即座に返る関数である）。koffiはElectronのメインプロセス（常駐）から呼ぶため、作ったデスクトップは親が生きている間は壊れない。これは以前のPowerShell+Add-Type方式と異なる点である。旧方式では、短命のランチャプロセスが子の接続前に終わると、作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちた（旧方式の実測で、待たないと生存プロセス0、`WaitForInputIdle`を待つと7）。現方式でも、子がUIを出す前に読み書きしないよう、非同期の`WaitForInputIdle`を待ってから次へ進む。
+起動後は`WaitForInputIdle`で待つ。
+子が初期化してメッセージ待ちになるまで待つ関数である（1回だけ待ち、2回目以降は即座に返る）。
+koffiはElectronのメインプロセス（常駐）から呼ぶ。
+そのため作ったデスクトップは親が生きている間は壊れない。
+これは以前のPowerShell+Add-Type方式と異なる。
+旧方式では短命のランチャプロセスが子の接続前に終わった。
+すると作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちた。
+旧方式の実測では、待たないと生存プロセスは0、`WaitForInputIdle`を待つと7だった。
+現方式でも、子がUIを出す前には読み書きしない。
+非同期の`WaitForInputIdle`を待ってから次へ進む。
 
 | 依存                                             | 壊れた場合の影響 | 検知                                     |
 | ------------------------------------------------ | ---------------- | ---------------------------------------- |
@@ -141,10 +261,19 @@ Electron向けの自動化手段も当たった。Playwrightの`_electron`は、
 
 ## 開発用ブリッジ（dev-bridge）の調査（2026-10-11）
 
-レンダラーは`globalThis.cdmm`を読む。これは本番ではElectronのpreloadが`contextBridge`でIPC越しに注入する。UIを素のブラウザ（`vp dev`）で描画・確認するには、この注入を代替する必要がある。公式手段・既存ライブラリを探した結果:
+レンダラーは`globalThis.cdmm`を読む。
+本番ではElectronのpreloadが`contextBridge`でIPC越しに注入する。
+UIを素のブラウザ（`vp dev`）で描画・確認するには、この注入を代替する必要がある。
+公式手段と既存ライブラリを探した。
 
-- `electron-mock-ipc` / `electron-ipc-mock` — 確認。`ipcMain`↔`ipcRenderer`のモックで、用途はJest/Mochaの単体テスト。本件のレンダラーは生IPCを直接触らず`globalThis.cdmm`（contextBridgeで公開されたオブジェクト）を読むため、IPCトランスポートのモックは噛み合わない。
-- Storybook — 確認。レンダラー単体の開発環境だが、preload相当のグローバルは「同じオブジェクトをデコレータで定義する」運用になり、結局は手書きのモックである。加えて本リポジトリに未導入で、導入は大掛かり。
-- Vite `define` — 静的な置換のみ。ブリッジは呼び出しにデータで応答する必要があり合わない。MSWはHTTPを横取りする仕組みで、ブリッジはHTTPではないため対象外。
+- `electron-mock-ipc` / `electron-ipc-mock` — 確認。`ipcMain`↔`ipcRenderer`のモックである。用途はJest/Mochaの単体テストである。本件のレンダラーは生IPCを直接触らない。`globalThis.cdmm`（contextBridgeで公開されたオブジェクト）を読むだけである。IPCトランスポートのモックは噛み合わない。
+- Storybook — 確認。レンダラー単体の開発環境である。preload相当のグローバルは「同じオブジェクトをデコレータで定義する」運用になり、結局は手書きのモックである。加えて本リポジトリに未導入で、導入は大掛かりである。
+- Vite `define` — 静的な置換のみである。ブリッジは呼び出しにデータで応答する必要があり合わない。MSWはHTTPを横取りする仕組みなので、HTTPではないブリッジは対象外である。
 
-結論: 「preload注入のグローバルを、素のブラウザでのdev描画のために代替する」既存の公式手段・ライブラリは見当たらない。`import.meta.env.DEV`で分岐し、実ブリッジが無いときだけ`globalThis.cdmm`を差すdev専用モジュール（動的importで本番バンドルから除外）を採る。これはElectronの定番パターンで、Web検索でも同じ構成が推奨されていた。本番バンドルに混入しないことはビルド成果物で確認済み。
+結論を記す。
+「preload注入のグローバルを、素のブラウザでのdev描画のために代替する」既存の公式手段やライブラリは見当たらない。
+そこで`import.meta.env.DEV`で分岐する。
+実ブリッジが無いときだけ`globalThis.cdmm`を差すdev専用モジュールを採る（動的importで本番バンドルから除外）。
+これはElectronの定番パターンである。
+Web検索でも同じ構成が推奨されていた。
+本番バンドルに混入しないことはビルド成果物で確認済みである。

@@ -162,11 +162,10 @@ export default defineConfig({
         command: "jev-lint eval .jev-lint/rules --replay",
       },
       "jev-lint": {
-        command: "jev-lint check",
+        command: "jev-lint check --retry 3",
         cache: {
           untrackedEnv: [
-            "TYPESAFE_API_KEY",
-            "TYPESAFEAI_API_KEY",
+            "OPENROUTER_API_KEY",
             "HTTPS_PROXY",
             "https_proxy",
             "NO_PROXY",
