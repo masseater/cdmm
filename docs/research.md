@@ -344,3 +344,10 @@ secretlintは正確な署名に特化する精度優先である。
 さらにsecretlintは`{{secret:...}}`規約・名前ベース判定・パス付き走査を持たない。
 よって原則2の「既にそれを実現しているライブラリ」には当たらず、実行時ガードは自作のまま残すと決めた。採用は見送る。
 `secret-guard.test.ts`がこのrecallを固定する。
+
+方針も確認した。GitGuardianは検出器を「generic（高recall）」と「specific（高精度）」に分ける。
+genericは`key=高エントロピー値`のような広い網で、specificが見逃すものを拾う。
+secret-guardの名前とshapeの判定はこのgeneric型に当たり、設定値の広い検査として確立した設計である。
+どちらを採るかはノイズと見逃しのどちらが痛いかで決める。保存時のガードは見逃しを避けたいのでrecall優先とする。
+gitleaksはGo製でNodeの公式APIが無い。detect-secretsのnpmはPython本体へのwrapperである。
+どちらも実行時の型付き検査には向かない。
