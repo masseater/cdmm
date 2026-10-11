@@ -331,12 +331,13 @@ gitleaksはGo製、detect-secretsはPython製で、どちらもリポジトリ�
 `@secretlint/core`の`lintSource`を実地評価した。
 contentと仮想filePathを渡せば文字列も検査できる。
 recommendプリセットは28個の提供元別ルール（aws・openai・anthropic・github等）を束ねる。
-手元の検証では`ghp_`だけを`rule-github`が検出した。
-代表的なAWSキー対・OpenAIキー・JWT・汎用トークンは検出されなかった。
+最初の検証はAWSの公式例キーを使ったため、secretlintのallowlistに弾かれて誤って通った。
+現実的な非例示の値で再検証すると、aws・slack・stripeは検出された。
+openai・anthropic・googleは提供元固有の正確な形式を要し、こちらの擬似値が形式に合わず通った。
 
-secretlintのルールは提供元の署名に特化する。
+secretlintのルールは提供元の署名に特化する。高確度だが、正確な形式を要し、公式例はallowlistで除外する。
 任意の設定値を広く疑う`SECRET_SHAPES`とは設計が異なる。
-したがってsecretlintは置き換えでなく、提供元別の追加層として補完的に使うものである。
+したがってsecretlintは広い網の置き換えでなく、提供元別の高確度層として補完的に使うものである。
 secret-guardの広いshape検出・`{{secret:...}}`規約・パス付き走査は、secretlintに委ねても薄い自作層として残る。
 よって実行時ガードは自作のまま残す。
 secretlintの追加採用は、別途ユーザーの承認を得る。
