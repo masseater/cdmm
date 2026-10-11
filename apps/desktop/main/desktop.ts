@@ -1,9 +1,11 @@
 import type { DesktopInstall, RouterStatus } from "@cdmm/core";
 import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str } from "effect";
-import { ChildProcess, ChildProcessSpawner } from "effect/process";
+import type { ChildProcessSpawner } from "effect/process";
 
-import { ManagerError } from "./errors.ts";
+import type { ManagerError } from "./errors.ts";
 import { READ_BODY, SEND_BODY, STOP_SCRIPT } from "./powershell.ts";
+import { defaultAppsSettings, registerRouterFor, routerStatus } from "./router.ts";
+import { asFailure, checked, detached, failed, output, powershellArgs } from "./spawn.ts";
 import { win32 } from "./win32.ts";
 
 type DesktopTarget = Readonly<{
@@ -30,24 +32,18 @@ type DesktopShape = Readonly<{
 
 class Desktop extends Context.Service<Desktop, DesktopShape>()("@cdmm/desktop/main/desktop") {}
 
+type WindowsServices = ChildProcessSpawner.ChildProcessSpawner | FileSystem.FileSystem | Path.Path;
+type Run = <Value, Failure>(
+  effect: Effect.Effect<Value, Failure, WindowsServices>,
+) => Effect.Effect<Value, Failure>;
+
 const PACKAGE_NAME = "Claude";
 const ALIAS = "claude-desktop.exe";
-const PROG_ID = "cdmm.Url";
-const APP_NAME = "cdmm";
-const APP_KEY = String.raw`HKCU\Software\cdmm`;
-const CLASSES_KEY = String.raw`HKCU\Software\Classes\cdmm.Url`;
-const REGISTERED_APPS = String.raw`HKCU\Software\RegisteredApplications`;
-const ASSOCIATION = String.raw`HKCU\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\claude`;
 const TESTED_VERSIONS: readonly string[] = ["2.19675."];
-const EXIT_OK = 0;
 const LAUNCH_WAIT_MS = 20_000;
 const DRIVE_TIMEOUT_MS = 40_000;
 const UNSAFE_TITLE = /[^\p{L}\p{N} ._-]/gu;
 const NOT_WINDOWS = "Claude Desktop can only be managed on Windows";
-
-const failed = (message: string): ManagerError => new ManagerError({ message });
-
-const asFailure = (cause: unknown): ManagerError => failed(String(cause));
 
 const desktopArgs = (target: DesktopTarget): readonly string[] => [
   ...Option.toArray(target.userDataDir.pipe(Option.map((dir) => `--user-data-dir=${dir}`))),
@@ -59,6 +55,11 @@ const codeEnv = (target: DesktopTarget): Readonly<Record<string, string>> =>
     onNone: () => ({}),
     onSome: (dir) => ({ CLAUDE_CONFIG_DIR: dir }),
   });
+
+const launchArgs = (target: DesktopTarget): Readonly<{ userDataDir: string; link: string }> => ({
+  userDataDir: Option.getOrElse(target.userDataDir, () => ""),
+  link: Option.getOrElse(target.link, () => ""),
+});
 
 const launchCommand = (
   input: Readonly<{ alias: string; userDataDir: string; link: string }>,
@@ -73,31 +74,6 @@ const launchCommand = (
 const bodyCommand = (file: string): string =>
   `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "${file}"`;
 
-const routeCommand = (executable: string): string => `"${executable}" --route -- "%1"`;
-
-const registryEntries = (executable: string): readonly (readonly string[])[] => [
-  [CLASSES_KEY, "/ve", "/d", "URL:Claude (Claude Max Desktop Manager)"],
-  [CLASSES_KEY, "/v", "URL Protocol", "/d", ""],
-  [String.raw`${CLASSES_KEY}\DefaultIcon`, "/ve", "/d", executable],
-  [String.raw`${CLASSES_KEY}\shell\open\command`, "/ve", "/d", routeCommand(executable)],
-  [
-    String.raw`${APP_KEY}\Capabilities`,
-    "/v",
-    "ApplicationName",
-    "/d",
-    "Claude Max Desktop Manager",
-  ],
-  [
-    String.raw`${APP_KEY}\Capabilities`,
-    "/v",
-    "ApplicationDescription",
-    "/d",
-    "Opens claude:// links in the Claude account they belong to",
-  ],
-  [String.raw`${APP_KEY}\Capabilities\URLAssociations`, "/v", "claude", "/d", PROG_ID],
-  [REGISTERED_APPS, "/v", APP_NAME, "/d", String.raw`Software\cdmm\Capabilities`],
-];
-
 const codeArgs = (title: string): readonly string[] => [
   "/c",
   "start",
@@ -108,56 +84,40 @@ const codeArgs = (title: string): readonly string[] => [
   "claude",
 ];
 
-const powershellArgs = (script: string): readonly string[] => [
-  "-NoProfile",
-  "-NonInteractive",
-  "-ExecutionPolicy",
-  "Bypass",
-  "-Command",
-  script,
-];
-
-type Invocation = Readonly<{
-  command: string;
-  args: readonly string[];
-  env: Readonly<Record<string, string>>;
-}>;
-
-const output = Effect.fn("Desktop.output")(function* output(
-  input: Readonly<{ command: string; args: readonly string[] }>,
-) {
-  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
-  const command = ChildProcess.make(input.command, [...input.args], { windowsHide: true });
-  return yield* spawner.string(command).pipe(
-    Effect.map(Str.trim),
-    Effect.orElseSucceed(() => ""),
-  );
-});
-
-const checked = Effect.fn("Desktop.checked")(function* checked(input: Invocation) {
-  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
-  const command = ChildProcess.make(input.command, [...input.args], {
-    windowsHide: true,
-    env: { ...input.env },
-    extendEnv: true,
-  });
-  return yield* spawner.exitCode(command).pipe(
-    Effect.mapError(asFailure),
-    Effect.filterOrFail(
-      (code) => code === EXIT_OK,
-      (code) => failed(`${input.command} exited with ${String(code)}`),
-    ),
-    Effect.asVoid,
-  );
-});
-
 const launchHidden = Effect.fn("Desktop.launchHidden")(function* launchHidden(
   input: Readonly<{ desktop: string; cmd: string; env: Readonly<Record<string, string>> }>,
 ) {
-  yield* Effect.tryPromise({
-    try: () => win32().launch({ ...input, waitMs: LAUNCH_WAIT_MS }),
-    catch: asFailure,
+  yield* win32.launch({ ...input, waitMs: LAUNCH_WAIT_MS }).pipe(Effect.mapError(asFailure));
+});
+
+const launchEffect = (
+  input: Readonly<{ alias: string; target: DesktopTarget }>,
+): Effect.Effect<void, ManagerError, ChildProcessSpawner.ChildProcessSpawner> =>
+  Option.match(input.target.desktop, {
+    onNone: () =>
+      detached({
+        command: input.alias,
+        args: desktopArgs(input.target),
+        env: codeEnv(input.target),
+      }),
+    onSome: (desktop) =>
+      launchHidden({
+        desktop,
+        cmd: launchCommand({ alias: input.alias, ...launchArgs(input.target) }),
+        env: codeEnv(input.target),
+      }),
   });
+
+const readOutput = Effect.fn("Desktop.readOutput")(function* readOutput(outFile: string) {
+  const fs = yield* FileSystem.FileSystem;
+  const present = yield* fs.exists(outFile).pipe(Effect.orElseSucceed(() => false));
+  if (!present) {
+    return "";
+  }
+  return yield* fs.readFileString(outFile).pipe(
+    Effect.map(Str.trim),
+    Effect.orElseSucceed(() => ""),
+  );
 });
 
 const drive = Effect.fn("Desktop.drive")(function* drive(
@@ -169,38 +129,15 @@ const drive = Effect.fn("Desktop.drive")(function* drive(
   const bodyFile = path.join(dir, "body.ps1");
   const outFile = path.join(dir, "out.txt");
   yield* fs.writeFileString(bodyFile, input.body).pipe(Effect.mapError(asFailure));
-  yield* Effect.tryPromise({
-    try: () =>
-      win32().run({
-        desktop: input.desktop,
-        cmd: bodyCommand(bodyFile),
-        env: { ...input.env, CMM_OUT: outFile },
-        timeoutMs: DRIVE_TIMEOUT_MS,
-      }),
-    catch: asFailure,
-  });
-  const present = yield* fs.exists(outFile).pipe(Effect.orElseSucceed(() => false));
-  if (!present) {
-    return "";
-  }
-  return yield* fs.readFileString(outFile).pipe(
-    Effect.map(Str.trim),
-    Effect.orElseSucceed(() => ""),
-  );
-}, Effect.scoped);
-
-const detached = Effect.fn("Desktop.detached")(function* detached(input: Invocation) {
-  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
-  const command = ChildProcess.make(input.command, [...input.args], {
-    detached: true,
-    stdin: "ignore",
-    stdout: "ignore",
-    stderr: "ignore",
-    env: { ...input.env },
-    extendEnv: true,
-  });
-  const handle = yield* spawner.spawn(command).pipe(Effect.mapError(asFailure));
-  yield* handle.unref.pipe(Effect.mapError(asFailure), Effect.asVoid);
+  yield* win32
+    .run({
+      desktop: input.desktop,
+      cmd: bodyCommand(bodyFile),
+      env: { ...input.env, CMM_OUT: outFile },
+      timeoutMs: DRIVE_TIMEOUT_MS,
+    })
+    .pipe(Effect.mapError(asFailure));
+  return yield* readOutput(outFile);
 }, Effect.scoped);
 
 const installAt = Effect.fn("Desktop.install")(function* installAt(alias: string) {
@@ -222,29 +159,6 @@ const installAt = Effect.fn("Desktop.install")(function* installAt(alias: string
   } satisfies DesktopInstall;
 });
 
-const queryValue = (
-  key: string,
-  name: string,
-): Effect.Effect<string, never, ChildProcessSpawner.ChildProcessSpawner> =>
-  output({ command: "reg.exe", args: ["query", key, "/v", name] });
-
-const routerStatus = Effect.fn("Desktop.routerStatus")(function* routerStatus(executable: string) {
-  const command = yield* output({
-    command: "reg.exe",
-    args: ["query", String.raw`${CLASSES_KEY}\shell\open\command`, "/ve"],
-  });
-  const registered = yield* queryValue(REGISTERED_APPS, APP_NAME);
-  if (!command.includes(routeCommand(executable)) || !registered.includes(APP_NAME)) {
-    return { status: "unregistered" } satisfies RouterStatus;
-  }
-  const latest = yield* queryValue(String.raw`${ASSOCIATION}\UserChoiceLatest\ProgId`, "ProgId");
-  const legacy = yield* queryValue(String.raw`${ASSOCIATION}\UserChoice`, "ProgId");
-  if (`${latest}${legacy}`.includes(PROG_ID)) {
-    return { status: "active" } satisfies RouterStatus;
-  }
-  return { status: "registered" } satisfies RouterStatus;
-});
-
 const isRunning = Effect.fn("Desktop.isRunning")(function* isRunning(userDataDir: string) {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
@@ -259,16 +173,42 @@ const isRunning = Effect.fn("Desktop.isRunning")(function* isRunning(userDataDir
   );
 });
 
-const registerRouterFor = (
-  executable: string,
-): Effect.Effect<void, ManagerError, ChildProcessSpawner.ChildProcessSpawner> =>
-  Effect.forEach(
-    registryEntries(executable),
-    (entry) => checked({ command: "reg.exe", args: ["add", ...entry, "/f"], env: {} }),
-    { discard: true },
-  );
-
-type WindowsServices = ChildProcessSpawner.ChildProcessSpawner | FileSystem.FileSystem | Path.Path;
+const makeWindowsDesktop = (
+  deps: Readonly<{ executable: string; alias: string; run: Run }>,
+): DesktopShape => {
+  const { executable, alias, run } = deps;
+  return {
+    install: run(installAt(alias)),
+    router: run(routerStatus(executable)),
+    isRunning: (userDataDir) => run(isRunning(userDataDir)),
+    launch: (target) => run(launchEffect({ alias, target })),
+    stop: (userDataDir) =>
+      run(
+        checked({
+          command: "powershell.exe",
+          args: powershellArgs(STOP_SCRIPT),
+          env: { CMM_USER_DATA_DIR: userDataDir },
+        }),
+      ),
+    read: (input) => run(drive({ desktop: input.desktop, body: READ_BODY, env: {} })),
+    send: (input) =>
+      run(
+        drive({ desktop: input.desktop, body: SEND_BODY, env: { CMM_TEXT: input.text } }).pipe(
+          Effect.asVoid,
+        ),
+      ),
+    launchCode: (input) =>
+      run(
+        detached({
+          command: "cmd.exe",
+          args: codeArgs(input.title),
+          env: { CLAUDE_CONFIG_DIR: input.codeDir },
+        }),
+      ),
+    registerRouter: run(registerRouterFor(executable)),
+    defaultAppsSettings,
+  };
+};
 
 const windowsLayer = (
   executable: string,
@@ -278,60 +218,10 @@ const windowsLayer = (
     Effect.gen(function* windowsDesktop() {
       const path = yield* Path.Path;
       const context = yield* Effect.context<WindowsServices>();
-      const run = <Value, Failure>(
-        effect: Effect.Effect<Value, Failure, WindowsServices>,
-      ): Effect.Effect<Value, Failure> => Effect.provideContext(effect, context);
+      const run: Run = (effect) => Effect.provideContext(effect, context);
       const localAppData = yield* Config.String("LOCALAPPDATA");
       const alias = path.join(localAppData, "Microsoft", "WindowsApps", ALIAS);
-      return Desktop.of({
-        install: run(installAt(alias)),
-        router: run(routerStatus(executable)),
-        isRunning: (userDataDir) => run(isRunning(userDataDir)),
-        launch: (target) =>
-          Option.match(target.desktop, {
-            onNone: () =>
-              run(detached({ command: alias, args: desktopArgs(target), env: codeEnv(target) })),
-            onSome: (desktop) =>
-              run(
-                launchHidden({
-                  desktop,
-                  cmd: launchCommand({
-                    alias,
-                    userDataDir: Option.getOrElse(target.userDataDir, () => ""),
-                    link: Option.getOrElse(target.link, () => ""),
-                  }),
-                  env: codeEnv(target),
-                }),
-              ),
-          }),
-        stop: (userDataDir) =>
-          run(
-            checked({
-              command: "powershell.exe",
-              args: powershellArgs(STOP_SCRIPT),
-              env: { CMM_USER_DATA_DIR: userDataDir },
-            }),
-          ),
-        read: (input) => run(drive({ desktop: input.desktop, body: READ_BODY, env: {} })),
-        send: (input) =>
-          run(
-            drive({
-              desktop: input.desktop,
-              body: SEND_BODY,
-              env: { CMM_TEXT: input.text },
-            }).pipe(Effect.asVoid),
-          ),
-        launchCode: (input) =>
-          run(
-            detached({
-              command: "cmd.exe",
-              args: codeArgs(input.title),
-              env: { CLAUDE_CONFIG_DIR: input.codeDir },
-            }),
-          ),
-        registerRouter: run(registerRouterFor(executable)),
-        defaultAppsSettings: `ms-settings:defaultapps?registeredAppUser=${APP_NAME}`,
-      });
+      return Desktop.of(makeWindowsDesktop({ executable, alias, run }));
     }),
   );
 
