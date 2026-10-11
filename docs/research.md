@@ -328,10 +328,15 @@ MCPサーバのstdioの引数・env、httpのURLとヘッダ、codeSettings、ru
 
 既存の秘密情報検出ツールを調べた。gitleaks・secretlint・detect-secretsである。
 gitleaksはGo製、detect-secretsはPython製で、どちらもリポジトリやファイルを走査するCLIである。TSの実行時に型付きオブジェクトを渡す口が無い。
-secretlintはfilenameに依存するlinterだが、`@secretlint/core`の`lintSource`はcontentと仮想filePathを渡せるので文字列も検査できる。
-ただしsecretlintの主眼は形式検出である。`{{secret:...}}`規約の区別と設定オブジェクトのパス付き報告は、そのまま得られない。
+`@secretlint/core`の`lintSource`を実地評価した。
+contentと仮想filePathを渡せば文字列も検査できる。
+recommendプリセットは28個の提供元別ルール（aws・openai・anthropic・github等）を束ねる。
+手元の検証では`ghp_`だけを`rule-github`が検出した。
+代表的なAWSキー対・OpenAIキー・JWT・汎用トークンは検出されなかった。
 
-よって現状は自作のままである。
-`SECRET_SHAPES`の正規表現（`sk-`・`ghp_`・`AKIA`・`AIza`・JWT等）はsecretlintのrecommendプリセットが見る形式と重なる。
-形式検出だけをsecretlintに委ね、規約と走査を自作で包む置き換えはありうるが、`lintSource`での実地評価は未了である。
-置き換えの採否はユーザーの判断に委ねる。
+secretlintのルールは提供元の署名に特化する。
+任意の設定値を広く疑う`SECRET_SHAPES`とは設計が異なる。
+したがってsecretlintは置き換えでなく、提供元別の追加層として補完的に使うものである。
+secret-guardの広いshape検出・`{{secret:...}}`規約・パス付き走査は、secretlintに委ねても薄い自作層として残る。
+よって実行時ガードは自作のまま残す。
+secretlintの追加採用は、別途ユーザーの承認を得る。
