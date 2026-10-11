@@ -59,6 +59,10 @@ type Done = Readonly<{ status: "done" }> | Readonly<{ status: "failed"; message:
 
 type PendingChoice = Readonly<{ link: string; candidates: readonly string[] }>;
 
+type Screen =
+  | Readonly<{ status: "read"; text: string }>
+  | Readonly<{ status: "failed"; message: string }>;
+
 const AccountIdInput = Schema.String;
 const SecretName = Schema.String.check(Schema.isPattern(/^[A-Za-z0-9_]+$/u));
 
@@ -79,6 +83,8 @@ const API_INPUTS = {
   launchDesktop: AccountIdInput,
   signIn: AccountIdInput,
   stopDesktop: AccountIdInput,
+  readScreen: AccountIdInput,
+  sendText: Schema.Struct({ accountId: Schema.String, text: Schema.String }),
   launchCode: AccountIdInput,
   openFolder: AccountIdInput,
   registerRouter: Schema.Void,
@@ -101,6 +107,8 @@ type ApiOutputs = Readonly<{
   launchDesktop: Done;
   signIn: Done;
   stopDesktop: Done;
+  readScreen: Screen;
+  sendText: Done;
   launchCode: Done;
   openFolder: Done;
   registerRouter: Done;
@@ -132,6 +140,7 @@ export type {
   PendingChoice,
   RouterStatus,
   Saved,
+  Screen,
   SyncStatus,
 };
 export { API_INPUTS };

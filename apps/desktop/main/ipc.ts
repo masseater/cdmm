@@ -12,7 +12,11 @@ import type { Ui } from "./ui.ts";
 
 const FILE_PROTOCOL = "file:";
 
-const READ_ONLY: ReadonlySet<ApiMethod> = new Set<ApiMethod>(["overview", "pendingChoice"]);
+const READ_ONLY: ReadonlySet<ApiMethod> = new Set<ApiMethod>([
+  "overview",
+  "pendingChoice",
+  "readScreen",
+]);
 
 const callApi = <Method extends ApiMethod>(
   input: Readonly<{ method: Method; argument: unknown }>,

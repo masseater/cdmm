@@ -3,12 +3,13 @@ import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
 import { ManagerError } from "./errors.ts";
-import { STOP_SCRIPT } from "./powershell.ts";
+import { HIDDEN_LAUNCH_SCRIPT, READ_SCRIPT, SEND_SCRIPT, STOP_SCRIPT } from "./powershell.ts";
 
 type DesktopTarget = Readonly<{
   userDataDir: Option.Option<string>;
   codeDir: Option.Option<string>;
   link: Option.Option<string>;
+  desktop: Option.Option<string>;
 }>;
 
 type DesktopShape = Readonly<{
@@ -17,6 +18,8 @@ type DesktopShape = Readonly<{
   isRunning: (userDataDir: string) => Effect.Effect<boolean>;
   launch: (target: DesktopTarget) => Effect.Effect<void, ManagerError>;
   stop: (userDataDir: string) => Effect.Effect<void, ManagerError>;
+  read: (input: Readonly<{ desktop: string }>) => Effect.Effect<string, ManagerError>;
+  send: (input: Readonly<{ desktop: string; text: string }>) => Effect.Effect<void, ManagerError>;
   launchCode: (
     input: Readonly<{ codeDir: string; title: string }>,
   ) => Effect.Effect<void, ManagerError>;
@@ -132,6 +135,16 @@ const checked = Effect.fn("Desktop.checked")(function* checked(input: Invocation
   );
 });
 
+const capture = Effect.fn("Desktop.capture")(function* capture(input: Invocation) {
+  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
+  const command = ChildProcess.make(input.command, [...input.args], {
+    windowsHide: true,
+    env: { ...input.env },
+    extendEnv: true,
+  });
+  return yield* spawner.string(command).pipe(Effect.map(Str.trim), Effect.mapError(asFailure));
+});
+
 const detached = Effect.fn("Desktop.detached")(function* detached(input: Invocation) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
   const command = ChildProcess.make(input.command, [...input.args], {
@@ -231,13 +244,46 @@ const windowsLayer = (
         router: run(routerStatus(executable)),
         isRunning: (userDataDir) => run(isRunning(userDataDir)),
         launch: (target) =>
-          run(detached({ command: alias, args: desktopArgs(target), env: codeEnv(target) })),
+          Option.match(target.desktop, {
+            onNone: () =>
+              run(detached({ command: alias, args: desktopArgs(target), env: codeEnv(target) })),
+            onSome: (desktop) =>
+              run(
+                checked({
+                  command: "powershell.exe",
+                  args: powershellArgs(HIDDEN_LAUNCH_SCRIPT),
+                  env: {
+                    ...codeEnv(target),
+                    CMM_DESKTOP_NAME: desktop,
+                    CMM_LAUNCH_APP: alias,
+                    CMM_USER_DATA_DIR: Option.getOrElse(target.userDataDir, () => ""),
+                    CMM_LINK: Option.getOrElse(target.link, () => ""),
+                  },
+                }),
+              ),
+          }),
         stop: (userDataDir) =>
           run(
             checked({
               command: "powershell.exe",
               args: powershellArgs(STOP_SCRIPT),
               env: { CMM_USER_DATA_DIR: userDataDir },
+            }),
+          ),
+        read: (input) =>
+          run(
+            capture({
+              command: "powershell.exe",
+              args: powershellArgs(READ_SCRIPT),
+              env: { CMM_DESKTOP_NAME: input.desktop },
+            }),
+          ),
+        send: (input) =>
+          run(
+            checked({
+              command: "powershell.exe",
+              args: powershellArgs(SEND_SCRIPT),
+              env: { CMM_DESKTOP_NAME: input.desktop, CMM_TEXT: input.text },
             }),
           ),
         launchCode: (input) =>
@@ -264,6 +310,8 @@ const unsupportedLayer = Layer.succeed(
     isRunning: () => Effect.succeed(false),
     launch: () => unsupported,
     stop: () => unsupported,
+    read: () => unsupported,
+    send: () => unsupported,
     launchCode: () => unsupported,
     registerRouter: unsupported,
     defaultAppsSettings: "",

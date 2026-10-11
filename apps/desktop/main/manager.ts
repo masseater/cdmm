@@ -1,5 +1,5 @@
 import { findSecretsInOverride, findSecretsInPreset } from "@cdmm/core";
-import type { ApiInput, ApiMethod, ApiOutputs } from "@cdmm/core";
+import type { ApiInput, ApiMethod, ApiOutputs, Screen } from "@cdmm/core";
 import { Effect, Option } from "effect";
 
 import {
@@ -9,6 +9,7 @@ import {
   saveAccount,
   updateSecrets,
 } from "./accounts.ts";
+import { readScreen, sendText } from "./driver.ts";
 import {
   fitWindow,
   launchCode,
@@ -80,6 +81,13 @@ const handlers: Handlers = {
   launchDesktop: (id) => settle(launchDesktop(id)),
   signIn: (id) => settle(signIn(id)),
   stopDesktop: (id) => settle(stopDesktop(id)),
+  readScreen: (id) =>
+    readScreen(id).pipe(
+      Effect.catch((error) =>
+        Effect.succeed({ status: "failed", message: error.message } satisfies Screen),
+      ),
+    ),
+  sendText: (input) => settle(sendText(input)),
   launchCode: (id) => settle(launchCode(id)),
   openFolder: (id) => settle(openFolder(id)),
   registerRouter: () => settle(registerRouter),

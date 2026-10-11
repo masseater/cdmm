@@ -54,6 +54,7 @@ describe("launching an account", () => {
         const target = Option.getOrThrow(yield* lastLaunch);
         expect(target.userDataDir).toStrictEqual(Option.some(yield* desktopDirOf(account)));
         expect(target.codeDir).toStrictEqual(Option.some(yield* codeDirOf(account)));
+        expect(target.desktop).toStrictEqual(Option.some(`cdmm-${account.id}`));
       }),
     ));
 });

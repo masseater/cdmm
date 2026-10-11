@@ -93,3 +93,28 @@ Anthropicが仕様として公開していないものに依存するのは次�
 | Desktop内蔵Claude Codeが`CLAUDE_CONFIG_DIR`に従うこと | Code側の分離             | 起動後に設定ディレクトリの更新を見る   |
 
 `claude_desktop_config.json`はMCPの設定ファイルとしてAnthropicが公開している。
+
+## 隠し運用と駆動
+
+アカウントごとのDesktopを、ユーザーに見せず起動し、CDMMから送信と読み取りをする方式を選ぶまでに次を調べた。
+
+公式の統合手段を探した。Desktopアプリのチャットへ外から送信したり読み取ったりする公式のCLIやAPIは見つからなかった。`claude`CLIとAgent SDKはClaude Code（別製品）であり、Desktopのチャット履歴は読み書きしない。Messages APIはDesktopの会話に触れない。SPEC.mdも独自のAPIクライアントや通信の中継を作らないと定める。CDPは`app.asar`が署名付きで塞いでいる。したがってDesktopの画面をそのまま読む以外に手段がない。
+
+既存ライブラリを探した。FlaUI（.NET、NuGet）、pywinauto（Pythonランタイム）、WinAppDriver（別プロセスのHTTP）は、いずれもWindowsのUI Automationを薄く包んだものである。どれも難所の「隠しデスクトップ上で動かすこと」を肩代わりしない。クライアントは対象と同じデスクトップに居る必要があるため、FlaUIやpywinautoを使っても結局そのランタイムごと`lpDesktop`付きで隠しデスクトップに起動することになり、自作のランチャはそのまま要る。これらが包むのは要素検索の書き味だけで、本実装の読み取りは窓の子孫を一度なめるだけ、送信は入力欄1つに値を入れてEnterを送るだけなので、ラッパーの利点がほとんど効かない。ElectronアプリにPythonやNuGetの依存を足す代わりに、OS同梱のUIAutomationClientを、stopやバージョン取得と同じPowerShell経路から直接使う。
+
+ブログ・issue・discussionの方針を探した（2026-10-11に確認）。
+
+同じことをするツールも個別に評価した。lowlevel-computer-use のMCPサーバー（<https://glama.ai/mcp/servers/codingmachineedge/lowlevel-computer-use-mcp>）は、見えないWin32デスクトップを作ってGUIアプリを起動する点は同じだが、Python製の独立したMCPサーバーで、ライセンスの記載が無く、入力はAutoHotkey系（`ahk_control_send`、`win_send_keys`）で、画面の読み取りはUIAではなくPrintWindowのキャプチャである。Electronアプリに別ランタイム（Python）と別プロセスを足すうえ、本実装が要る「UIAでの本文読み取り」を備えない。trycua/cua（<https://github.com/trycua/cua>）とArdurAI/ardur-bot（<https://github.com/ArdurAI/ardur-bot>）は、ElectronのUIA露出に関する不具合報告（cua #1616、ardur-bot #213・#180）であって、組み込めるライブラリではない。これらは採らず、知見だけを引く。
+
+隠しデスクトップ上でのUIAは、上記lowlevel-computer-useが同じ方式を採っていた。C++フォーラムには、アクティブなデスクトップを切り替えると自動化が続かないという報告があり、切り替えではなく対象と自動化を同じ隠しデスクトップに置く本方式の裏付けになる。`SetThreadDesktop`は、呼ぶスレッドが窓を持つと`ERROR_BUSY`（170）で失敗するため使わない。
+
+ElectronのUIA露出が最大の落とし穴だった。Chromiumはレンダラのアクセシビリティツリーを、支援技術クライアントの要求を検知したときか、`--force-renderer-accessibility`付きで起動したときにしか構築しない（microsoft/vscode #84833）。これが無いと、UIAからはタイトルバーの数要素しか見えない（trycua/cua #1616 は VS Code で3要素のみと報告、本実装の初回読み取りも窓名と最小化・最大化・閉じるの4件だった）。そこで隠し起動の引数に`--force-renderer-accessibility`を付けた。付けた後は実測で、サインイン画面の本文（"Sign in - Claude"、"始める"、"Menu"、"Notifications"）まで読めた。加えてツリー構築には初回問い合わせ後に1〜2秒ほどの遅延があり、隠し・不可視の窓は`backgroundThrottling`で更新が止まり空に見えることがあるという報告がある（ArdurAI/ardur-bot #213、#180）。ログイン済みチャットの本文読み取りと送信先セレクタはここでしか最終確認できないため、公式UI変更で壊れる前提で追従する。
+
+起動の同期も要る。`PROCESS_INFORMATION`のドキュメントは、子ハンドルを閉じても親が生きていれば子は残ると述べるが、本方式では短命のランチャが先に終わると、作ったデスクトップが参照を失って壊れ、付いたばかりの子が落ちる。そこで公式アプリ起動後、`WaitForInputIdle`で子がデスクトップに付くまで待ってからランチャを終える（実測で生存プロセスが0、待つと7）。`WaitForInputIdle`は初期化してメッセージ待ちになるまで1回だけ待つ関数で、2回目以降は即座に返る。
+
+| 依存                                             | 壊れた場合の影響 | 検知                                     |
+| ------------------------------------------------ | ---------------- | ---------------------------------------- |
+| 隠しデスクトップに起動してUIAで読めること        | 駆動そのもの     | 読み取りが空なら起動と窓の有無を確かめる |
+| `--force-renderer-accessibility`で本文が露出する | 本文の読み取り   | 読み取りが窓枠だけなら露出を疑う         |
+| 入力欄のUIA種別（Edit/Document）とEnter          | 送信             | ログイン済みのチャットでのみ最終確認する |
+| トップ窓の名前が`Claude`であること               | 窓の特定         | 見つからなければ空を返す                 |

@@ -13,6 +13,8 @@ const API_METHODS: readonly ApiMethod[] = [
   "launchDesktop",
   "signIn",
   "stopDesktop",
+  "readScreen",
+  "sendText",
   "launchCode",
   "openFolder",
   "registerRouter",

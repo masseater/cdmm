@@ -27,6 +27,15 @@ const COPY = {
   secretValue: "Value",
   addSecret: "Save secret",
   remove: "Remove",
+  drive: "Drive",
+  driveHelp: "Send a message to this profile's running Claude, and read what is on its screen.",
+  message: "Message",
+  messagePlaceholder: "Type a message to send to Claude",
+  send: "Send",
+  readScreen: "Read screen",
+  screen: "Screen text",
+  screenRead: "Read this profile's screen.",
+  screenEmpty: "Nothing on screen yet. Start this profile first.",
 } as const;
 
 export { COPY };

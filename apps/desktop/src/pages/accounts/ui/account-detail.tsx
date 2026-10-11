@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { AccountHeading } from "./account-heading";
 import { ActionBar } from "./action-bar";
+import { DrivePanel } from "./drive-panel";
 import { IdentityWarning } from "./identity-warning";
 import { SettingsPanel } from "./settings-panel";
 import { SyncNote } from "./sync-note";
@@ -13,6 +14,7 @@ const AccountDetail = ({ view }: Readonly<{ view: AccountView }>): ReactNode => 
     <ActionBar view={view} />
     <IdentityWarning view={view} />
     <SyncNote sync={view.sync} />
+    {view.running ? <DrivePanel view={view} /> : ""}
     <SettingsPanel view={view} />
   </section>
 );

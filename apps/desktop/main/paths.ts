@@ -24,6 +24,8 @@ const ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,62}$/u;
 
 const isValidId = (id: string): boolean => ID_PATTERN.test(id);
 
+const desktopName = (id: string): string => `cdmm-${id}`;
+
 const rootPaths = (input: Readonly<{ join: Join; appData: string }>): RootPaths => {
   const root = input.join(input.appData, ROOT_NAME);
   return {
@@ -57,4 +59,4 @@ const accountPaths = (
 };
 
 export type { AccountPaths, Join, RootPaths };
-export { accountPaths, isValidId, rootPaths };
+export { accountPaths, desktopName, isValidId, rootPaths };

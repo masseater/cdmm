@@ -7,6 +7,7 @@ import { Desktop } from "./desktop.ts";
 import { ManagerError } from "./errors.ts";
 import { Host } from "./host.ts";
 import { identityOf } from "./identity.ts";
+import { desktopName } from "./paths.ts";
 import { Session } from "./session.ts";
 import { Store } from "./store.ts";
 import type { StoreError } from "./store.ts";
@@ -45,6 +46,7 @@ const startDesktop = Effect.fn("startDesktop")(function* startDesktop(
     userDataDir: Option.some(paths.desktop),
     codeDir: Option.some(paths.code),
     link: input.link,
+    desktop: Option.some(desktopName(input.account.id)),
   });
   const state = yield* store.state;
   yield* store.saveState({ ...state, lastActiveId: input.account.id });
@@ -80,6 +82,7 @@ const launchDefault = Effect.fn("launchDefault")(function* launchDefault(link: s
     userDataDir: Option.none(),
     codeDir: Option.none(),
     link: Option.some(link),
+    desktop: Option.none(),
   });
 });
 

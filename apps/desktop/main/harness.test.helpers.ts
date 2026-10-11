@@ -15,6 +15,7 @@ type LaunchTarget = Desktop["Service"]["launch"] extends (target: infer Target) 
 type RecorderShape = Readonly<{
   launched: Ref.Ref<readonly LaunchTarget[]>;
   running: Ref.Ref<ReadonlySet<string>>;
+  sent: Ref.Ref<readonly Readonly<{ desktop: string; text: string }>[]>;
 }>;
 
 class Recorder extends Context.Service<Recorder, RecorderShape>()(
@@ -28,7 +29,8 @@ const recorderLayer = Layer.effect(
   Effect.gen(function* makeRecorder() {
     const launched = yield* Ref.make<readonly LaunchTarget[]>([]);
     const running = yield* Ref.make<ReadonlySet<string>>(new Set());
-    return Recorder.of({ launched, running });
+    const sent = yield* Ref.make<readonly Readonly<{ desktop: string; text: string }>[]>([]);
+    return Recorder.of({ launched, running, sent });
   }),
 );
 
@@ -64,6 +66,8 @@ const desktopLayer = Layer.effect(
       isRunning: (dir) => Ref.get(recorder.running).pipe(Effect.map((dirs) => dirs.has(dir))),
       launch: (target) => Ref.update(recorder.launched, (all) => [...all, target]),
       stop: () => Effect.void,
+      read: (input) => Effect.succeed(`screen:${input.desktop}`),
+      send: (input) => Ref.update(recorder.sent, (all) => [...all, input]),
       launchCode: () => Effect.void,
       registerRouter: Effect.void,
       defaultAppsSettings: "",
