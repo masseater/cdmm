@@ -1,6 +1,0 @@
-{
-  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "extends": ["../../.fallowrc.jsonc"],
-  "entry": ["main/index.ts", "main/preload.ts", "src/app/dev-bridge.ts"],
-  "boundaries": { "preset": "feature-sliced" },
-}

@@ -1,12 +1,47 @@
 {
   "version": 1,
   "skills": {
+    "better-auth-best-practices": {
+      "source": "better-auth/skills",
+      "ref": "20c9e88a5c007461a703f1c213572b073196113e",
+      "sourceType": "github",
+      "skillPath": "better-auth/best-practices/SKILL.md",
+      "computedHash": "0c30be0e118c2b7a0c4c57bd9e63bf110c7e420a79ec6ce7997153f3b1e066ee"
+    },
+    "better-auth-security-best-practices": {
+      "source": "better-auth/skills",
+      "ref": "20c9e88a5c007461a703f1c213572b073196113e",
+      "sourceType": "github",
+      "skillPath": "security/SKILL.md",
+      "computedHash": "7a230edf3a24ce18162cb4379f59b6a19b8d24ca04db530609d0f15cede556dc"
+    },
+    "cloudflare": {
+      "source": "cloudflare/skills",
+      "ref": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
+      "sourceType": "github",
+      "skillPath": "skills/cloudflare/SKILL.md",
+      "computedHash": "4f0291c3924bb6cfec5311b23cc9798ee0292c055ce88543cf2d2cc3001174f6"
+    },
     "effect-ts": {
       "source": "Effect-TS/skills",
       "ref": "155c50c911f9c99c294ef8a4461981c5bbe6453e",
       "sourceType": "github",
       "skillPath": "skills/effect-ts/SKILL.md",
       "computedHash": "cb225ba5dda169883dfee680fba6c570c89245ba19242a9bc5c3f2ac8218a55f"
+    },
+    "elysiajs": {
+      "source": "elysiajs/skills",
+      "ref": "8fd8031b83bce42e903ed0e38e6170213876c20e",
+      "sourceType": "github",
+      "skillPath": "elysia/SKILL.md",
+      "computedHash": "55268e69a2c766ed67e56a0db57544f60cc52dba0c7f024a974baf965e525e1b"
+    },
+    "email-and-password-best-practices": {
+      "source": "better-auth/skills",
+      "ref": "20c9e88a5c007461a703f1c213572b073196113e",
+      "sourceType": "github",
+      "skillPath": "better-auth/emailAndPassword/SKILL.md",
+      "computedHash": "863886759f729081e265941f4f72c503835d55a1f34f6d63cebe6571159fff4a"
     },
     "feature-sliced-design": {
       "source": "feature-sliced/skills",
@@ -62,12 +97,19 @@
       "skillPath": "skills/verification-before-completion/SKILL.md",
       "computedHash": "b529822bdac4b197b180fe12225cff86b930b65910435103c10622df7f041651"
     },
+    "workers-best-practices": {
+      "source": "cloudflare/skills",
+      "ref": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
+      "sourceType": "github",
+      "skillPath": "skills/workers-best-practices/SKILL.md",
+      "computedHash": "e1c30e93854345114dfa6a0a077363119eb99c03e5c64a8f2109349802e1f2aa"
+    },
     "yomiyasu": {
       "source": "nanaism/yomiyasu",
       "ref": "15244a1369c192d6b7e74963ee9709537fadf166",
       "sourceType": "github",
       "skillPath": "skills/yomiyasu/SKILL.md",
-      "computedHash": "f45a6586b47b539db151b18cab28687cc6541650b07e577976211a87919086c7"
+      "computedHash": "a3d50b77af3cd0c9c2fdd796ed7a21f0f13d5da91709a5067d168a4a183638a4"
     }
   }
 }

@@ -3,11 +3,12 @@ import eslintReact from "@eslint-react/eslint-plugin";
 import htmlReact from "@html-eslint/eslint-plugin-react";
 import { plugin as shadcn } from "@shadcn/lint";
 import tanstackQuery from "@tanstack/eslint-plugin-query";
+import tanstackRouter from "@tanstack/eslint-plugin-router";
 import baselineJs from "eslint-plugin-baseline-js";
 import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig } from "vite-plus";
 
-import { generated, restrictedImports, ruleFixtures } from "./lint.config.ts";
+import { generated, restrictedImports } from "./lint.config.ts";
 
 type Rules = Readonly<Record<string, "error">>;
 
@@ -44,7 +45,7 @@ export default defineConfig({
     sortPackageJson: true,
   },
   lint: {
-    ignorePatterns: [...generated, ...ruleFixtures],
+    ignorePatterns: generated,
     plugins: [
       "eslint",
       "typescript",
@@ -71,6 +72,8 @@ export default defineConfig({
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       { name: "tanstack-query", specifier: "@tanstack/eslint-plugin-query" },
+      { name: "tanstack-router", specifier: "@tanstack/eslint-plugin-router" },
+      { name: "drizzle", specifier: "eslint-plugin-drizzle" },
       { name: "react-hooks-js", specifier: "eslint-plugin-react-hooks" },
       { name: "@eslint-react", specifier: "@eslint-react/eslint-plugin" },
       { name: "shadcn", specifier: "@shadcn/lint" },
@@ -82,6 +85,9 @@ export default defineConfig({
       "vite-plus/prefer-vite-plus-imports": "error",
       "no-comments/disallowComments": ["error", { allow: ["oxlint-disable", "eslint-disable"] }],
       ...allRulesOf("tanstack-query", tanstackQuery),
+      ...allRulesOf("tanstack-router", tanstackRouter),
+      "drizzle/enforce-delete-with-where": "error",
+      "drizzle/enforce-update-with-where": "error",
       ...allRulesOf("shadcn", shadcn),
       ...allRulesOf("baseline-js", baselineJs),
       ...baselineJs.configs.recommended().rules,
@@ -117,7 +123,7 @@ export default defineConfig({
             {
               from: "package",
               package: "effect",
-              name: ["Cause", "Context", "Effect", "Exit", "Layer", "Option", "None", "Some"],
+              name: ["Cause", "Context", "Effect", "Exit", "Layer", "Option"],
             },
           ],
         },
@@ -130,17 +136,24 @@ export default defineConfig({
       "eslint/new-cap": [
         "error",
         {
-          capIsNewExceptions: ["Stack"],
-          capIsNewExceptionPattern: "^(Config|Context|Data|Schema)\\.",
+          capIsNewExceptions: [
+            "CloudflareApiLive",
+            "PullRequestCreationPolicy",
+            "Resource",
+            "Ruleset",
+            "Stack",
+          ],
+          capIsNewExceptionPattern: "^(Config|Context|Data|Schema|D1|Website)\\.",
         },
       ],
       "typescript/no-empty-interface": ["error", { allowSingleExtends: true }],
       "typescript/no-empty-object-type": ["error", { allowInterfaces: "with-single-extends" }],
       "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
+      "react/only-export-components": ["error", { allowExportNames: ["Route"] }],
     },
     overrides: [
       {
-        files: ["**/*.config.ts", "apps/desktop/steiger.config.mjs"],
+        files: ["**/*.config.ts", "**/alchemy.run.ts"],
         rules: { "import/no-default-export": "off" },
       },
       {
@@ -158,9 +171,6 @@ export default defineConfig({
   run: {
     cache: true,
     tasks: {
-      "jev-lint-eval": {
-        command: "jev-lint eval .jev-lint/rules --replay",
-      },
       "actions-lint": {
         command:
           "uvx --from actionlint-py@1.7.12.25 actionlint && uvx zizmor@1.30.1 .github && ast-grep scan --rule .github/rules/no-full-history-checkout.yml .github/workflows",
