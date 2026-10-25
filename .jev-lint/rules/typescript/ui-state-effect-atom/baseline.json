@@ -1,0 +1,482 @@
+{
+  "schema": "jev-lint-eval-1",
+  "recorded": "2026-10-04T14:21:51.278Z",
+  "model": "jev-1.13.0",
+  "suite": "typescript/ui-state-effect-atom",
+  "rules": [
+    {
+      "id": "ui-state-effect-atom",
+      "draft": "988ef318df7e",
+      "at": 0.67
+    }
+  ],
+  "cutoffs": {},
+  "passes": [
+    [
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/reducer-wizard.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/mutation-hook.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/draft-atom.tsx",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/module-store.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/context-store.tsx",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/use-state-form.tsx",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/controlled-input.tsx",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.5,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/suspense-query.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/hidden-state-hook.ts",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.88,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/ref-toggle.tsx",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/mutation-hook.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/reducer-wizard.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/suspense-query.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/draft-atom.tsx",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/use-state-form.tsx",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/controlled-input.tsx",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.53,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/module-store.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/ref-toggle.tsx",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.78,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/hidden-state-hook.ts",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/context-store.tsx",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/draft-atom.tsx",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/module-store.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.89,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/hidden-state-hook.ts",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/ref-toggle.tsx",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.8,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/context-store.tsx",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/controlled-input.tsx",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.56,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/suspense-query.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.33,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/reducer-wizard.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/use-state-form.tsx",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/mutation-hook.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.22,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/controlled-input.tsx",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/context-store.tsx",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/module-store.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.91,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/suspense-query.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.34,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/reducer-wizard.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.86,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/hidden-state-hook.ts",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/draft-atom.tsx",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.11,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/ref-toggle.tsx",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/mutation-hook.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.2,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/use-state-form.tsx",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.94,
+        "confidence": null
+      }
+    ],
+    [
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/reducer-wizard.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.87,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/hidden-state-hook.ts",
+        "line": 1,
+        "endLine": 8,
+        "kind": "noul",
+        "value": 0.85,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/controlled-input.tsx",
+        "line": 1,
+        "endLine": 6,
+        "kind": "noul",
+        "value": 0.55,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/ref-toggle.tsx",
+        "line": 1,
+        "endLine": 16,
+        "kind": "noul",
+        "value": 0.79,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/mutation-hook.ts",
+        "line": 1,
+        "endLine": 5,
+        "kind": "noul",
+        "value": 0.21,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/draft-atom.tsx",
+        "line": 1,
+        "endLine": 14,
+        "kind": "noul",
+        "value": 0.12,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/module-store.ts",
+        "line": 1,
+        "endLine": 19,
+        "kind": "noul",
+        "value": 0.9,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/context-store.tsx",
+        "line": 1,
+        "endLine": 15,
+        "kind": "noul",
+        "value": 0.93,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/suspense-query.tsx",
+        "line": 1,
+        "endLine": 18,
+        "kind": "noul",
+        "value": 0.32,
+        "confidence": null
+      },
+      {
+        "rule": "ui-state-effect-atom",
+        "file": ".jev-lint/rules/typescript/ui-state-effect-atom/fixtures/use-state-form.tsx",
+        "line": 1,
+        "endLine": 11,
+        "kind": "noul",
+        "value": 0.95,
+        "confidence": null
+      }
+    ]
+  ],
+  "spent": {
+    "calls": 50,
+    "inputTokens": 35515,
+    "usd": 0.00149163,
+    "ms": 489
+  }
+}

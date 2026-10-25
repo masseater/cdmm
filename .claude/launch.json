@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "desktop-renderer",
+      "runtimeExecutable": "vp",
+      "runtimeArgs": ["dev"],
+      "cwd": "apps/desktop",
+      "port": 5173
+    }
+  ]
+}

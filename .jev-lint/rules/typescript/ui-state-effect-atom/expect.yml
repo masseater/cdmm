@@ -1,0 +1,20 @@
+fixtures/use-state-form.tsx:
+  - { line: 1, label: bad, why: form text held in useState }
+fixtures/reducer-wizard.tsx:
+  - { line: 1, label: bad, why: wizard step held in useReducer }
+fixtures/context-store.tsx:
+  - { line: 1, label: bad, why: React context used as a selection store }
+fixtures/module-store.ts:
+  - { line: 1, label: bad, why: hand-written module store for a UI toggle }
+fixtures/suspense-query.tsx:
+  - { line: 1, label: clean, why: server data read through TanStack Query is server state }
+fixtures/mutation-hook.ts:
+  - { line: 1, label: clean, why: a TanStack Query mutation result is server state }
+fixtures/draft-atom.tsx:
+  - { line: 1, label: clean, why: draft text held in an effect-atom family }
+fixtures/controlled-input.tsx:
+  - { line: 1, label: clean, why: forwards props and holds no state }
+fixtures/hidden-state-hook.ts:
+  - { line: 1, label: bad, why: an edited value held in useState behind a neutral hook name }
+fixtures/ref-toggle.tsx:
+  - { line: 1, label: bad, why: an open flag held in a ref }

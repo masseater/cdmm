@@ -42,6 +42,10 @@ dist-ssr
 .fallow
 .jev-lint/baseline.json
 
+# Electron builder output
+release
+.jev-lint/rules/**/last.json
+
 # Playwright CLI
 .playwright/
 .playwright-cli/

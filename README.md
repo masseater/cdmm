@@ -1,16 +1,15 @@
 # cdmm
 
+複数の Claude Max アカウントを、公式の Claude Desktop でアカウントごとに分けて同時に使うための Windows アプリである。
+仕様は SPEC.md、根拠となる観測は docs/research.md にある。
+
 ## セットアップ
 
 ```sh
 vp install
 cp .env.example .env
-vp exec --filter web alchemy profile edit --add Cloudflare
 vp run verify
 ```
-
-Cloudflare の認証情報は環境変数ではなく Alchemy のプロファイル（`~/.alchemy`）で管理する。
-デプロイと `.mcp.json` の Cloudflare MCP は、どちらもこのプロファイルの認証情報を使う。
 
 ## 環境変数
 
@@ -30,12 +29,14 @@ Cloudflare の認証情報は環境変数ではなく Alchemy のプロファイ
 | `CLAUDE_CODE_OAUTH_TOKEN` | verify 失敗時に Claude Code が自動修正する |
 
 Settings → Actions → General で「Allow GitHub Actions to create and approve pull requests」を有効にする。
-release-pleaseと自動修正がPRを作るためである。
+release-please と自動修正が PR を作るためである。
 
-## 起動とデプロイ
+## 起動とビルド
+
+Windows で実行する。
 
 ```sh
-cd apps/web
-vp run dev
-vp run deploy
+cd apps/desktop
+vp run start
+vp run dist
 ```

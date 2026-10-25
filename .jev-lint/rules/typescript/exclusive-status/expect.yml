@@ -1,0 +1,16 @@
+fixtures/loading-flags.ts:
+  - { line: 1, label: bad, why: loading and error booleans with optional result can contradict }
+fixtures/dialog-flags.tsx:
+  - { line: 1, label: bad, why: open, closing and submitted flags held separately }
+fixtures/optional-result.ts:
+  - { line: 1, label: bad, why: upload progress, url, error and cancelled as optional fields }
+fixtures/connection-class.ts:
+  - { line: 1, label: bad, why: connected, connecting and failed booleans on one object }
+fixtures/status-union.ts:
+  - { line: 1, label: clean, why: one exclusive status union }
+fixtures/window-sizes.ts:
+  - { line: 1, label: clean, why: a constant size table and calls to window methods hold no state }
+fixtures/predicates.ts:
+  - { line: 1, label: clean, why: boolean-returning predicates are not state }
+fixtures/options-bag.ts:
+  - { line: 1, label: clean, why: independent spawn options are configuration, not one state }

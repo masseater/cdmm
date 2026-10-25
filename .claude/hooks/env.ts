@@ -209,14 +209,4 @@ const runHookWith =
 const runHook = runHookWith(Layer.empty);
 
 export type { HookBlocked };
-export {
-  blockWhen,
-  getJson,
-  localBin,
-  projectDir,
-  readHookInput,
-  runCommand,
-  runHook,
-  runHookWith,
-  writeJson,
-};
+export { blockWhen, getJson, localBin, projectDir, readHookInput, runCommand, runHook, writeJson };

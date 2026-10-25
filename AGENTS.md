@@ -41,17 +41,16 @@ release. Add a tool name to select part of the graph. For example, run
 ## 環境変数と認証
 
 - 環境変数は必要最小限にする。環境変数が一つ増えるだけで、どの環境で何を設定するかという考慮事項が爆発的に増えるためである。
-- 環境変数にしてよいのは、設定や認証に限らず、本当に環境ごとに変わる値だけである。環境で変わらない値はコードや Alchemy の設定に書き、ツールにフラグがあればフラグを使う。
-- Cloudflare などのクラウドの認証は Alchemy のプロファイルで管理する。
+- 環境変数にしてよいのは、設定や認証に限らず、本当に環境ごとに変わる値だけである。環境で変わらない値はコードに書き、ツールにフラグがあればフラグを使う。
 
 ## レビューとCI
 
 - PRのレビューは行わない。PRは作ったらすぐマージする。
 - PR単位のCIは走らせない。`pull_request` トリガーのワークフローを追加しない。
 - CIはmainへのpushで必ず走らせる。ワークフローは `.github/workflows/verify.yml` である。
-- デプロイやリリースのジョブは、同じワークフローで `needs: verify` を指定し、mainの必須CIが通ってから実行する。
+- リリースのジョブは、同じワークフローで `needs: verify` を指定し、mainの必須CIが通ってから実行する。
 - マージ前の確認は手元の `vp run verify` で行う。
-- PRごとの動作検証やデプロイはしない。動作の確認は、mainにマージしてデプロイされた本番で実測して行う。
+- PRごとの動作検証はしない。動作の確認は、mainにマージしたものをWindowsの実機で実測して行う。
 - Claude のクラウドセッションではプロキシが GitHub API を拒むため、session-start フック（`.claude/hooks/session-start.sh`）が `ZIZMOR_NO_ONLINE_AUDITS=true` を設定し、zizmor はオフライン監査だけを行う。オンライン監査は main の CI（`.github/workflows/verify.yml`）が担う。
 
 ## jev-lint
@@ -65,6 +64,10 @@ release. Add a tool name to select part of the graph. For example, run
 - 機能開発に取り掛かる前に、AIが自分でデバッグできる仕組みを必ず作る。再現手段、ログやスパン、その出力を読む経路の3つである。
 - 計測は本番環境で行えるようにする。できないときは、あらゆる手段で本番同等を保証したステージング環境を作って行う。手元やテスト環境だけの計測は判断の根拠にしない。
 - 実践の手順は `measure-dont-guess` スキル（`docs/skills/measure-dont-guess/SKILL.md`）にある。不具合の調査は `systematic-debugging`、完了の確認は `verification-before-completion` スキルに従う。
+
+## Browser support
+
+- renderer は Electron 同梱の Chromium だけで動くため、Baseline Newly available の機能も polyfill や fallback なしで使う
 
 ## ベース
 

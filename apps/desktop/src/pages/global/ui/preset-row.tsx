@@ -1,0 +1,34 @@
+import type { AccountView, Preset } from "@cdmm/core";
+import { Array as Arr } from "effect";
+import { useCallback } from "react";
+import type { ReactNode } from "react";
+
+import { COPY } from "#/pages/global/config/copy";
+import { useSelectPreset } from "#/pages/global/model/selection";
+import { ListRow } from "#/shared/ui/list-row";
+
+const usersOf = (accounts: readonly AccountView[], presetId: string): string => {
+  const users = accounts.filter((view) => view.account.presetId === presetId);
+  if (Arr.isReadonlyArrayNonEmpty(users)) {
+    return users.map((view) => view.account.label).join(", ");
+  }
+  return COPY.unused;
+};
+
+const PresetRow = ({
+  preset,
+  accounts,
+  pressed,
+}: Readonly<{ preset: Preset; accounts: readonly AccountView[]; pressed: boolean }>): ReactNode => {
+  const setSelected = useSelectPreset();
+  const select = useCallback(() => {
+    setSelected(preset.id);
+  }, [preset.id, setSelected]);
+  return (
+    <ListRow title={preset.name} pressed={pressed} onSelect={select}>
+      <span className="text-muted-foreground truncate text-xs">{usersOf(accounts, preset.id)}</span>
+    </ListRow>
+  );
+};
+
+export { PresetRow };

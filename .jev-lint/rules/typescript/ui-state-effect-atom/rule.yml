@@ -8,6 +8,7 @@ ask: This code holds client-side UI state with something other than effect-atom,
 criteria:
   "true": Client-side UI state is held by something other than effect-atom.
   "false":
-    what: Client-side UI state is held only by effect-atom, or the file holds none.
-    not_for: Creating a TanStack Query QueryClient or configuring the router, which hold no UI state.
+    what: Client-side UI state is held only by effect-atom, or the file holds none, as in a component that calls no state hook, creates no store and keeps no module-level mutable value.
+    not_for: Server data read or written through TanStack Query (useQuery, useSuspenseQuery, useMutation and their results), which is server state; creating a TanStack Query QueryClient or configuring the router. None of these hold UI state.
 severity: error
+threshold: 0.67
