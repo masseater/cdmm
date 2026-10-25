@@ -1,14 +1,13 @@
 import type { Preset } from "@cdmm/core";
-import { useAtomValue } from "@effect/atom-react";
 import { Option } from "effect";
 import type { ReactNode } from "react";
 
-import { selectedPresetAtom, shownPreset } from "#/pages/global/model/selection";
+import { shownPreset, useSelectedPreset } from "#/pages/global/model/selection";
 
 import { PresetEditor } from "./preset-editor";
 
 const PresetPanel = ({ presets }: Readonly<{ presets: readonly Preset[] }>): ReactNode => {
-  const selected = useAtomValue(selectedPresetAtom);
+  const selected = useSelectedPreset();
   const preset = Option.fromNullishOr(shownPreset({ presets, selected }));
   return Option.match(preset, {
     onNone: () => "",

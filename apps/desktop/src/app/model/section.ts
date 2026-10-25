@@ -1,8 +1,15 @@
+import { useAtom, useAtomSet, useAtomValue } from "@effect/atom-react";
 import { Atom } from "effect/reactivity";
 
 type Section = "picker" | "accounts" | "global";
 
 const sectionAtom = Atom.make<Section>("picker");
+
+const useSection = (): Section => useAtomValue(sectionAtom);
+
+const useSetSection = (): ((section: Section) => void) => useAtomSet(sectionAtom);
+
+const useSectionState = (): readonly [Section, (section: Section) => void] => useAtom(sectionAtom);
 
 const windowModeOf = (section: Section): "picker" | "manage" => {
   if (section === "picker") {
@@ -21,4 +28,4 @@ const PAGE_TITLES: Readonly<Record<Section, string>> = {
 const titleOf = (section: Section): string => PAGE_TITLES[section];
 
 export type { Section };
-export { sectionAtom, titleOf, windowModeOf };
+export { titleOf, useSection, useSectionState, useSetSection, windowModeOf };

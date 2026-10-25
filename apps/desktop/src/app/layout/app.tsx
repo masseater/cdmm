@@ -1,10 +1,9 @@
-import { useAtomValue } from "@effect/atom-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Effect } from "effect";
 import { Suspense, useEffect } from "react";
 import type { ReactNode } from "react";
 
-import { sectionAtom, titleOf, windowModeOf } from "#/app/model/section";
+import { titleOf, useSection, windowModeOf } from "#/app/model/section";
 import { managerApi, onManagerChanged } from "#/shared/api";
 
 import { ChoiceBanner } from "./choice-banner";
@@ -13,7 +12,7 @@ import { MainArea } from "./main-area";
 
 const App = (): ReactNode => {
   const queryClient = useQueryClient();
-  const section = useAtomValue(sectionAtom);
+  const section = useSection();
   useEffect(
     () =>
       onManagerChanged(() => {

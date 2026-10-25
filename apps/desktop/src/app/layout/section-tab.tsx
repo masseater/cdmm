@@ -1,8 +1,7 @@
-import { useAtom } from "@effect/atom-react";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 
-import { sectionAtom } from "#/app/model/section";
+import { useSectionState } from "#/app/model/section";
 import type { Section } from "#/app/model/section";
 import { Button } from "#/shared/ui/button";
 
@@ -24,7 +23,7 @@ const SectionTab = ({
   section,
   label,
 }: Readonly<{ section: Section; label: string }>): ReactNode => {
-  const [current, setCurrent] = useAtom(sectionAtom);
+  const [current, setCurrent] = useSectionState();
   const select = useCallback(() => {
     setCurrent(section);
   }, [section, setCurrent]);

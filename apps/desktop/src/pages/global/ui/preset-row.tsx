@@ -1,11 +1,10 @@
 import type { AccountView, Preset } from "@cdmm/core";
-import { useAtomSet } from "@effect/atom-react";
 import { Array as Arr } from "effect";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 
 import { COPY } from "#/pages/global/config/copy";
-import { selectedPresetAtom } from "#/pages/global/model/selection";
+import { useSelectPreset } from "#/pages/global/model/selection";
 import { ListRow } from "#/shared/ui/list-row";
 
 const usersOf = (accounts: readonly AccountView[], presetId: string): string => {
@@ -21,7 +20,7 @@ const PresetRow = ({
   accounts,
   pressed,
 }: Readonly<{ preset: Preset; accounts: readonly AccountView[]; pressed: boolean }>): ReactNode => {
-  const setSelected = useAtomSet(selectedPresetAtom);
+  const setSelected = useSelectPreset();
   const select = useCallback(() => {
     setSelected(preset.id);
   }, [preset.id, setSelected]);
