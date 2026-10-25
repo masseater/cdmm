@@ -1,11 +1,11 @@
 import type { DesktopInstall, RouterStatus } from "@cdmm/core";
 import { Config, Context, Effect, FileSystem, Layer, Option, Path, String as Str } from "effect";
-import type { ChildProcessSpawner } from "effect/process";
 
 import type { ManagerError } from "./errors.ts";
 import { READ_BODY, SEND_BODY, STOP_SCRIPT } from "./powershell.ts";
 import { defaultAppsSettings, registerRouterFor, routerStatus } from "./router.ts";
 import { asFailure, checked, detached, failed, output, powershellArgs } from "./spawn.ts";
+import type { Processes } from "./spawn.ts";
 import { win32 } from "./win32.ts";
 
 type DesktopTarget = Readonly<{
@@ -32,7 +32,7 @@ type DesktopShape = Readonly<{
 
 class Desktop extends Context.Service<Desktop, DesktopShape>()("@cdmm/desktop/main/desktop") {}
 
-type WindowsServices = ChildProcessSpawner.ChildProcessSpawner | FileSystem.FileSystem | Path.Path;
+type WindowsServices = Processes | FileSystem.FileSystem | Path.Path;
 type Run = <Value, Failure>(
   effect: Effect.Effect<Value, Failure, WindowsServices>,
 ) => Effect.Effect<Value, Failure>;
@@ -92,7 +92,7 @@ const launchHidden = Effect.fn("Desktop.launchHidden")(function* launchHidden(
 
 const launchEffect = (
   input: Readonly<{ alias: string; target: DesktopTarget }>,
-): Effect.Effect<void, ManagerError, ChildProcessSpawner.ChildProcessSpawner> =>
+): Effect.Effect<void, ManagerError, Processes> =>
   Option.match(input.target.desktop, {
     onNone: () =>
       detached({

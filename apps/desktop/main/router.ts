@@ -1,9 +1,9 @@
 import type { RouterStatus } from "@cdmm/core";
 import { Effect } from "effect";
-import type { ChildProcessSpawner } from "effect/process";
 
 import type { ManagerError } from "./errors.ts";
 import { checked, output } from "./spawn.ts";
+import type { Processes } from "./spawn.ts";
 
 const PROG_ID = "cdmm.Url";
 const APP_NAME = "cdmm";
@@ -39,10 +39,7 @@ const registryEntries = (executable: string): readonly (readonly string[])[] => 
   [REGISTERED_APPS, "/v", APP_NAME, "/d", String.raw`Software\cdmm\Capabilities`],
 ];
 
-const queryValue = (
-  key: string,
-  name: string,
-): Effect.Effect<string, never, ChildProcessSpawner.ChildProcessSpawner> =>
+const queryValue = (key: string, name: string): Effect.Effect<string, never, Processes> =>
   output({ command: "reg.exe", args: ["query", key, "/v", name] });
 
 const routerStatus = Effect.fn("Desktop.routerStatus")(function* routerStatus(executable: string) {
@@ -62,9 +59,7 @@ const routerStatus = Effect.fn("Desktop.routerStatus")(function* routerStatus(ex
   return { status: "registered" } satisfies RouterStatus;
 });
 
-const registerRouterFor = (
-  executable: string,
-): Effect.Effect<void, ManagerError, ChildProcessSpawner.ChildProcessSpawner> =>
+const registerRouterFor = (executable: string): Effect.Effect<void, ManagerError, Processes> =>
   Effect.forEach(
     registryEntries(executable),
     (entry) => checked({ command: "reg.exe", args: ["add", ...entry, "/f"], env: {} }),

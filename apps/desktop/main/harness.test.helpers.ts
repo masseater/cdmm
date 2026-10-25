@@ -1,6 +1,7 @@
 import { layer as nodeServicesLayer } from "@effect/platform-node/NodeServices";
 import { Context, Effect, FileSystem, Layer, Ref } from "effect";
 import { Base64 } from "effect/encoding";
+import type { ChildProcessSpawner } from "effect/process";
 
 import { Desktop } from "./desktop.ts";
 import { ManagerError } from "./errors.ts";
@@ -81,7 +82,10 @@ const testLayer = Layer.mergeAll(storeLayer, sessionLayer, desktopLayer).pipe(
   Layer.provideMerge(nodeServicesLayer),
 );
 
-type TestServices = Layer.Success<typeof testLayer>;
+type TestServices = Exclude<
+  Layer.Success<typeof testLayer>,
+  ChildProcessSpawner.ChildProcessSpawner
+>;
 
 const runTest = <Value, Failure>(
   program: Effect.Effect<Value, Failure, TestServices>,

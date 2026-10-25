@@ -1,8 +1,8 @@
-import { Effect, String as Str } from "effect";
+import { layer as nodeServicesLayer } from "@effect/platform-node/NodeServices";
+import { Effect, Layer, String as Str } from "effect";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import { describe, expect, it } from "vite-plus/test";
 
-import { runTest } from "./harness.test.helpers.ts";
 import { NO_DIR_EXIT, READ_BODY, SEND_BODY, STOP_SCRIPT } from "./powershell.ts";
 
 const PARSE = [
@@ -19,8 +19,17 @@ const commandOf = (input: Pwsh): ChildProcess.Command =>
     extendEnv: true,
   });
 
+const runNode = <Value, Failure>(
+  effect: Effect.Effect<Value, Failure, ChildProcessSpawner.ChildProcessSpawner>,
+): Promise<Value> => {
+  const provided = Layer.build(nodeServicesLayer).pipe(
+    Effect.flatMap((context) => Effect.provideContext(effect, context)),
+  );
+  return Effect.runPromise(Effect.scoped(provided));
+};
+
 const outputOf = (input: Pwsh): Promise<string> =>
-  runTest(
+  runNode(
     ChildProcessSpawner.ChildProcessSpawner.pipe(
       Effect.flatMap((spawner) => spawner.string(commandOf(input))),
       Effect.map(Str.trim),
@@ -28,7 +37,7 @@ const outputOf = (input: Pwsh): Promise<string> =>
   );
 
 const exitCodeOf = (input: Pwsh): Promise<number> =>
-  runTest(
+  runNode(
     ChildProcessSpawner.ChildProcessSpawner.pipe(
       Effect.flatMap((spawner) => spawner.exitCode(commandOf(input))),
       Effect.map(Number),
