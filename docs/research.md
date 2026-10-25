@@ -228,11 +228,11 @@ UIAクライアントは対話デスクトップ側に居る。
 
 確認状況は次のとおりである（2026-10-11、WebFetchで一次確認したもの）。
 
-- trycua/cua #1616 — 確認。VS CodeがUIAに3要素（タイトルバーのみ）しか見せないと本文にある。Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築されるとある。Windows/UIAの根拠として採用する。
-- microsoft/vscode #84833 — 確認。内容はVS CodeがLinuxで`--force-renderer-accessibility`を受け付けるようにした変更である。フラグの扱いはChromium側の前提にとどまる。文脈はLinux/Orcaなので、Windows/UIAには言及しない。根拠としては補助的に扱う。
-- Playwright `_electron` 公式ドキュメント — 確認。`executablePath`を指定して自分から起動する前提である。既存インスタンスへの接続は記載がない。Nodeのinspect系に依存する。本件には合わないと判断する。
-- lowlevel-computer-use（glama一覧） — 確認済み（前述）。
-- ArdurAI/ardur-bot #213・#180、Windows-MCP — 未確認。根拠としては使わず、補足情報としてのみ記す。
+- trycua/cua #1616：確認済み。VS CodeがUIAに3要素（タイトルバーのみ）しか見せないと本文にある。Chromiumのツリーは`--force-renderer-accessibility`かUIAイベント購読でのみ構築されるとある。Windows/UIAの根拠として採用する。
+- microsoft/vscode #84833：確認済み。内容はVS CodeがLinuxで`--force-renderer-accessibility`を受け付けるようにした変更である。フラグの扱いはChromium側の前提にとどまる。文脈はLinux/Orcaなので、Windows/UIAには言及しない。根拠としては補助的に扱う。
+- Playwright `_electron` 公式ドキュメント：確認済み。`executablePath`を指定して自分から起動する前提である。既存インスタンスへの接続は記載がない。Nodeのinspect系に依存する。本件には合わないと判断する。
+- lowlevel-computer-use（glama一覧）：確認済み（前述）。
+- ArdurAI/ardur-bot #213・#180、Windows-MCP：未確認。根拠としては使わず、補足情報としてのみ記す。
 
 利用規約について記す。
 本アプリは利用者本人の複数のClaude Maxアカウントを、本人の端末で運用する前提である。
@@ -266,9 +266,9 @@ koffiはElectronのメインプロセス（常駐）から呼ぶ。
 UIを素のブラウザ（`vp dev`）で描画・確認するには、この注入を代替する必要がある。
 公式手段と既存ライブラリを探した。
 
-- `electron-mock-ipc` / `electron-ipc-mock` — 確認。`ipcMain`↔`ipcRenderer`のモックである。用途はJest/Mochaの単体テストである。本件のレンダラーは生IPCを直接触らない。`globalThis.cdmm`（contextBridgeで公開されたオブジェクト）を読むだけである。IPCトランスポートのモックは噛み合わない。
-- Storybook — 確認。レンダラー単体の開発環境である。preload相当のグローバルは「同じオブジェクトをデコレータで定義する」運用になり、結局は手書きのモックである。加えて本リポジトリに未導入で、導入は大掛かりである。
-- Vite `define` — 静的な置換のみである。ブリッジは呼び出しにデータで応答する必要があり合わない。MSWはHTTPを横取りする仕組みなので、HTTPではないブリッジは対象外である。
+- `electron-mock-ipc` / `electron-ipc-mock`：確認。`ipcMain`↔`ipcRenderer`のモックである。用途はJest/Mochaの単体テストである。本件のレンダラーは生IPCを直接触らない。`globalThis.cdmm`（contextBridgeで公開されたオブジェクト）を読むだけである。IPCトランスポートのモックは噛み合わない。
+- Storybook：確認。レンダラー単体の開発環境である。preload相当のグローバルは「同じオブジェクトをデコレータで定義する」運用になり、結局は手書きのモックである。加えて本リポジトリに未導入で、導入は大掛かりである。
+- Vite `define`：静的な置換のみである。ブリッジは呼び出しにデータで応答する必要があり合わない。MSWはHTTPを横取りする仕組みなので、HTTPではないブリッジは対象外である。
 
 結論を記す。
 「preload注入のグローバルを、素のブラウザでのdev描画のために代替する」既存の公式手段やライブラリは見当たらない。
