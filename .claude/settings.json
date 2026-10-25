@@ -3,26 +3,11 @@
   "env": {
     "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1"
   },
+  "permissions": {
+    "deny": ["Bash(pnpm *)", "Bash(pnpx *)", "Bash(pn *)", "Bash(pnx *)"]
+  },
   "enabledMcpjsonServers": ["fallow"],
   "extraKnownMarketplaces": {
-    "typesafe-ai": {
-      "source": {
-        "source": "github",
-        "repo": "typesafe-ai/skills"
-      }
-    },
-    "fast-jev-compaction": {
-      "source": {
-        "source": "github",
-        "repo": "tamaratran/fast-jev-compaction"
-      }
-    },
-    "fast-jev-output": {
-      "source": {
-        "source": "github",
-        "repo": "tamaratran/jev-pruner"
-      }
-    },
     "jev-lint": {
       "source": {
         "source": "github",
@@ -37,9 +22,6 @@
     }
   },
   "enabledPlugins": {
-    "typesafe@typesafe-ai": true,
-    "fast-jev-compaction@fast-jev-compaction": true,
-    "fast-jev-output@fast-jev-output": true,
     "jev-lint@jev-lint": true,
     "cc-jev-teacher@cc-jev-teacher": true
   },
@@ -116,7 +98,7 @@
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/post-edit.ts"
             ],
             "timeout": 300,
-            "statusMessage": "fallow と jev で変更を検査中"
+            "statusMessage": "fallow で変更を検査中"
           }
         ]
       },

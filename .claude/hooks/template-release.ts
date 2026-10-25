@@ -1,12 +1,12 @@
-import { Effect, FileSystem, Path, Schema, String as Str } from "effect";
-import { HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http";
+import { Effect, FileSystem, Option, Path, Schema, String as Str } from "effect";
 
-import { projectDir, runHook, writeJson } from "./env.ts";
+import { getJson, projectDir, runHook, writeJson } from "./env.ts";
 
 const TEMPLATE_REPOSITORY = "masseater/typescript-template";
-const MANIFEST_FILE = ".release-please-manifest.json";
+const MANIFEST_FILE = ".github/release-please/manifest.json";
 const REQUEST_TIMEOUT = "5 seconds";
 const NOTES_LENGTH = 4000;
+const WORKTREE_SEGMENT = "/.claude/worktrees/";
 
 const Manifest = Schema.Struct({ ".": Schema.String });
 
@@ -32,17 +32,10 @@ const currentVersion = Effect.gen(function* currentVersion() {
   return `v${manifest["."]}`;
 });
 
-const latestRelease = Effect.gen(function* latestRelease() {
-  const client = yield* HttpClient.HttpClient;
-  const request = HttpClientRequest.get(
-    `https://api.github.com/repos/${TEMPLATE_REPOSITORY}/releases/latest`,
-    { acceptJson: true },
-  );
-  const response = yield* client
-    .execute(request)
-    .pipe(Effect.flatMap(HttpClientResponse.filterStatusOk));
-  return yield* HttpClientResponse.schemaBodyJson(Release)(response);
-}).pipe(Effect.timeout(REQUEST_TIMEOUT));
+const latestRelease = getJson(
+  `https://api.github.com/repos/${TEMPLATE_REPOSITORY}/releases/latest`,
+  Release,
+).pipe(Effect.timeout(REQUEST_TIMEOUT));
 
 const instructions = (current: string, release: typeof Release.Type): string => {
   const latest = release.tag_name;
@@ -63,11 +56,15 @@ const instructions = (current: string, release: typeof Release.Type): string => 
 
 runHook(
   Effect.gen(function* templateRelease() {
-    const current = yield* currentVersion;
-    const release = yield* latestRelease;
-    if (release.tag_name === current) {
+    if ((yield* projectDir).includes(WORKTREE_SEGMENT)) {
       return;
     }
+    const current = yield* currentVersion;
+    const found = yield* latestRelease;
+    if (Option.isNone(found) || found.value.tag_name === current) {
+      return;
+    }
+    const release = found.value;
     yield* writeJson(SessionStartOutput, {
       systemMessage: `テンプレート ${TEMPLATE_REPOSITORY} に新しいリリース ${release.tag_name} があります（現在 ${current}）。`,
       hookSpecificOutput: {

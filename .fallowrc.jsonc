@@ -64,7 +64,7 @@
       "name": "vite-plus",
       "enablers": ["vite-plus"],
       "entryPoints": ["vite.config.ts"],
-      "toolingDependencies": ["eslint-plugin-no-comments"],
+      "toolingDependencies": ["@ast-grep/cli", "eslint-plugin-no-comments"],
     },
     {
       "name": "syncpack-ts",
@@ -91,6 +91,12 @@
       "enablers": ["skills"],
       "configPatterns": ["skills-lock.json"],
       "toolingDependencies": ["skills"],
+    },
+    {
+      "name": "tanstack-intent",
+      "enablers": ["@tanstack/intent"],
+      "configPatterns": [".intent/hooks/*.mjs"],
+      "toolingDependencies": ["@tanstack/intent"],
     },
     {
       "name": "steiger",

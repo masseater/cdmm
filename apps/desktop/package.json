@@ -15,7 +15,8 @@
     "start": "vp pack && vp build && electron .",
     "test": "vp test run",
     "steiger": "steiger ./src",
-    "fallow": "fallow --production --quiet --format compact && fallow dupes --quiet --format compact && fallow security --fail-on-issues --quiet"
+    "fallow": "fallow --production --quiet --format compact && fallow dupes --quiet --format compact && fallow security --fail-on-issues --quiet",
+    "prepare": "effect-tsgo patch --typescript --oxlint"
   },
   "dependencies": {
     "@cdmm/core": "workspace:*",

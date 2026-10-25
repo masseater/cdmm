@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "vp check && vp run jev-lint-eval && vp run jev-lint && syncpack lint && vp run textlint && vp run yomiyasu && vp run renovate && vp run -r test && vp run -r steiger && vp run -r fallow",
+    "verify": "vp check && vp run jev-lint-eval && vp run -r test && syncpack lint && vp run textlint && vp run yomiyasu && vp run renovate && vp run actions-lint && vp run -r steiger && vp run -r fallow",
     "textlint": "textlint \"**/*.md\"",
     "yomiyasu": "node -e \"const { execFileSync, spawnSync } = require('node:child_process'); const shell = process.platform === 'win32'; const { path } = JSON.parse(execFileSync('skills', ['ls', '--json'], { shell })).find(({ name }) => name === 'yomiyasu'); const statuses = JSON.parse(spawnSync('textlint', ['--format', 'json', '**/*.md'], { shell }).stdout).map(({ filePath }) => spawnSync('python3', [require('node:path').join(path, 'scripts', 'yomiyasu_lint.py'), '--strict', filePath], { shell, stdio: 'inherit' }).status); process.exitCode = statuses.every((status) => status === 0) ? 0 : 1\"",
     "renovate": "renovate-config-validator --strict",
@@ -12,6 +12,7 @@
     "prepare": "vp config && skills experimental_install --force"
   },
   "devDependencies": {
+    "@ast-grep/cli": "catalog:",
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
     "@effect/tsgo": "catalog:stack",
@@ -19,6 +20,7 @@
     "@html-eslint/eslint-plugin-react": "catalog:",
     "@shadcn/lint": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
+    "@tanstack/intent": "catalog:",
     "@textlint-ja/textlint-rule-preset-ai-writing": "1.7.0",
     "@types/node": "catalog:",
     "eslint-plugin-baseline-js": "catalog:",
@@ -27,7 +29,7 @@
     "fallow": "catalog:stack",
     "jev-lint": "catalog:",
     "renovate": "catalog:stack",
-    "skills": "1.7.0",
+    "skills": "catalog:",
     "syncpack": "catalog:",
     "textlint": "catalog:stack",
     "textlint-rule-preset-ja-technical-writing": "12.0.2",
@@ -41,12 +43,12 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.6.0",
+      "version": "12.10.1",
       "onFail": "download"
     }
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=26.0.0"
   },
   "intent": {
     "skills": [

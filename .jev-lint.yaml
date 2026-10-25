@@ -1,9 +1,11 @@
 baseUrl: https://openrouter.ai/api
 apiKeyEnv: OPENROUTER_API_KEY
 model: perplexity/pplx-decider-v1.1-27b
+exclude:
+  - "**/*.test.ts"
+  - "**/*.gen.ts"
+  - ".jev-lint/rules/**/fixtures"
 rules:
   typescript/exclusive-status: on
-  typescript/ui-state-effect-atom: on
   typescript/server-state-tanstack-query: on
-exclude:
-  - ".jev-lint/rules/**/fixtures"
+  typescript/ui-state-effect-atom: on

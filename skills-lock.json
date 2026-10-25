@@ -3,36 +3,43 @@
   "skills": {
     "effect-ts": {
       "source": "Effect-TS/skills",
-      "ref": "2309e6f27d9955b434c0e3f394b945c136e89fd2",
+      "ref": "155c50c911f9c99c294ef8a4461981c5bbe6453e",
       "sourceType": "github",
       "skillPath": "skills/effect-ts/SKILL.md",
-      "computedHash": "6bdb9b95aa83071eca2f67ae947b7d398a22e9e6e08f6cfa35de9516b03efa6e"
-    },
-    "fallow": {
-      "source": "fallow",
-      "sourceType": "node_modules",
-      "computedHash": "4c105770a5dc3af14ae91287f4c867321a5e35412fe0c15c2bda87b1d05b7b1e"
+      "computedHash": "cb225ba5dda169883dfee680fba6c570c89245ba19242a9bc5c3f2ac8218a55f"
     },
     "feature-sliced-design": {
       "source": "feature-sliced/skills",
-      "ref": "fd71da42a89e916f2ced63e5349fd865c87070a6",
+      "ref": "538e1002f89a2f168ec849ea469493799cb0b6e1",
       "sourceType": "github",
       "skillPath": "feature-sliced-design/SKILL.md",
-      "computedHash": "ee5a0a74e2c5715c9b4573fbc2c64a72db5c6bd51415ad0734dab47ced77edcd"
+      "computedHash": "98d09ea1a9acac34fc5720c610c4ee7c7780dd30b2f287d733961f8e7e9d980b"
+    },
+    "measure-dont-guess": {
+      "source": "./docs/skills/measure-dont-guess",
+      "sourceType": "local",
+      "computedHash": "26c3183fedaad983b439d63804240dd4d822ce87f0ca0718e85e6b96b4ef910d"
     },
     "modern-web-guidance": {
       "source": "GoogleChrome/modern-web-guidance",
-      "ref": "84ae7251ee919239d5ea85aef25897983f26601e",
+      "ref": "a97286845f2baba38988f9e5fe2b2a1351021e50",
       "sourceType": "github",
       "skillPath": "skills/modern-web-guidance/SKILL.md",
-      "computedHash": "7350ef15ed8febd35f1a15750e57418eac6656b7e86259e7796aa5e7972af60c"
+      "computedHash": "dbd30d9c331c8957e065270150ffe44b4ba11ad5259cc9144240f63c45b05f1c"
     },
     "shadcn": {
       "source": "shadcn-ui/ui",
-      "ref": "295a1f114a138f23b5dfee0e0c6812394dfeb90c",
+      "ref": "2d3f1cd436b18ea12f24130de4df781355925b08",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be"
+      "computedHash": "da388f632cd83783c02967446e21941c9ee8291ccb43ba74c23f7d4e9b7c298c"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "ref": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+      "sourceType": "github",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "computedHash": "276fb0aadb002ab930cc2a56de89e16995a2e3e70b33587652bf0a5fb123148d"
     },
     "typescript-discriminated-unions": {
       "source": "mkosir/typescript-style-guide",
@@ -48,12 +55,19 @@
       "skillPath": "skills/typescript-variables/SKILL.md",
       "computedHash": "a4f4459aa4c0dd16f8fd43401b76c4e9cb68265a73060d7f184ddb438f911afd"
     },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "ref": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+      "sourceType": "github",
+      "skillPath": "skills/verification-before-completion/SKILL.md",
+      "computedHash": "b529822bdac4b197b180fe12225cff86b930b65910435103c10622df7f041651"
+    },
     "yomiyasu": {
       "source": "nanaism/yomiyasu",
-      "ref": "4075fc34fb0333ca1fe42d32cd619338f4a138ba",
+      "ref": "15244a1369c192d6b7e74963ee9709537fadf166",
       "sourceType": "github",
-      "skillPath": "SKILL.md",
-      "computedHash": "6a4b0154774277639a1c0a30934714c2933ecf9c6bc385aae404a28a6e1fb607"
+      "skillPath": "skills/yomiyasu/SKILL.md",
+      "computedHash": "f45a6586b47b539db151b18cab28687cc6541650b07e577976211a87919086c7"
     }
   }
 }
