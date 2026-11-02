@@ -123,7 +123,7 @@ export default defineConfig({
             "Ruleset",
             "Stack",
           ],
-          capIsNewExceptionPattern: "^(Config|Context|Data|Schema|D1|Website)\\.",
+          capIsNewExceptionPattern: String.raw`^(Config|Context|Data|Schema|D1|Website)\.`,
         },
       ],
       "typescript/no-empty-interface": ["error", { allowSingleExtends: true }],
