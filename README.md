@@ -1,6 +1,11 @@
 # cdmm
 
-## セットアップ
+Windows の公式 Claude Desktop で、複数の Claude Max アカウントを使い分けられるようにする道具である。
+まだテンプレートの雛形のままで、この機能は入っていない。
+
+## 手元で動かす
+
+前提は Vite+ の `vp` と Cloudflare のアカウントである。
 
 ```sh
 vp install
@@ -8,8 +13,13 @@ vp exec --filter web alchemy profile edit --add Cloudflare
 vp run verify
 ```
 
-Cloudflare の認証情報は環境変数ではなく Alchemy のプロファイル（`~/.alchemy`）で管理する。
-デプロイと `.mcp.json` の Cloudflare MCP は、どちらもこのプロファイルの認証情報を使う。
+デプロイと `.mcp.json` の Cloudflare MCP は、どちらもこの Alchemy のプロファイルの認証情報を使う。
+
+```sh
+cd apps/web
+vp run dev
+vp run deploy
+```
 
 ## GitHub の設定
 
@@ -20,12 +30,4 @@ Cloudflare の認証情報は環境変数ではなく Alchemy のプロファイ
 | `CLAUDE_CODE_OAUTH_TOKEN` | verify 失敗時に Claude Code が自動修正する |
 
 Settings → Actions → General で「Allow GitHub Actions to create and approve pull requests」を有効にする。
-release-pleaseと自動修正がPRを作るためである。
-
-## 起動とデプロイ
-
-```sh
-cd apps/web
-vp run dev
-vp run deploy
-```
+有効にしないと、release-please と自動修正が PR を作れない。
