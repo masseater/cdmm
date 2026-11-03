@@ -9,6 +9,10 @@
       "matchPackageNames": ["effect", "@effect/**", "!@effect/tsgo", "alchemy", "@alchemy.run/**"],
       "groupName": "effect and alchemy",
       "automerge": false
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "!/-dev\\./"
     }
   ],
   "customManagers": [

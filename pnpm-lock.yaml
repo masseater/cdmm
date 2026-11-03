@@ -186,8 +186,8 @@ catalogs:
       specifier: 0.67.0
       version: 0.67.0
     '@r_masseater/oxlint-typed-rules':
-      specifier: 0.0.1
-      version: 0.0.1
+      specifier: 0.0.2
+      version: 0.0.2
     '@shadcn/lint':
       specifier: 0.2.3
       version: 0.2.3
@@ -336,7 +336,7 @@ importers:
         version: 0.67.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
       '@r_masseater/oxlint-typed-rules':
         specifier: 'catalog:'
-        version: 0.0.1(redis@6.2.1(@opentelemetry/api@1.9.1))
+        version: 0.0.2(redis@6.2.1(@opentelemetry/api@1.9.1))
       '@shadcn/lint':
         specifier: 'catalog:'
         version: 0.2.3(@typescript-eslint/parser@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
@@ -560,12 +560,15 @@ packages:
       '@effect/platform-node': ^4.0.5
       effect: 4.0.7
       rolldown: 1.2.13
+      vite: ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       '@effect/platform-bun':
         optional: true
       '@effect/platform-node':
         optional: true
       rolldown:
+        optional: true
+      vite:
         optional: true
 
   '@alchemy.run/cloudflare@2.0.0-beta.84':
@@ -577,6 +580,7 @@ packages:
       '@effect/platform-node': ^4.0.5
       alchemy: 2.0.0-beta.84
       effect: 4.0.7
+      vite: ^8.0.7
     peerDependenciesMeta:
       '@alchemy.run/domain':
         optional: true
@@ -585,6 +589,8 @@ packages:
       '@effect/platform-bun':
         optional: true
       '@effect/platform-node':
+        optional: true
+      vite:
         optional: true
 
   '@alchemy.run/docker@2.0.0-beta.84':
@@ -3053,8 +3059,8 @@ packages:
   '@qnighy/marshal@0.1.3':
     resolution: {integrity: sha512-uaDZTJYtD2UgQTGemmgWeth+e2WapZm+GkAq8UU8AJ55PKRFaf1GkH7X/uzA+Ygu8iInzIlM2FGyCUnruyMKMg==}
 
-  '@r_masseater/oxlint-typed-rules@0.0.1':
-    resolution: {integrity: sha512-BSQ3bXz3FIRG95P5uwPjBh08bSpOkOZxtxAghgfknbXSezthZeRnFYYD8CanB7NNbQcDe7hoZuA4ca8zWnWwQA==}
+  '@r_masseater/oxlint-typed-rules@0.0.2':
+    resolution: {integrity: sha512-HrBI7YTbX2jnADs7TJFktxMPvlqlpOwGm5advHP/ypji77Y736+jmaacwse5IObxcJStP9xmMCxv59G3kwK/JA==}
     engines: {node: '>=26'}
 
   '@radix-ui/number@1.1.3':
@@ -5081,8 +5087,11 @@ packages:
     resolution: {integrity: sha512-xLL3lkDegJZw+MGoGaCCsFayDZthGgpAtr3Vziyfc4p7xH89K7KRPcRBBh/kEYm0Aqkt5DtTmkYpBtRV/FrHZg==}
     peerDependencies:
       msw: ^2.4.9 || ^3.0.0
+      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       msw:
+        optional: true
+      vite:
         optional: true
 
   '@vitest/pretty-format@5.0.5':
@@ -5404,6 +5413,11 @@ packages:
 
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
 
   ajv-keywords@5.1.0:
     resolution: {integrity: sha512-YCS/JNFAUyr5vAuhk1DWm1CBxRHW9LbJ2ozWeemrIqpbsqKjHVxYPyi5GC0rjZIT5JxJ3virVTS8wk4i/Z+krw==}
@@ -5425,6 +5439,7 @@ packages:
       '@effect/platform-node': ^4.0.5
       '@effect/vitest': 4.0.7
       effect: 4.0.7
+      vite: ^8.0.7
       ws: ^8.21.0
     peerDependenciesMeta:
       '@alchemy.run/frontend-frameworks':
@@ -5434,6 +5449,8 @@ packages:
       '@effect/platform-node':
         optional: true
       '@effect/vitest':
+        optional: true
+      vite:
         optional: true
       ws:
         optional: true
@@ -12189,11 +12206,11 @@ snapshots:
     dependencies:
       '@babel/runtime-corejs3': 7.29.7
 
-  '@r_masseater/oxlint-typed-rules@0.0.1(redis@6.2.1(@opentelemetry/api@1.9.1))':
+  '@r_masseater/oxlint-typed-rules@0.0.2(redis@6.2.1(@opentelemetry/api@1.9.1))':
     dependencies:
       '@effect/platform-node': 4.0.7(effect@4.0.7)(redis@6.2.1(@opentelemetry/api@1.9.1))
       effect: 4.0.7
-      typescript: 6.0.3
+      typescript-6: typescript@6.0.3
     transitivePeerDependencies:
       - bufferutil
       - redis
