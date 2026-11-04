@@ -9,17 +9,11 @@ Windows の公式 Claude Desktop で、複数の Claude Max アカウントを�
 
 ```sh
 vp install
-vp exec --filter web alchemy profile edit --add Cloudflare
+vp exec --filter claude-harness alchemy profile edit --add Cloudflare
 vp run verify
 ```
 
-デプロイと `.mcp.json` の Cloudflare MCP は、どちらもこの Alchemy のプロファイルの認証情報を使う。
-
-```sh
-cd apps/web
-vp run dev
-vp run deploy
-```
+`.mcp.json` の Cloudflare MCP は、この Alchemy のプロファイルの認証情報を使う。
 
 ## GitHub の設定
 
