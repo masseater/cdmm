@@ -165,8 +165,8 @@ settings:
 catalogs:
   default:
     '@ast-grep/cli':
-      specifier: 0.51.0
-      version: 0.51.0
+      specifier: 0.51.1
+      version: 0.51.1
     '@commitlint/cli':
       specifier: 21.2.4
       version: 21.2.4
@@ -186,8 +186,8 @@ catalogs:
       specifier: 0.2.4
       version: 0.2.4
     '@tanstack/eslint-plugin-query':
-      specifier: 5.105.1
-      version: 5.105.1
+      specifier: 5.105.2
+      version: 5.105.2
     '@tanstack/eslint-plugin-router':
       specifier: 1.162.0
       version: 1.162.0
@@ -210,8 +210,8 @@ catalogs:
       specifier: 7.1.1
       version: 7.1.1
     skills:
-      specifier: 1.7.4
-      version: 1.7.4
+      specifier: 1.7.5
+      version: 1.7.5
     syncpack:
       specifier: 15.3.3
       version: 15.3.3
@@ -220,8 +220,8 @@ catalogs:
       specifier: 2.0.0-beta.85
       version: 2.0.0-beta.85
     '@effect/tsgo':
-      specifier: 0.63.0
-      version: 0.63.0
+      specifier: 0.64.1
+      version: 0.64.1
     alchemy:
       specifier: 2.0.0-beta.85
       version: 2.0.0-beta.85
@@ -229,8 +229,8 @@ catalogs:
       specifier: 3.38.1
       version: 3.38.1
     renovate:
-      specifier: 44.201.1
-      version: 44.201.1
+      specifier: 44.206.0
+      version: 44.206.0
     textlint:
       specifier: 15.8.0
       version: 15.8.0
@@ -259,7 +259,7 @@ importers:
     devDependencies:
       '@ast-grep/cli':
         specifier: 'catalog:'
-        version: 0.51.0
+        version: 0.51.1
       '@commitlint/cli':
         specifier: 'catalog:'
         version: 21.2.4(conventional-commits-parser@7.1.2)(typescript@6.0.3)
@@ -268,7 +268,7 @@ importers:
         version: 21.2.4
       '@effect/tsgo':
         specifier: catalog:stack
-        version: 0.63.0
+        version: 0.64.1
       '@eslint-react/eslint-plugin':
         specifier: 'catalog:'
         version: 5.28.8(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
@@ -283,7 +283,7 @@ importers:
         version: 0.2.4(@typescript-eslint/parser@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
       '@tanstack/eslint-plugin-query':
         specifier: 'catalog:'
-        version: 5.105.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
+        version: 5.105.2(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
       '@tanstack/eslint-plugin-router':
         specifier: 'catalog:'
         version: 1.162.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
@@ -316,10 +316,10 @@ importers:
         version: 3.38.1
       renovate:
         specifier: catalog:stack
-        version: 44.201.1(supports-color@7.2.0)(typanion@3.14.0)
+        version: 44.206.0(supports-color@7.2.0)(typanion@3.14.0)
       skills:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.7.5
       syncpack:
         specifier: 'catalog:'
         version: 15.3.3
@@ -350,7 +350,7 @@ importers:
     devDependencies:
       '@effect/tsgo':
         specifier: catalog:stack
-        version: 0.63.0
+        version: 0.64.1
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.6
@@ -457,52 +457,52 @@ packages:
   '@arcanis/slice-ansi@1.1.1':
     resolution: {integrity: sha512-xguP2WR2Dv0gQ7Ykbdb7BNCnPnIPB94uTi0Z2NvkRBEnhbwjOQ7QyQKJXrVQg4qDpiD9hA5l5cCwy/z2OXgc3w==}
 
-  '@ast-grep/cli-darwin-arm64@0.51.0':
-    resolution: {integrity: sha512-LYh8du1Qd1xFMi15Lh6xnWgHBZGbdCVyQVHOsaqEbICXvd8oAdEIex8ywTt2PwODYAMt6TD7p94S2/kt5dJ1tQ==}
+  '@ast-grep/cli-darwin-arm64@0.51.1':
+    resolution: {integrity: sha512-C279HR4eytYkHrmqudMi+eUG3ZvuAqWc0zp9i5aPugFF389AE6N6SbiSFdKeVZXMaUVpwRbmBQbBTr5cA0Tugw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@ast-grep/cli-darwin-x64@0.51.0':
-    resolution: {integrity: sha512-RF3FsO3XsGt+qLqpqbHiKKhly9/Pd08mVnvxx86Qli3DokvIFRAR8KlsTDnql4hsNgAbacp4vyDJsf/pBhh8iw==}
+  '@ast-grep/cli-darwin-x64@0.51.1':
+    resolution: {integrity: sha512-i8wJd4amxXCvEgZDcU8QDnVE92oqJyDFPyTjaT1PVtBQ0Vb7Y55iTu1dwBwXVi0inFM2OJ4Ze57yCz1uNuXTbg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@ast-grep/cli-linux-arm64-gnu@0.51.0':
-    resolution: {integrity: sha512-aYT07uAVSA3nfoofdVXJuL44DGt1lIOj/GGSNy9mrIiD3TeBv5wxNNXHjMw96bkACdOp8pFMwiuCLY8pMtCT7Q==}
+  '@ast-grep/cli-linux-arm64-gnu@0.51.1':
+    resolution: {integrity: sha512-ix/97iBUPGvf9KrhKRcooSJLmwBgAo7GhKHm7VH30kpxOMUrNLqiTXJj2eZVLiO2xQdUFnbwhVn+A7blSlYLJQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ast-grep/cli-linux-x64-gnu@0.51.0':
-    resolution: {integrity: sha512-ljsdvSrmnmQZaB/lrtLuOP3k3AYCb+TNpPCMi4OQuF1vRBFwMdsES0xrL9iUpJ8ioyIy1h5qTM1T4z5OeoGIvw==}
+  '@ast-grep/cli-linux-x64-gnu@0.51.1':
+    resolution: {integrity: sha512-FlaaRLyopXet+zFrWOdlTbyJb+QqZzgV9jxIbgz0FoVsJSaJ6jsenO/6bgYJk4zPOCUODuvoQ1/XFlB4r6BdcQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ast-grep/cli-win32-arm64-msvc@0.51.0':
-    resolution: {integrity: sha512-G0eb9EmwWvsaJSZI929PCcJhBBeFiB7oAndml5weI1iDjDVn7f5u8jb4wEsovA9W5wy70MjYfH7/H59ogQr8Nw==}
+  '@ast-grep/cli-win32-arm64-msvc@0.51.1':
+    resolution: {integrity: sha512-WRgt7DX/APxJ6KwGopM0jiC1SN4okxXh2kXY5/YliNy0oPc7ayE5FdG7Dqz40iyOE3EpQN6SZVRquvkpJEagnQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@ast-grep/cli-win32-ia32-msvc@0.51.0':
-    resolution: {integrity: sha512-68oC9L73Nq7Wi34aEqcUSIhIYaaM4PpVrrlcbobn4cAKSlUEMIC/9aKsKo6pknQYwSNr9dyIFX92zXIoTRNbcg==}
+  '@ast-grep/cli-win32-ia32-msvc@0.51.1':
+    resolution: {integrity: sha512-Nclj/nsZmiT1bg1jfVL9sqpv0dzcZv6lZu1uk/UrjtvXw832yewmJucvmpAOd0fcb6l57SQ69Jqvt9MNzKwFSQ==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
 
-  '@ast-grep/cli-win32-x64-msvc@0.51.0':
-    resolution: {integrity: sha512-lYsKBG0Wn/vk8Zbeo60l+Lms317mL1xpW6Dvv68k3F57vqlMHkWR2tuNcyWC3OVJXbas8dFMoe1R+6wkofIC+g==}
+  '@ast-grep/cli-win32-x64-msvc@0.51.1':
+    resolution: {integrity: sha512-98fN1gUWJ6AMcwfFdUAQV+4haq5HAzDZWyu3W5zCZXkhhvcT3GLY9oRcACrr7yefIQohHpj5GG0rUZNlwukrMQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
 
-  '@ast-grep/cli@0.51.0':
-    resolution: {integrity: sha512-sIZEt4L4iQJRM2QDKQnbltQxddIsxzt9nmguw3/X7eP3cFwBopsZtFRvaEVht/3/6C1xe3Opn/pbsxSFVJDvpA==}
+  '@ast-grep/cli@0.51.1':
+    resolution: {integrity: sha512-xdX9+jHTZLwpYtHFRmK4Zzoe0UPmZrn037wwCHKBqaFJPC12xiGTwrZEZDMbBwRwmsGYcG1yHsb7yvEFU8EzNw==}
     engines: {node: '>= 12.0.0'}
     hasBin: true
 
@@ -825,8 +825,8 @@ packages:
     resolution: {integrity: sha512-sGEA473TlCvhCGNoTBY9OXZVWdscIXdGt0dm8EpB+2MRfmt8LNh/X56P/T3nCtEB+eH5qGEa3odphSAoUxSfSQ==}
     engines: {node: '>=22.12.0'}
 
-  '@containerbase/base@14.59.8':
-    resolution: {integrity: sha512-cQE5uWC/h4Y4LbvNYqpgnXD9nKqnGhyGPO+/aAE7BzgUg+0/mrf5O3DKYjbYOKnXOoPkVVWnAXg4ZnVUw6MCFw==}
+  '@containerbase/base@14.61.0':
+    resolution: {integrity: sha512-xzfBD+2gVqU9reHELY5WbdCmDUCqjnPvCscG5/6iKnos7Jxg8M0E3rEdiYUMOHLWoww1+hZZFj5vHarjttTUTg==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -907,43 +907,43 @@ packages:
     peerDependencies:
       effect: 4.1.2
 
-  '@effect/tsgo-darwin-arm64@0.63.0':
-    resolution: {integrity: sha512-KBvYatuEol71+i+BERWuDRU9XE+4sTK78N83Ko6VNF5gy6yXiujj/bgtWs2P3cDGXsevAV6L+HtpuAWjAQKC6Q==}
+  '@effect/tsgo-darwin-arm64@0.64.1':
+    resolution: {integrity: sha512-/T4E1JzKiCaXL1dNyNDB2K+7Wot35Pt+FttrrQ5XV5W2p6A62FhCzpZvPaNZ/NQvT/Ldw6wNMtprivpE0mKTdQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@effect/tsgo-darwin-x64@0.63.0':
-    resolution: {integrity: sha512-Qxp51/OFaHx5D+z5f1FtRKAiUH5rkMzaqjv/4ppUGNS0ppdqlcQ5rwQqbY6CiZOxqUlcnmKRirtWpmuxUgHP7w==}
+  '@effect/tsgo-darwin-x64@0.64.1':
+    resolution: {integrity: sha512-K6GwVVbudxEG3vuf3x4ooAsL667T/uf5XQXNkKzlxNDqHv6i/h8eRIArRk0flV1Z1H97YQmHTryoeffjKAgbAQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@effect/tsgo-linux-arm64@0.63.0':
-    resolution: {integrity: sha512-uwnM3kSwaHDKPeU1WSMxijdZaM1NxpDREgJtyyIx2qdqB6HnRYhEZB8RrhWvYYPw1QDKaWHd+byzq5p49+o7+Q==}
+  '@effect/tsgo-linux-arm64@0.64.1':
+    resolution: {integrity: sha512-sVmjJzl1aqliVkHkBhgZgQMrxI2eaD2IFYXaz4FWVgOOENqE92xBEJrpnwhsKVEwxMZCDoEG6yEHZQJ2m4vGmw==}
     cpu: [arm64]
     os: [linux]
 
-  '@effect/tsgo-linux-arm@0.63.0':
-    resolution: {integrity: sha512-tVwlTyAqmDVPvDrr0oogCnlRVs96X19Ny9OD/XJ/6QQSp/1hIjXAvKjo9HAyncF2sAUQyVdF1E7Q7X3wFXvSnQ==}
+  '@effect/tsgo-linux-arm@0.64.1':
+    resolution: {integrity: sha512-DKpAPkIEm1avo0II4wdpkzQXyHYRDYoVbTBs/2KROnKtT20ZVJHLJUAlfEbHZjFi5nhg1s8UgeUNPsR1kamNJA==}
     cpu: [arm]
     os: [linux]
 
-  '@effect/tsgo-linux-x64@0.63.0':
-    resolution: {integrity: sha512-fM3pJIhAZEX8LMbd/pN9iYNxkdVEkx68vMtILYGT4qazwxWelvouD/5fNV0SHDmY13Mv04NJ/550vTLC2hU8VA==}
+  '@effect/tsgo-linux-x64@0.64.1':
+    resolution: {integrity: sha512-mHSsYFFgEsOiGo2E/G0T0kKmphb88oJZnJMx8IaO0/wVIdEAUKIMN30o13cC9gXJpeCrNox6ZilrzFOA+VllFg==}
     cpu: [x64]
     os: [linux]
 
-  '@effect/tsgo-win32-arm64@0.63.0':
-    resolution: {integrity: sha512-LTS0CrEqZmQO0AJAIfFaETjIN/3d/Nda1Mi5zl90y/9BKZr4yyFfClCkz+DMl6/P/+TOuEQ5Wi8LvRiEdwWT4g==}
+  '@effect/tsgo-win32-arm64@0.64.1':
+    resolution: {integrity: sha512-Av6WBMiQIu1jyKgU8Cy8fLOnKBvJAk94Hb2vpFzgwRNItFgC9cFUhvUGa+QVZRx60xwx0cWBs4HpEDXpFuqNyA==}
     cpu: [arm64]
     os: [win32]
 
-  '@effect/tsgo-win32-x64@0.63.0':
-    resolution: {integrity: sha512-28s5YrwL26/7EUnUOu81IOJGJZLkPf2lPkiSIsd4EnFhimeBqP279bhAoDAEwLW1gv45GKM/49JKduXmdLyT1g==}
+  '@effect/tsgo-win32-x64@0.64.1':
+    resolution: {integrity: sha512-fDozqyqyT15T/RcGswIqr8yVOMDhAAnsDZ8o0UP2OAaXzIf5lO6SvUbS+A5A0KE0ddCCBYWPF/8Rw1N9y7sVNQ==}
     cpu: [x64]
     os: [win32]
 
-  '@effect/tsgo@0.63.0':
-    resolution: {integrity: sha512-bRbvVj+YLE/nBmcBWGAwsul3mjEYlqqOmWMxvwSVKq/oNnJEuZYgi2OFDeUf7q49E2g3w+oMHMWyN2QayZ77RQ==}
+  '@effect/tsgo@0.64.1':
+    resolution: {integrity: sha512-MtBw+qO1IJdZklc80rBXIMgAZBmNTH1NeEHgJu5LiCFocDR0X56cFYUyKItYY7+D9ROzNIS3bD/sL1Tku6mMpQ==}
     hasBin: true
 
   '@emnapi/runtime@1.11.3':
@@ -2246,8 +2246,8 @@ packages:
     peerDependencies:
       '@redis/client': ^6.2.1
 
-  '@renovatebot/base-image@13.152.12':
-    resolution: {integrity: sha512-9WiVwJReTnjIXIYaxSP8z2nJQiiN7JczGTrxbtfIr8Cpn3VV/Jfz9VMje8JMgx69ACcM8FFPiTcJQdYNfCe+OA==}
+  '@renovatebot/base-image@13.154.0':
+    resolution: {integrity: sha512-Z90F5Q5nhHWUi7U/M+n6To+Y3tcrFWJPvFkBOPfybmYNhAEKfI99PtlCvuHz/IeEemEU/DND8n9GeHQv9sDM2w==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -2263,12 +2263,12 @@ packages:
     resolution: {integrity: sha512-dvFb9ST8WVo+YsrhK6vbWBib49Biu4/fPmZf1QRNIR1Ov5T04god/AA3rRJcyRrofzt/K96vPO9RPhEE3u+hfg==}
     engines: {node: '>=24.10.0', pnpm: '>=10.0.0'}
 
-  '@renovatebot/osv-offline-db@4.5.7':
-    resolution: {integrity: sha512-nyoq4Vq3ehQVSiS6hPasna+fYZVzjHxrmbiuGn04lrt/ts7JJh4daScnYiv3CXKSuI5/BUIEjBvgaxRl6U4btA==}
+  '@renovatebot/osv-offline-db@4.5.8':
+    resolution: {integrity: sha512-ndX4Dw/zRSnKDJw/7tJUQwqpHAIQDmMlEWLVJJNZ/HpCsQZCDmjPKBBaflEVDys5O3pVG4T9KYQN419A/um0Vw==}
     engines: {node: '>=24.11.0', pnpm: '>=10.0.0'}
 
-  '@renovatebot/osv-offline@4.5.7':
-    resolution: {integrity: sha512-j6QoRw4vA8urYD0OQ7fHAlIkIrykLwbDKX1JIrUNaJWXVyqr9lpn5V8VgrdcBy3ap/S5Xi9HFTehWSPOtyo+bQ==}
+  '@renovatebot/osv-offline@4.5.8':
+    resolution: {integrity: sha512-xysaXLDbyMTdhb1L0wSrPy/k8ilvdBgHVEflQoL248w/RQYNfGY074ubaqIhVdUQ24kHqEd23wUi35W9IDoImw==}
     engines: {node: '>=24.11.0', pnpm: '>=10.0.0'}
 
   '@renovatebot/pep440@6.0.0':
@@ -2279,9 +2279,9 @@ packages:
     resolution: {integrity: sha512-Hp8wjIruBAzc1qIAumCU3dN3AgX60r+Wop6FrFNwjpg8r2TIR9DXHZxv2SY7wIWel8wbEaM2jzb+hVQDfYUwUQ==}
     engines: {node: '>=24.10.0', pnpm: '>=10.0.0'}
 
-  '@renovatebot/ruby-semver@5.0.0':
-    resolution: {integrity: sha512-yQgeq4HVV9mh2AJHHlStd//7mD/96lWj8KWB5Szi5YDjPwpvk12Sj3H+Y4waNC3N2D4t5xqbwYYpTHB5KsrSVg==}
-    engines: {node: ^22.11.0 || >=24.10.0, pnpm: '>=10.0.0'}
+  '@renovatebot/ruby-semver@6.0.0':
+    resolution: {integrity: sha512-RGiSBw2vRYu5PnPTAaJR8R/VV86boURoojuohaJJcAZMgRKrpvRLlmUsK5A8WWLMH0JD9dHoYCpXHZdAZFlFTw==}
+    engines: {node: '>=24.10.0', pnpm: '>=10.0.0'}
 
   '@rolldown/binding-android-arm-eabi@1.2.13':
     resolution: {integrity: sha512-Vu/NICrgdRvUOeaJZIyB2FP63s6fO/4ud5l8dXmxDx9yDyn+mN0y+gsvsVviSli+T361Aqo0h46EuMoobrwawA==}
@@ -2452,8 +2452,8 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@tanstack/eslint-plugin-query@5.105.1':
-    resolution: {integrity: sha512-p6GxacHDMUVt9zWU5CsY+mY8asEZzV2KyCmjIc1V4+ltb4MpvC9SadJML9lSq2GuwLqsUcuLVDONmQvv4NI9Tg==}
+  '@tanstack/eslint-plugin-query@5.105.2':
+    resolution: {integrity: sha512-vypsZap6MigpBEyIy0OERWMmXMbsqKLBOKUQj1R3iWWUY2v6zcGYywkXzKU4JnZZs/DaKJhgP2Enwu9j7S3oQg==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: ^5.6.0 || ^6.0.0 || ^7.0.0
@@ -5736,8 +5736,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@44.201.1:
-    resolution: {integrity: sha512-8NCZ69/lBMwCfH8ccte361eJdIQTy46jbutrCcEtgtz1VxiQsNJFfTyyRTCOEdLr5X0caZl/xXp8y/HpLcX2Hg==}
+  renovate@44.206.0:
+    resolution: {integrity: sha512-YuuBHDZZG/6NHre5QGcKT6auY/QkZ+H0F13EdgSs4+Je7L0v92lZs9+OOOQdwtywrk5EBHPdq2Q10OT2abjdyg==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -5921,8 +5921,8 @@ packages:
     resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
     engines: {node: '>=18'}
 
-  skills@1.7.4:
-    resolution: {integrity: sha512-lHZJksE8UImNAr+LL6unqq7jERjdFw5EJasm17srycwL7rXHGdCmgu1L1ttLxUO9i3rdH+QQig+px0icHqLmRw==}
+  skills@1.7.5:
+    resolution: {integrity: sha512-ihrB0rgqZ6Ibs2gp3iIHmIeJkz1OVc8lIExF50eFl4Mbc71sfGGUQB3jtNQZnIHWIbzBenaYmq2ZeY4V1jFjtg==}
     engines: {node: '>=22.20.0'}
     hasBin: true
 
@@ -6829,38 +6829,38 @@ snapshots:
     dependencies:
       grapheme-splitter: 1.0.4
 
-  '@ast-grep/cli-darwin-arm64@0.51.0':
+  '@ast-grep/cli-darwin-arm64@0.51.1':
     optional: true
 
-  '@ast-grep/cli-darwin-x64@0.51.0':
+  '@ast-grep/cli-darwin-x64@0.51.1':
     optional: true
 
-  '@ast-grep/cli-linux-arm64-gnu@0.51.0':
+  '@ast-grep/cli-linux-arm64-gnu@0.51.1':
     optional: true
 
-  '@ast-grep/cli-linux-x64-gnu@0.51.0':
+  '@ast-grep/cli-linux-x64-gnu@0.51.1':
     optional: true
 
-  '@ast-grep/cli-win32-arm64-msvc@0.51.0':
+  '@ast-grep/cli-win32-arm64-msvc@0.51.1':
     optional: true
 
-  '@ast-grep/cli-win32-ia32-msvc@0.51.0':
+  '@ast-grep/cli-win32-ia32-msvc@0.51.1':
     optional: true
 
-  '@ast-grep/cli-win32-x64-msvc@0.51.0':
+  '@ast-grep/cli-win32-x64-msvc@0.51.1':
     optional: true
 
-  '@ast-grep/cli@0.51.0':
+  '@ast-grep/cli@0.51.1':
     dependencies:
       detect-libc: 2.1.2
     optionalDependencies:
-      '@ast-grep/cli-darwin-arm64': 0.51.0
-      '@ast-grep/cli-darwin-x64': 0.51.0
-      '@ast-grep/cli-linux-arm64-gnu': 0.51.0
-      '@ast-grep/cli-linux-x64-gnu': 0.51.0
-      '@ast-grep/cli-win32-arm64-msvc': 0.51.0
-      '@ast-grep/cli-win32-ia32-msvc': 0.51.0
-      '@ast-grep/cli-win32-x64-msvc': 0.51.0
+      '@ast-grep/cli-darwin-arm64': 0.51.1
+      '@ast-grep/cli-darwin-x64': 0.51.1
+      '@ast-grep/cli-linux-arm64-gnu': 0.51.1
+      '@ast-grep/cli-linux-x64-gnu': 0.51.1
+      '@ast-grep/cli-win32-arm64-msvc': 0.51.1
+      '@ast-grep/cli-win32-ia32-msvc': 0.51.1
+      '@ast-grep/cli-win32-x64-msvc': 0.51.1
 
   '@aws-sdk/checksums@3.1001.1':
     dependencies:
@@ -7393,7 +7393,7 @@ snapshots:
       conventional-commits-parser: 7.1.2
       picocolors: 1.1.1
 
-  '@containerbase/base@14.59.8(zod@4.6.7)':
+  '@containerbase/base@14.61.0(zod@4.6.7)':
     dependencies:
       semver: 7.8.5
     optionalDependencies:
@@ -7469,36 +7469,36 @@ snapshots:
       '@cloudflare/workers-types': 5.20261103.1
       effect: 4.1.2
 
-  '@effect/tsgo-darwin-arm64@0.63.0':
+  '@effect/tsgo-darwin-arm64@0.64.1':
     optional: true
 
-  '@effect/tsgo-darwin-x64@0.63.0':
+  '@effect/tsgo-darwin-x64@0.64.1':
     optional: true
 
-  '@effect/tsgo-linux-arm64@0.63.0':
+  '@effect/tsgo-linux-arm64@0.64.1':
     optional: true
 
-  '@effect/tsgo-linux-arm@0.63.0':
+  '@effect/tsgo-linux-arm@0.64.1':
     optional: true
 
-  '@effect/tsgo-linux-x64@0.63.0':
+  '@effect/tsgo-linux-x64@0.64.1':
     optional: true
 
-  '@effect/tsgo-win32-arm64@0.63.0':
+  '@effect/tsgo-win32-arm64@0.64.1':
     optional: true
 
-  '@effect/tsgo-win32-x64@0.63.0':
+  '@effect/tsgo-win32-x64@0.64.1':
     optional: true
 
-  '@effect/tsgo@0.63.0':
+  '@effect/tsgo@0.64.1':
     optionalDependencies:
-      '@effect/tsgo-darwin-arm64': 0.63.0
-      '@effect/tsgo-darwin-x64': 0.63.0
-      '@effect/tsgo-linux-arm': 0.63.0
-      '@effect/tsgo-linux-arm64': 0.63.0
-      '@effect/tsgo-linux-x64': 0.63.0
-      '@effect/tsgo-win32-arm64': 0.63.0
-      '@effect/tsgo-win32-x64': 0.63.0
+      '@effect/tsgo-darwin-arm64': 0.64.1
+      '@effect/tsgo-darwin-x64': 0.64.1
+      '@effect/tsgo-linux-arm': 0.64.1
+      '@effect/tsgo-linux-arm64': 0.64.1
+      '@effect/tsgo-linux-x64': 0.64.1
+      '@effect/tsgo-win32-arm64': 0.64.1
+      '@effect/tsgo-win32-x64': 0.64.1
 
   '@emnapi/runtime@1.11.3':
     dependencies:
@@ -8466,9 +8466,9 @@ snapshots:
     dependencies:
       '@redis/client': 6.2.1(@opentelemetry/api@1.10.0)
 
-  '@renovatebot/base-image@13.152.12(zod@4.6.7)':
+  '@renovatebot/base-image@13.154.0(zod@4.6.7)':
     dependencies:
-      '@containerbase/base': 14.59.8(zod@4.6.7)
+      '@containerbase/base': 14.61.0(zod@4.6.7)
     optionalDependencies:
       zod: 4.6.7
 
@@ -8486,7 +8486,7 @@ snapshots:
       klona: 2.0.6
       moo: 0.5.3
 
-  '@renovatebot/osv-offline-db@4.5.7(supports-color@7.2.0)(zod@4.6.7)':
+  '@renovatebot/osv-offline-db@4.5.8(supports-color@7.2.0)(zod@4.6.7)':
     dependencies:
       '@containerbase/base': 14.64.0(zod@4.6.7)
       debug: 4.4.3(supports-color@7.2.0)
@@ -8494,9 +8494,9 @@ snapshots:
       - supports-color
       - zod
 
-  '@renovatebot/osv-offline@4.5.7(supports-color@7.2.0)(zod@4.6.7)':
+  '@renovatebot/osv-offline@4.5.8(supports-color@7.2.0)(zod@4.6.7)':
     dependencies:
-      '@renovatebot/osv-offline-db': 4.5.7(supports-color@7.2.0)(zod@4.6.7)
+      '@renovatebot/osv-offline-db': 4.5.8(supports-color@7.2.0)(zod@4.6.7)
       fs-extra: 11.4.1
       got: 15.1.0
       luxon: 3.7.2
@@ -8510,7 +8510,7 @@ snapshots:
 
   '@renovatebot/pgp@2.0.4': {}
 
-  '@renovatebot/ruby-semver@5.0.0': {}
+  '@renovatebot/ruby-semver@6.0.0': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.13':
     optional: true
@@ -8625,7 +8625,7 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/eslint-plugin-query@5.105.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)':
+  '@tanstack/eslint-plugin-query@5.105.2(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/utils': 8.72.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -12488,7 +12488,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@44.201.1(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@44.206.0(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -12521,13 +12521,13 @@ snapshots:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.3.0(@opentelemetry/api@1.10.0)
-      '@renovatebot/base-image': 13.152.12(zod@4.6.7)
+      '@renovatebot/base-image': 13.154.0(zod@4.6.7)
       '@renovatebot/detect-tools': 5.0.0
       '@renovatebot/good-enough-parser': 3.0.0
-      '@renovatebot/osv-offline': 4.5.7(supports-color@7.2.0)(zod@4.6.7)
+      '@renovatebot/osv-offline': 4.5.8(supports-color@7.2.0)(zod@4.6.7)
       '@renovatebot/pep440': 6.0.0
       '@renovatebot/pgp': 2.0.4
-      '@renovatebot/ruby-semver': 5.0.0
+      '@renovatebot/ruby-semver': 6.0.0
       '@sindresorhus/is': 8.1.0
       '@yarnpkg/core': 4.9.1(typanion@3.14.0)
       '@yarnpkg/parsers': 3.1.0
@@ -12859,7 +12859,7 @@ snapshots:
       mrmime: 2.0.1
       totalist: 3.0.1
 
-  skills@1.7.4:
+  skills@1.7.5:
     dependencies:
       tar: 7.5.22
       yaml: 2.9.1
