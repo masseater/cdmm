@@ -1,4 +1,4 @@
-import type { CommitlintConfig } from "@r_masseater/vp-tools";
+import type { CommitlintConfig } from "@r_masseater/vite-plus-adopt";
 import baselineJs from "eslint-plugin-baseline-js";
 import { defineConfig } from "vite-plus";
 
