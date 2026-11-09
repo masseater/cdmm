@@ -8,11 +8,11 @@
   },
   "devDependencies": {
     "@ast-grep/cli": "catalog:",
-    "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
     "@effect/tsgo": "catalog:stack",
     "@html-eslint/eslint-plugin-react": "catalog:",
     "@r_masseater/oxlint-typed-rules": "catalog:",
+    "@r_masseater/vp-tools": "catalog:",
     "@shadcn/lint": "catalog:",
     "@tanstack/intent": "catalog:",
     "@textlint-ja/textlint-rule-preset-ai-writing": "1.7.0",
@@ -28,11 +28,6 @@
     "textlint": "catalog:stack",
     "textlint-rule-preset-ja-technical-writing": "12.0.2",
     "vite-plus": "catalog:stack"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   },
   "devEngines": {
     "packageManager": {
