@@ -1,3 +1,4 @@
+import type { CommitlintConfig } from "@r_masseater/vp-tools";
 import baselineJs from "eslint-plugin-baseline-js";
 import { defineConfig } from "vite-plus";
 
@@ -16,7 +17,10 @@ import {
 
 const typedRules = "@r_masseater/oxlint-typed-rules";
 
+const commitlint: CommitlintConfig = { extends: ["@commitlint/config-conventional"] };
+
 export default defineConfig({
+  commitlint,
   staged: {
     "*": "vp check --fix",
   },
