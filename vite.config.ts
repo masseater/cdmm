@@ -1,4 +1,5 @@
-import type { CommitlintConfig } from "@r_masseater/vite-plus-adopt";
+import type { ToolSections } from "@r_masseater/vite-plus-adopt";
+import { Array as Arr, pipe } from "effect";
 import baselineJs from "eslint-plugin-baseline-js";
 import { defineConfig } from "vite-plus";
 
@@ -17,10 +18,55 @@ import {
 
 const typedRules = "@r_masseater/oxlint-typed-rules";
 
-const commitlint: CommitlintConfig = { extends: ["@commitlint/config-conventional"] };
+const MARKDOWN_IGNORES = ["AGENTS.md", ".agents/skills/**", ".claude/worktrees/**", "CHANGELOG.md"];
+
+const markdownFiles = pipe(
+  MARKDOWN_IGNORES,
+  Arr.map((glob) => `':(glob,exclude)${glob}'`),
+  Arr.join(" "),
+);
+
+const PUBLIC_VALUES = [String.raw`\bCF_BEACON_TOKEN = "[0-9a-f]{32}"`];
+
+const checks: ToolSections = {
+  commitlint: { extends: ["@commitlint/config-conventional"] },
+  betterleaks: {
+    extend: { useDefault: true },
+    filter: `matchesAny(finding.line, [${pipe(
+      PUBLIC_VALUES,
+      Arr.map((pattern) => `\`${pattern}\``),
+      Arr.join(", "),
+    )}])`,
+  },
+  textlint: {
+    ignores: MARKDOWN_IGNORES,
+    rules: {
+      "@textlint-ja/preset-ai-writing": true,
+      "preset-ja-technical-writing": {
+        "sentence-length": { max: 120 },
+        "ja-no-mixed-period": { allowPeriodMarks: [":"] },
+        "no-mix-dearu-desumasu": { preferInBody: "である", preferInList: "である" },
+        "max-kanji-continuous-len": {
+          max: 6,
+          allow: [
+            "外国電子決済手段",
+            "電子決済手段等取引業",
+            "前払式支払手段",
+            "犯罪収益移転防止法",
+            "事業者間取引適正化等法",
+            "個人情報保護法",
+            "特定商取引法",
+            "電気通信利用役務",
+            "特定業務委託事業者",
+          ],
+        },
+      },
+    },
+  },
+};
 
 export default defineConfig({
-  commitlint,
+  ...checks,
   staged: {
     "*": "vp check --fix",
   },
@@ -175,26 +221,14 @@ export default defineConfig({
             "NODE_EXTRA_CA_CERTS",
           ],
         },
-        dependsOn: ["syncpack", "markdown-lint", "renovate", "actions-lint", "fallow", "audit"],
+        dependsOn: ["syncpack", "vpa", "yomiyasu", "renovate", "actions-lint", "fallow", "audit"],
       },
       syncpack: "syncpack lint",
-      "markdown-lint": [
-        'textlint "**/*.md"',
-        `git -c core.quotePath=false ls-files -co --exclude-standard '*.md' | git -c core.quotePath=false -c core.excludesFile=.textlintignore check-ignore --no-index --stdin -nv | awk -F '\\t' '$1 == "::" { print $2 }' | tr '\\n' '\\0' | xargs -0 -r -n 1 -P 4 python3 "$(skills ls --json | jq -r '.[] | select(.name == "yomiyasu").path')/scripts/yomiyasu_lint.py" --strict`,
-      ],
+      vpa: { command: "vpa", cache: false },
+      yomiyasu: `git ls-files -z '*.md' ${markdownFiles} | xargs -0 -r -n 1 -P 4 python3 "$(skills ls --json | jq -r '.[] | select(.name == "yomiyasu").path')/scripts/yomiyasu_lint.py" --strict`,
       audit: {
         command:
           'before="$(cksum pnpm-workspace.yaml)"; vp pm audit --fix || exit; if [ "$before" != "$(cksum pnpm-workspace.yaml)" ]; then echo "vp pm audit --fix rewrote pnpm-workspace.yaml. Run vp install and commit the diff." >&2; exit 1; fi',
-        cache: false,
-      },
-      betterleaks: {
-        command:
-          'betterleaks git . --config .betterleaks.toml --redact --no-banner --revision="$(git rev-parse -q --verify "$BETTERLEAKS_BASE" || echo origin/main)..HEAD"',
-        cache: false,
-      },
-      "betterleaks:staged": {
-        command:
-          "git diff --cached --no-ext-diff --no-textconv --no-color --src-prefix=a/ --dst-prefix=b/ | betterleaks stdin --git-diff --config .betterleaks.toml --redact --no-banner",
         cache: false,
       },
       renovate: "renovate-config-validator --strict",
@@ -204,21 +238,8 @@ export default defineConfig({
         "fallow dupes --quiet --format compact",
         "fallow security --fail-on-issues --quiet",
       ],
-      "actions-lint": {
-        command:
-          "actionlint && zizmor .github && ast-grep scan --rule .github/rules/no-full-history-checkout.yml .github/workflows",
-        cache: {
-          untrackedEnv: [
-            "GH_TOKEN",
-            "ZIZMOR_NO_ONLINE_AUDITS",
-            "HTTPS_PROXY",
-            "https_proxy",
-            "NO_PROXY",
-            "no_proxy",
-            "SSL_CERT_FILE",
-          ],
-        },
-      },
+      "actions-lint":
+        "ast-grep scan --rule .github/rules/no-full-history-checkout.yml .github/workflows",
     },
   },
 });
