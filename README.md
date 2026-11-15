@@ -9,8 +9,7 @@ Windows の公式 Claude Desktop で、複数の Claude Max アカウントを�
 
 ```sh
 vp install
-vp exec --filter claude-harness alchemy profile edit --add Cloudflare
 vp run verify
 ```
 
-`.mcp.json` の Cloudflare MCP は、この Alchemy のプロファイルの認証情報を使う。
+`.mcp.json` 内の Cloudflare MCP サーバーは、環境変数 `CLOUDFLARE_API_TOKEN` から API トークンを読み取る。

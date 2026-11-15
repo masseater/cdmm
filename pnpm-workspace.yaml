@@ -8,6 +8,7 @@ packages:
 catalogMode: prefer
 
 catalog:
+  "@r_masseater/msch": 0.13.0
   "@r_masseater/oxlint-typed-rules": 0.4.1
   "@r_masseater/vite-plus-adopt": 0.4.0
   "@ast-grep/cli": 0.51.2
@@ -73,4 +74,6 @@ allowBuilds:
   re2: true
 patchedDependencies:
 minimumReleaseAgeExclude:
+  - "@r_masseater/msch@0.13.0"
   - "@r_masseater/oxlint-typed-rules@0.4.1"
+  - "@r_masseater/oxlint-plugin-decision@0.5.1"
