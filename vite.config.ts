@@ -209,7 +209,6 @@ export default defineConfig({
       verify: {
         command: "vp check --deny-warnings",
         cache: {
-          env: ["OPENROUTER_API_KEY"],
           untrackedEnv: [
             "CLAUDECODE",
             "CLAUDE_CODE_REMOTE",
