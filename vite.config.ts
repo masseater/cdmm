@@ -18,13 +18,7 @@ import {
 
 const typedRules = "@r_masseater/oxlint-typed-rules";
 
-const MARKDOWN_IGNORES = ["AGENTS.md", ".agents/skills/**", ".claude/worktrees/**", "CHANGELOG.md"];
-
-const markdownFiles = pipe(
-  MARKDOWN_IGNORES,
-  Arr.map((glob) => `':(glob,exclude)${glob}'`),
-  Arr.join(" "),
-);
+const MARKDOWN_IGNORES = ["AGENTS.md", ".agents/skills/**", "CHANGELOG.md"];
 
 const PUBLIC_VALUES = [String.raw`\bCF_BEACON_TOKEN = "[0-9a-f]{32}"`];
 
@@ -42,6 +36,7 @@ const checks: ToolSections = {
     ignores: MARKDOWN_IGNORES,
     rules: {
       "@textlint-ja/preset-ai-writing": true,
+      "@masseater.dev/yomiyasu": true,
       "preset-ja-technical-writing": {
         "sentence-length": { max: 120 },
         "ja-no-mixed-period": { allowPeriodMarks: [":"] },
@@ -220,11 +215,16 @@ export default defineConfig({
             "NODE_EXTRA_CA_CERTS",
           ],
         },
-        dependsOn: ["syncpack", "vpa", "yomiyasu", "renovate", "actions-lint", "fallow", "audit"],
+        dependsOn: ["syncpack", "vpa", "msch", "renovate", "actions-lint", "fallow", "audit"],
       },
       syncpack: "syncpack lint",
       vpa: { command: "vpa", cache: false },
-      yomiyasu: `git ls-files -z '*.md' ${markdownFiles} | xargs -0 -r -n 1 -P 4 sh -c 'python3 "$0" --strict < "$1" || { echo "yomiyasu: $1" >&2; exit 1; }' "$(skills ls --json | jq -r '.[] | select(.name == "yomiyasu").path')/scripts/yomiyasu_lint.py"`,
+      msch: {
+        command: "msch",
+        cache: {
+          untrackedEnv: ["HTTPS_PROXY", "https_proxy", "NO_PROXY", "no_proxy", "SSL_CERT_FILE"],
+        },
+      },
       audit: {
         command:
           'before="$(cksum pnpm-workspace.yaml)"; vp pm audit --fix || exit; if [ "$before" != "$(cksum pnpm-workspace.yaml)" ]; then echo "vp pm audit --fix rewrote pnpm-workspace.yaml. Run vp install and commit the diff." >&2; exit 1; fi',
