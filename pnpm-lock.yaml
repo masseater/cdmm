@@ -232,8 +232,8 @@ catalogs:
       specifier: 3.42.0
       version: 3.42.0
     renovate:
-      specifier: 44.236.0
-      version: 44.236.0
+      specifier: 44.236.1
+      version: 44.236.1
     typescript:
       specifier: 7.1.0-beta
       version: 7.1.0-beta
@@ -300,7 +300,7 @@ importers:
         version: 3.42.0
       renovate:
         specifier: catalog:stack
-        version: 44.236.0(supports-color@7.2.0)(typanion@3.14.0)
+        version: 44.236.1(supports-color@7.2.0)(typanion@3.14.0)
       skills:
         specifier: 'catalog:'
         version: 1.8.1
@@ -816,8 +816,8 @@ packages:
     resolution: {integrity: sha512-sGEA473TlCvhCGNoTBY9OXZVWdscIXdGt0dm8EpB+2MRfmt8LNh/X56P/T3nCtEB+eH5qGEa3odphSAoUxSfSQ==}
     engines: {node: '>=22.12.0'}
 
-  '@containerbase/base@14.66.17':
-    resolution: {integrity: sha512-WcZRYhXR5KN4Lk/nbCjk1U6kqLmiIyFy0cXnsG4HsrQO/8itPJmJTsv2lvtxVdHUgEk1a/g39W7V91/DsYJ/bA==}
+  '@containerbase/base@14.66.18':
+    resolution: {integrity: sha512-znv1iQAdvSrUm9fS15LFZxJwI9dzT5MPy96+6EqRcfZVMHU5QHnTUI73WDpEUQam33avuAh5ocF9ssxvZ/Nt9A==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -825,8 +825,8 @@ packages:
       zod:
         optional: true
 
-  '@containerbase/base@14.66.18':
-    resolution: {integrity: sha512-znv1iQAdvSrUm9fS15LFZxJwI9dzT5MPy96+6EqRcfZVMHU5QHnTUI73WDpEUQam33avuAh5ocF9ssxvZ/Nt9A==}
+  '@containerbase/base@14.66.19':
+    resolution: {integrity: sha512-ixzqNkbJ5HQ2YSH8ytbaAM3hPgoS6HR7DhLYqryjiQT/t+4QfIB7OyOvx38QzH9w8fFEzdmT7Ars6t3MP16lGQ==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -2182,8 +2182,8 @@ packages:
     peerDependencies:
       '@redis/client': ^6.2.1
 
-  '@renovatebot/base-image@13.165.3':
-    resolution: {integrity: sha512-CgyzRUUBWZfqM6vw65BLTidzoHy8EnEkLoQQeSb41LJyQPGvPpcslEqMcYnV96unMzNCa0xqp/CIxsdEhSRpAw==}
+  '@renovatebot/base-image@13.165.4':
+    resolution: {integrity: sha512-uMsOqi8HbmI0F51WL0vD0ak2nYgcd/3dd21PDZHmbslLfTj+IHyg9YQioI33eoNqyzskihIfNrsQ+ZlmybzKwQ==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -5573,8 +5573,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@44.236.0:
-    resolution: {integrity: sha512-NBxQmIxRNWj8jjpT8Rij+ku7nneqQgN2IMOfH8IB9XRAA+lboTp+pfQ3/p2y3rlA327G77mjSMxaslp1HmTZOg==}
+  renovate@44.236.1:
+    resolution: {integrity: sha512-k1Yj+tXtoCQh1Vpv7h0qInr/oBhxlBPsdtoqPPfIHDUBnMf0xWpvRBdUldhUBxOpVDyf7FDsOB9T1a1gJpEang==}
     engines: {node: ^24.11.0 || ^26.13.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -7191,13 +7191,13 @@ snapshots:
       conventional-commits-parser: 7.1.2
       picocolors: 1.1.1
 
-  '@containerbase/base@14.66.17(zod@4.6.7)':
+  '@containerbase/base@14.66.18(zod@4.6.7)':
     dependencies:
       semver: 7.8.6
     optionalDependencies:
       zod: 4.6.7
 
-  '@containerbase/base@14.66.18(zod@4.6.7)':
+  '@containerbase/base@14.66.19(zod@4.6.7)':
     dependencies:
       semver: 7.8.6
     optionalDependencies:
@@ -8219,9 +8219,9 @@ snapshots:
     dependencies:
       '@redis/client': 6.2.1(@opentelemetry/api@1.10.0)
 
-  '@renovatebot/base-image@13.165.3(zod@4.6.7)':
+  '@renovatebot/base-image@13.165.4(zod@4.6.7)':
     dependencies:
-      '@containerbase/base': 14.66.18(zod@4.6.7)
+      '@containerbase/base': 14.66.19(zod@4.6.7)
     optionalDependencies:
       zod: 4.6.7
 
@@ -8241,7 +8241,7 @@ snapshots:
 
   '@renovatebot/osv-offline-db@4.5.10(supports-color@7.2.0)(zod@4.6.7)':
     dependencies:
-      '@containerbase/base': 14.66.17(zod@4.6.7)
+      '@containerbase/base': 14.66.18(zod@4.6.7)
       debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
@@ -11947,7 +11947,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@44.236.0(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@44.236.1(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -11980,7 +11980,7 @@ snapshots:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.3.1(@opentelemetry/api@1.10.0)
-      '@renovatebot/base-image': 13.165.3(zod@4.6.7)
+      '@renovatebot/base-image': 13.165.4(zod@4.6.7)
       '@renovatebot/detect-tools': 5.0.0
       '@renovatebot/good-enough-parser': 4.0.3
       '@renovatebot/osv-offline': 4.5.10(supports-color@7.2.0)(zod@4.6.7)
