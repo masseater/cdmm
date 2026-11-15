@@ -19,7 +19,7 @@ jobs:
     steps:
       - id: changed
         if: github.event_name == 'pull_request'
-        uses: masseater/typescript-template/.github/actions/pr-changed@d931a8843e20a6675286de4aae013da4778a72d6
+        uses: masseater/typescript-template/.github/actions/pr-changed@a036b9c24e81d9de10bd390491a6d5c8307f4f05
         with:
           file: skills-lock.json
           github-token: ${{ github.token }}
@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
       - if: steps.changed.outputs.changed == 'true'
-        uses: masseater/typescript-template/.github/actions/skills-lock@eeeed3cd1ec6cbeabc464f7b1a0bd727703bfd7c
+        uses: masseater/typescript-template/.github/actions/skills-lock@a036b9c24e81d9de10bd390491a6d5c8307f4f05
         with:
           branch: ${{ github.head_ref }}
 
